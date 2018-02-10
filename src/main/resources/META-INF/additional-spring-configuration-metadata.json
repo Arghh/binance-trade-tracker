@@ -1,0 +1,17 @@
+{"properties": [
+  {
+    "name": "BINANCE_API_KEY",
+    "type": "java.lang.String",
+    "description": "A description for 'BINANCE_API_KEY'"
+  },
+  {
+    "name": "BINANCE_SECRET_KEY",
+    "type": "java.lang.String",
+    "description": "A description for 'BINANCE_SECRET_KEY'"
+  },
+  {
+    "name": "tradeHistory.path",
+    "type": "java.lang.String",
+    "description": "A description for 'tradeHistory.path'"
+  }
+]}
