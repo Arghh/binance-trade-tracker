@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<head lang="en" th:replace="fragments/header :: header">
+</head>
+<body>
+	<div th:replace="fragments/sidebar"></div>
+	<div th:if="${not #lists.isEmpty(profits)}">
+		<h2>profit List</h2>
+		<table class="table table-striped">
+			<tr>
+				<th>Id</th>
+				<th>Quantity</th>
+				<th>Profit</th>
+				<th>Time</th>
+			</tr>
+			<tr th:each="profit : ${profits}">
+				<td th:text="${profit.id}"></td>
+				<td th:text="${profit.quantity}"></td>
+				<td th:text="${profit.profitValue} ${profit.baseSymbol}"></td>
+				<td th:text="${profit.timeOfprofit}"></td>
+			</tr>
+		</table>
+	</div>
+	</div>
+	</div>
+	</div>
+	<div lang="en" th:replace="fragments/footer :: footer"></div>
+	</div>
+	</div>
+</body>

@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<head lang="en" th:replace="trade/fragments/header :: header">
+<head lang="en" th:replace="fragments/header :: header">
 </head>
 <body>
-	<div th:replace="trade/fragments/sidebar"></div>
+	<div th:replace="fragments/sidebar"></div>
 	<div th:if="${not #lists.isEmpty(trades)}">
 		<h2>Trade List</h2>
 		<table class="table table-striped">
@@ -31,7 +31,7 @@
 	</div>
 	</div>
 	</div>
-	<div lang="en" th:replace="trade/fragments/footer :: footer"></div>
+	<div lang="en" th:replace="fragments/footer :: footer"></div>
 	</div>
 	</div>
 </body>
