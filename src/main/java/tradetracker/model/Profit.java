@@ -2,7 +2,6 @@ package tradetracker.model;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -43,7 +42,7 @@ public class Profit {
 	@Column(name = "priceDifference", precision = 13, scale = 8)
 	private BigDecimal priceDifference;
 
-	private Date timeDifference;
+	private long timeDifference;
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "profit")
 	private List<AggregatedTrade> aggregatedTrade = new ArrayList<>();
@@ -99,11 +98,11 @@ public class Profit {
 		this.baseCurrency = baseCurrency;
 	}
 
-	public Date getTimeDifference() {
+	public long getTimeDifference() {
 		return timeDifference;
 	}
 
-	public void setTimeDifference(Date timeDifference) {
+	public void setTimeDifference(long timeDifference) {
 		this.timeDifference = timeDifference;
 	}
 

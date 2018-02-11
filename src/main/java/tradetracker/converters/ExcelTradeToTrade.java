@@ -33,7 +33,7 @@ public class ExcelTradeToTrade implements Converter<List<String>, Trade> {
 			}
 
 			Trade trade = new Trade();
-			trade.setTimeOfTrade(convertDate(source.get(0)));
+			trade.setTradeTime(convertDate(source.get(0)));
 			trade.setSymbol(source.get(1));
 			trade.setBuy(convertBuy(source.get(2)));
 			trade.setPrice(convertDecimal(source.get(3)));
@@ -54,7 +54,7 @@ public class ExcelTradeToTrade implements Converter<List<String>, Trade> {
 
 	private Date convertDate(String cell) throws TradeException {
 		if (cell != null && cell.startsWith("2")) {
-			SimpleDateFormat formatter = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
+			SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 			try {
 				return formatter.parse(cell);
 			} catch (ParseException e) {

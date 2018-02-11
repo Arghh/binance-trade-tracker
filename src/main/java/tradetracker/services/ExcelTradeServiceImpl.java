@@ -68,6 +68,7 @@ public class ExcelTradeServiceImpl implements ExcelTradeService {
 				excelData.clear();
 			}
 			workbook.close();
+			// sort all imported trades so we get the oldest first
 			sortExcelTradesBeforeSave(rawTrades);
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
@@ -98,9 +99,9 @@ public class ExcelTradeServiceImpl implements ExcelTradeService {
 		Collections.sort(rawTrades, new Comparator<Trade>() {
 			@Override
 			public int compare(Trade o1, Trade o2) {
-				if (o1.getTimeOfTrade() == null || o2.getTimeOfTrade() == null)
+				if (o1.getTradeTime() == null || o2.getTradeTime() == null)
 					return 0;
-				return o1.getTimeOfTrade().compareTo(o2.getTimeOfTrade());
+				return o1.getTradeTime().compareTo(o2.getTradeTime());
 			}
 		});
 

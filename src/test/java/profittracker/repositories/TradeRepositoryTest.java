@@ -14,14 +14,14 @@ import tradetracker.model.Trade;
 import tradetracker.repositories.TradeRepository;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringBootTest
+@SpringBootTest(classes = TradeRepository.class)
 public class TradeRepositoryTest {
 
 	private static final BigDecimal PRICE = BigDecimal.valueOf(100.00);
 	private static final String SYMBOL = "WTCBTC";
 
 	@Autowired
-	private TradeRepository productRepository;
+	private TradeRepository tradeRepo;
 
 	@Before
 	public void setUp() throws Exception {
@@ -35,11 +35,11 @@ public class TradeRepositoryTest {
 		trade.setPrice(PRICE);
 		trade.setSymbol(SYMBOL);
 		// when
-		productRepository.save(trade);
+		tradeRepo.save(trade);
 
 		// then
 		Assert.assertNotNull(trade.getId());
-		Trade newProduct = productRepository.findById(trade.getId()).orElse(null);
+		Trade newProduct = tradeRepo.findById(trade.getId()).orElse(null);
 		Assert.assertEquals((Long) 1L, newProduct.getId());
 	}
 }

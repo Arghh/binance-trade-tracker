@@ -104,10 +104,10 @@ public class TradeServiceImpl implements TradeService {
 
 	private ArrayList<Trade> checkIfPartialTrade(ArrayList<Trade> partialCanditates) {
 		BigDecimal price = partialCanditates.get(0).getPrice();
-		long date = partialCanditates.get(0).getTimeOfTrade().getTime();
+		long date = partialCanditates.get(0).getTradeTime().getTime();
 
 		boolean partialTrade = partialCanditates.stream().allMatch(
-				(x) -> x.getPrice().compareTo(price) == 0 && (x.getTimeOfTrade().getTime() - date) / 1000 < 10);
+				(x) -> x.getPrice().compareTo(price) == 0 && (x.getTradeTime().getTime() - date) / 1000 < 10);
 
 		// if (trade.getSymbol().equals(lastTrade.getSymbol())) {
 		// System.out.println("The last two trades have the same symbol: " +
@@ -139,7 +139,7 @@ public class TradeServiceImpl implements TradeService {
 		List<BigDecimal> totalQuantity = new ArrayList<>();
 		List<BigDecimal> totalCost = new ArrayList<>();
 		List<BigDecimal> totalFee = new ArrayList<>();
-		combinedTrade.setTimeOfTrade(firstTrade.getTimeOfTrade());
+		combinedTrade.setTradeTime(firstTrade.getTradeTime());
 		combinedTrade.setSymbol(firstTrade.getSymbol());
 		combinedTrade.setBuy(firstTrade.isBuy());
 		combinedTrade.setPrice(firstTrade.getPrice());

@@ -25,20 +25,21 @@ public class ProfitController {
 
 	@RequestMapping({ "/profit/list", "/profit/" })
 	public String listAllProfits(Model model) {
-		model.addAttribute("profits", profitService.listAllProfits());
-		return "profit/list";
+		model.addAttribute("profits", profitService.showAllProfits());
+		// model.addAttribute("totalProfits", profitService.totalProfits());
+		return "profit/profitlist";
 	}
 
 	@RequestMapping({ "/profit/list/daily" })
 	public String listDailyProfits(Model model) {
 		model.addAttribute("profits", profitService.listDailyTradeProfits());
-		return "profit/list";
+		return "profit/profitlist";
 	}
 
 	@RequestMapping({ "/profit/save" })
 	public String saveAllProfitsFromTrades() {
 		profitService.saveAllTradeProfits();
-		return "profit/list";
+		return "index";
 	}
 
 }

@@ -22,7 +22,7 @@ public class TradeToAggTrade implements Converter<Trade, AggregatedTrade> {
 	public AggregatedTrade convert(Trade trade) {
 
 		AggregatedTrade aggTrade = new AggregatedTrade();
-		aggTrade.setTimeOfTrade(trade.getTimeOfTrade());
+		aggTrade.setTradeTime(trade.getTradeTime());
 		aggTrade.setSymbol(trade.getSymbol());
 		aggTrade.setBuy(trade.isBuy());
 		aggTrade.setPrice(trade.getPrice());

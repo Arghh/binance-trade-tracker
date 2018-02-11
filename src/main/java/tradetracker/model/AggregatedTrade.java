@@ -34,6 +34,7 @@ public class AggregatedTrade {
 	private String feeCoin;
 	@Column(name = "total", precision = 13, scale = 9)
 	private BigDecimal total;
+	private Date tradeTime;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "profit_fk")
@@ -54,8 +55,6 @@ public class AggregatedTrade {
 	public void setTotal(BigDecimal total) {
 		this.total = total;
 	}
-
-	private Date timeOfTrade;
 
 	public Long getId() {
 		return id;
@@ -105,12 +104,12 @@ public class AggregatedTrade {
 		this.feeCoin = assetOfFee;
 	}
 
-	public Date getTimeOfTrade() {
-		return timeOfTrade;
+	public Date getTradeTime() {
+		return tradeTime;
 	}
 
-	public void setTimeOfTrade(Date timeOfTrade) {
-		this.timeOfTrade = timeOfTrade;
+	public void setTradeTime(Date tradeTime) {
+		this.tradeTime = tradeTime;
 	}
 
 	public boolean isBuy() {

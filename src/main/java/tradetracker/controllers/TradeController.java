@@ -45,31 +45,31 @@ public class TradeController {
 	@RequestMapping({ "/trade/list/raw" })
 	public String listRawTrades(Model model) {
 		model.addAttribute("trades", tradeService.listAllRaw());
-		return "trade/list";
+		return "trade/tradelist";
 	}
 
 	@RequestMapping({ "/trade/list", "/trade" })
 	public String listTrades(Model model) {
 		model.addAttribute("trades", aggService.listAllAggregated());
-		return "trade/list";
+		return "trade/tradelist";
 	}
 
 	@RequestMapping({ "/trade/api/save" })
 	public String loadAllTradesFromApi() {
 		apiService.saveAllBinanaceTrades("WTCBTC");
-		return "trade/list";
+		return "trade/tradelist";
 	}
 
 	@RequestMapping({ "/trade/excel/save" })
 	public String saveAllTradesFromExcel() {
 		excelService.saveAllTradesFromFile();
-		return "trade/list";
+		return "index";
 	}
 
 	@RequestMapping({ "/trade/excel/load" })
 	public String saveAllAggTrades() {
 		tradeService.saveAllAggregatedTrades();
-		return "trade/list";
+		return "index";
 	}
 
 	@RequestMapping("/trade/show/{id}")
@@ -113,7 +113,7 @@ public class TradeController {
 	@RequestMapping("/trade/delete/{id}")
 	public String delete(@PathVariable String id) {
 		tradeService.delete(Long.valueOf(id));
-		return "trade/list";
+		return "trade/tradelist";
 	}
 
 	@ExceptionHandler(TradeNotFoundException.class)

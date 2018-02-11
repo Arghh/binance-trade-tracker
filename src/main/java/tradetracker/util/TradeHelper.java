@@ -33,8 +33,8 @@ public class TradeHelper {
 
 	}
 
-	public static Date getTimeBetweenTrades(Date buy, Date sell) throws ProfitException {
-		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
+	public static long getMsBetweenTrades(Date buy, Date sell) throws ProfitException {
+		SimpleDateFormat formatter = new SimpleDateFormat("dd hh:mm:ss");
 		String buyTime = formatter.format(buy.getTime());
 		String sellTime = formatter.format(sell.getTime());
 
@@ -42,6 +42,60 @@ public class TradeHelper {
 			throw new ProfitException("Buy time " + buyTime + " can't come after sell time " + sellTime);
 		}
 
-		return new Date(sell.getTime() - buy.getTime());
+		return sell.getTime() - buy.getTime();
 	}
+
+	// 1 minute = 60 seconds
+	// 1 hour = 60 x 60 = 3600
+	// 1 day = 3600 x 24 = 86400
+	public static String getTimeDifference(Date buy, Date sell) {
+
+		StringBuilder sb = new StringBuilder();
+		// milliseconds
+		long dif = sell.getTime() - buy.getTime();
+
+		long secondsInMilli = 1000;
+		long minutesInMilli = secondsInMilli * 60;
+		long hoursInMilli = minutesInMilli * 60;
+		long daysInMilli = hoursInMilli * 24;
+
+		long elapsedDays = dif / daysInMilli;
+		if (elapsedDays != 0) {
+			sb.append(elapsedDays + " days, ");
+		}
+		dif = dif % daysInMilli;
+
+		long elapsedHours = dif / hoursInMilli;
+		if (elapsedHours != 0) {
+			sb.append(elapsedHours + "h ");
+		}
+		dif = dif % hoursInMilli;
+
+		long elapsedMinutes = dif / minutesInMilli;
+		if (elapsedMinutes != 0) {
+			sb.append(elapsedMinutes + "m ");
+		}
+		dif = dif % minutesInMilli;
+
+		long elapsedSeconds = dif / secondsInMilli;
+		if (elapsedSeconds != 0) {
+			sb.append(elapsedSeconds + "s");
+		}
+
+		// String message = "On the test run at {0,time} on {0,date}, we found {1} prime
+		// numbers";
+		//
+		// MessageFormat mf = new MessageFormat(message);
+		//
+		// return MessageFormat.format("{0} days, {1} hours {2} minutes {3}", arguments)
+		// return mf.format(();
+
+		// return System.out.printf("%d days, %d hours, %d minutes, %d seconds%n",
+		// elapsedDays, elapsedHours,
+		// elapsedMinutes, elapsedSeconds);
+
+		return sb.toString();
+
+	}
+
 }

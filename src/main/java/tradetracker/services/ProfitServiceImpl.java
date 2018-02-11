@@ -1,5 +1,6 @@
 package tradetracker.services;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -9,11 +10,14 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import tradetracker.commands.ProfitList;
 import tradetracker.converters.AggTradeToProfit;
+import tradetracker.converters.ProfitToProfitList;
 import tradetracker.model.AggregatedTrade;
 import tradetracker.model.Profit;
 import tradetracker.repositories.AggregatedTradeRepository;
 import tradetracker.repositories.ProfitRepository;
+import tradetracker.util.TradeHelper;
 
 @Service
 public class ProfitServiceImpl implements ProfitService {
@@ -22,14 +26,16 @@ public class ProfitServiceImpl implements ProfitService {
 	private ProfitRepository profitRepository;
 	private AggregatedTradeService aggTradeService;
 	private AggTradeToProfit profitConverter;
+	private ProfitToProfitList webConverter;
 
 	@Autowired
 	public ProfitServiceImpl(AggregatedTradeRepository aggTradeRepository, AggregatedTradeService aggTradeService,
-			ProfitRepository profitRepository, AggTradeToProfit profitConverter) {
+			ProfitRepository profitRepository, AggTradeToProfit profitConverter, ProfitToProfitList webConverter) {
 		this.aggTradeRepository = aggTradeRepository;
 		this.aggTradeService = aggTradeService;
 		this.profitRepository = profitRepository;
 		this.profitConverter = profitConverter;
+		this.webConverter = webConverter;
 	}
 
 	@Override
@@ -127,9 +133,24 @@ public class ProfitServiceImpl implements ProfitService {
 	}
 
 	@Override
-	public List<AggregatedTrade> listDailyTradeProfits() {
+	public List<Profit> listDailyTradeProfits() {
 		// TODO Auto-generated method stub
-		return null;
+		return new ArrayList<>();
+	}
+
+	@Override
+	public BigDecimal totalProfits() {
+		List<Profit> profits = listAllProfits();
+		List<BigDecimal> decimals = profits.stream().map(x -> x.getPriceDifference()).collect(Collectors.toList());
+
+		return TradeHelper.addBigDecimals(decimals);
+
+	}
+
+	@Override
+	public List<ProfitList> showAllProfits() {
+		List<ProfitList> profitsForWeb = webConverter.convert(listAllProfits());
+		return profitsForWeb;
 	}
 
 }

@@ -34,7 +34,7 @@ public class BinanceTradeToTrade implements Converter<BinanceTrade, Trade> {
 			trade.setFeeCoin(binanceTrade.getCommissionAsset());
 			trade.setBinanceId(binanceTrade.getId());
 			trade.setFee(binanceTrade.getCommission());
-			trade.setTimeOfTrade(new Date(binanceTrade.getTime()));
+			trade.setTradeTime(new Date(binanceTrade.getTime()));
 			trade.setQuantity(binanceTrade.getQty());
 			trade.setBuy(binanceTrade.isBuyer);
 			return trade;

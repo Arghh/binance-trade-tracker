@@ -2,8 +2,8 @@
 <head lang="en" th:replace="fragments/header :: header">
 </head>
 <body>
-	<div th:replace="fragments/sidebar"></div>
-	<div th:if="${not #lists.isEmpty(trades)}">
+	<div th:replace="fragments/sidebar :: sidebar"></div>
+	<div th:if="${!trades.empty}">
 		<h2>Trade List</h2>
 		<table class="table table-striped">
 			<tr>
@@ -24,7 +24,7 @@
 				<td th:text="${trade.total}"></td>
 				<td th:text="${trade.fee}"></td>
 				<td th:text="${trade.feeCoin}"></td>
-				<td th:text="${trade.timeOfTrade}"></td>
+				<td th:text="${#dates.format(trade.tradeTime, 'yyyy-MM-dd hh:mm:ss')}"></td>
 			</tr>
 		</table>
 	</div>

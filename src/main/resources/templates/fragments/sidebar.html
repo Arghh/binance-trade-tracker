@@ -1,46 +1,48 @@
-<div id="wrapper">
+<div th:fragment="sidebar">
+	<div id="wrapper">
 
-	<!-- Sidebar -->
-	<div id="sidebar-wrapper">
-		<ul class="sidebar-nav">
-			<li class="sidebar-brand"><a href="#">Binance Trade Tracker</a></li>
-			<li class="active"><a th:href="@{/}">Home</a></li>
+		<!-- Sidebar -->
+		<div id="sidebar-wrapper">
+			<ul class="sidebar-nav">
+				<li class="sidebar-brand"><a href="#">Binance Trade Tracker</a></li>
+				<li class="active"><a th:href="@{/}">Home</a></li>
 
-			<li><a href="#" data-toggle="collapse"
-				data-target="#trades-submenu" aria-expanded="false">Trades</a>
-				<ul id="trades-submenu" class="collapse">
-					<li><a th:href="@{/trade/list}">All trades</a></li>
-					<li><a th:href="@{/trade/list/raw}">Raw trades</a></li>
-				</ul></li>
+				<li><a href="#" data-toggle="collapse"
+					data-target="#trades-submenu" aria-expanded="false">Trades</a>
+					<ul id="trades-submenu" class="collapse">
+						<li><a th:href="@{/trade/list}">All trades</a></li>
+						<li><a th:href="@{/trade/list/raw}">Raw trades</a></li>
+					</ul></li>
 
-			<li><a href="#" data-toggle="collapse"
-				data-target="#profit-submenu" aria-expanded="false">Profits</a>
-				<ul id="profit-submenu" class="collapse">
-					<li><a th:href="@{/profit/list}">All</a></li>
-					<li><a th:href="@{/profit/list/daily}">Daily</a></li>
-				</ul></li>
+				<li><a href="#" data-toggle="collapse"
+					data-target="#profit-submenu" aria-expanded="false">Profits</a>
+					<ul id="profit-submenu" class="collapse">
+						<li><a th:href="@{/profit/list}">All</a></li>
+						<li><a th:href="@{/profit/list/daily}">Daily</a></li>
+					</ul></li>
 
-			<li><a href="#" data-toggle="collapse"
-				data-target="#import-submenu" aria-expanded="false">Imports</a>
-				<ul id="import-submenu" class="collapse">
-					<li><a th:href="@{/trade/api/save}">Binance API import</a></li>
-					<li><a th:href="@{/trade/excel/save}">Excel import</a></li>
-				</ul></li>
+				<li><a href="#" data-toggle="collapse"
+					data-target="#import-submenu" aria-expanded="false">Imports</a>
+					<ul id="import-submenu" class="collapse">
+						<li><a th:href="@{/trade/api/save}">Binance API import</a></li>
+						<li><a th:href="@{/trade/excel/save}">Excel import</a></li>
+					</ul></li>
 
 
-			<li><a th:href="@{/trade/excel/load}">Add Partial trades
-					together</a></li>
-			<li><a th:href="@{/profit/save}">Calculate Profits</a></li>
-			<li><a href="#">About</a></li>
-			<li><a href="#">Contact</a></li>
-		</ul>
-	</div>
-	<!-- /#sidebar-wrapper -->
-	<!-- Page Content -->
-	<div class="page-content-wrapper">
-		<div class="container-fluid">
-			<div class="row">
-				<div class="col-lg-12">
-					<a class="btn btn-default btn-sm float-right" id="menu-toggle">Toggle
-						Menu</a>
-					<!-- /#wrapper -->
+				<li><a th:href="@{/trade/excel/load}">Add Partial trades
+						together</a></li>
+				<li><a th:href="@{/profit/save}">Calculate Profits</a></li>
+				<li><a href="#">About</a></li>
+				<li><a href="#">Contact</a></li>
+			</ul>
+		</div>
+		<!-- /#sidebar-wrapper -->
+		<!-- Page Content -->
+		<div class="page-content-wrapper">
+			<div class="container-fluid">
+				<div class="row">
+					<div class="col-lg-12">
+						<a class="btn btn-default btn-sm float-right" id="menu-toggle">Toggle
+							Menu</a>
+						<!-- /#wrapper -->
+					</div>

@@ -32,16 +32,7 @@ public class Trade {
 	private String feeCoin;
 	@Column(name = "total", precision = 13, scale = 9)
 	private BigDecimal total;
-
-	public BigDecimal getTotal() {
-		return total;
-	}
-
-	public void setTotal(BigDecimal total) {
-		this.total = total;
-	}
-
-	private Date timeOfTrade;
+	private Date tradeTime;
 
 	public Long getId() {
 		return id;
@@ -91,12 +82,12 @@ public class Trade {
 		this.feeCoin = assetOfFee;
 	}
 
-	public Date getTimeOfTrade() {
-		return timeOfTrade;
+	public Date getTradeTime() {
+		return tradeTime;
 	}
 
-	public void setTimeOfTrade(Date timeOfTrade) {
-		this.timeOfTrade = timeOfTrade;
+	public void setTradeTime(Date tradeTime) {
+		this.tradeTime = tradeTime;
 	}
 
 	public boolean isBuy() {
@@ -113,5 +104,13 @@ public class Trade {
 
 	public void setBinanceId(Long binanceId) {
 		this.binanceId = binanceId;
+	}
+
+	public BigDecimal getTotal() {
+		return total;
+	}
+
+	public void setTotal(BigDecimal total) {
+		this.total = total;
 	}
 }
