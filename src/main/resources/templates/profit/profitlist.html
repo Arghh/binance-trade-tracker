@@ -1,37 +1,54 @@
 <!DOCTYPE html>
 <head lang="en" th:replace="fragments/header :: header">
 </head>
-<body>
-	<div th:replace="fragments/sidebar :: sidebar"></div>
-	<div th:if="${!profits.empty}">
-		<h2>profit List</h2>
-		<table class="table table-striped">
-			<tr>
-				<th>Symbol</th>
-				<th>Buy Price</th>
-				<th>Sell Price</th>
-				<th>Profit</th>
-				<th>Quantity</th>
-				<th>Buy Time</th>
-				<th>Sell Time</th>
-				<th>Time Total</th>
-			</tr>
-			<tr th:each="profit : ${profits}">
-				<td th:text="${profit.symbol}"></td>
-				<td th:text="${profit.buyPrice}"></td>
-				<td th:text="${profit.sellPrice}"></td>
-				<td th:text="${profit.profit}"></td>
-				<td th:text="${profit.quantity}"></td>
-				<td th:text="${#dates.format(profit.buyTime, 'yyyy-MM-dd hh:mm:ss')}"></td>
-				<td th:text="${#dates.format(profit.sellTime, 'yyyy-MM-dd hh:mm:ss')}"></td>
-				<td th:text="${profit.timeDifference}"></td>
-			</tr>
-		</table>
+<div th:replace="fragments/sidebar :: sidebar"></div>
+
+<div th:if="${!profits.empty}">
+	<div class="d-flex flex-row">
+		<div class="p-2">
+			<h1>Profit List</h1>
+		</div>
+		<div class="p-2">
+			<div th:if="${!totalProfits.empty}">
+				<button type="button" id="heading-total-profits"
+					class="btn btn-outline-dark" data-toggle="collapse"
+					data-target="#collapse-total-profits">Total profits</button>
+			</div>
+		</div>
+		<div id="collapse-total-profits" class="collapse list-group-flush p-2">
+			<ul class="list-inline">
+				<li id="total-profit-currencies" class="list-inline-item" th:each="currency : ${totalProfits}"
+					th:text="${currency}"></li>
+			</ul>
+		</div>
+
 	</div>
-	</div>
-	</div>
-	</div>
-	<div lang="en" th:replace="fragments/footer :: footer"></div>
-	</div>
-	</div>
-</body>
+	<table class="table table-striped">
+		<tr>
+			<th>Symbol</th>
+			<th>Buy Price</th>
+			<th>Sell Price</th>
+			<th>Profit</th>
+			<th>Quantity</th>
+			<th>Buy Time</th>
+			<th>Sell Time</th>
+			<th>Trade took</th>
+		</tr>
+
+		<tr th:each="profit : ${profits}">
+			<td th:text="${profit.symbol}"></td>
+			<td th:text="${profit.buyPrice}"></td>
+			<td th:text="${profit.sellPrice}"></td>
+			<td th:text="${profit.profit}"></td>
+			<td th:text="${profit.quantity}"></td>
+			<td th:text="${#dates.format(profit.buyTime, 'yyyy-MM-dd hh:mm:ss')}"></td>
+			<td
+				th:text="${#dates.format(profit.sellTime, 'yyyy-MM-dd hh:mm:ss')}"></td>
+			<td th:text="${profit.timeDifference}"></td>
+		</tr>
+	</table>
+</div>
+</div>
+</div>
+<div lang="en" th:replace="fragments/footer :: footer"></div>
+</div>

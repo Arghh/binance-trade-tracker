@@ -4,7 +4,11 @@
 <body>
 	<div th:replace="fragments/sidebar :: sidebar"></div>
 	<div th:if="${!trades.empty}">
-		<h2>Trade List</h2>
+		<div class="d-flex flex-row">
+		<div class="p-2">
+		<h1>Trade List</h1>
+		</div>
+		</div>
 		<table class="table table-striped">
 			<tr>
 				<th>Type</th>
@@ -12,7 +16,7 @@
 				<th>Price</th>
 				<th>Total</th>
 				<th>Fee</th>
-				<th>Symbol of Fee</th>
+				<th>Fee Coin</th>
 				<th>Time Of Trade</th>
 				<th>View</th>
 			</tr>
@@ -24,14 +28,12 @@
 				<td th:text="${trade.total}"></td>
 				<td th:text="${trade.fee}"></td>
 				<td th:text="${trade.feeCoin}"></td>
-				<td th:text="${#dates.format(trade.tradeTime, 'yyyy-MM-dd hh:mm:ss')}"></td>
+				<td
+					th:text="${#dates.format(trade.tradeTime, 'yyyy-MM-dd hh:mm:ss')}"></td>
 			</tr>
 		</table>
 	</div>
 	</div>
 	</div>
-	</div>
 	<div lang="en" th:replace="fragments/footer :: footer"></div>
 	</div>
-	</div>
-</body>

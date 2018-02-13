@@ -1,3 +1,26 @@
+html {
+	height: 100%;
+}
+
+.page-content-wrapper {
+	min-height: calc(100vh - 70px);
+}
+
+.footer-container {
+	width: 100%;
+	padding-left: 60px;
+}
+
+.footer-container a {
+	text-decoration: none;
+	color: #999999;
+}
+
+.footer-container a:hover {
+	text-decoration: none;
+	color: #000000;
+	background: rgba(255, 255, 255, 0.2);
+}
 /* Toggle Styles */
 #wrapper {
 	padding-left: 0;
@@ -110,20 +133,35 @@
 	}
 
 	/* Sidebar Submenu Styles */
-	#import-submenu {
+	#profits-submenu {
 		list-style-type: none;
 	}
 	#trades-submenu {
 		list-style-type: none;
 	}
-	#profits-submenu {
+	#import-submenu {
 		list-style-type: none;
 	}
-	
 
 	/* Buttons */
-	#menu-toggle {
-		color: #999999;
-		background-color: #000000;
+	#heading-total-profits {
+		color: #000000;
+		background-color: #e0e0e0;
+		font-size: 12px;
+	}
+
+	/* Tools Menu*/
+	.tool-text {
+		font-size: 13px;
+	}
+
+	/* Profit List*/
+	#heading-total-profits {
+		margin-top: 15px;
+		margin-left: 20px;
+	}
+	#total-profit-currencies {
+		font-size: 12px;
+		margin-top: 21px;
 	}
 }

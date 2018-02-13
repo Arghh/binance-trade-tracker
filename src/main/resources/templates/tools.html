@@ -1,0 +1,154 @@
+<head lang="en" th:replace="fragments/header :: header">
+</head>
+<div th:replace="fragments/sidebar"></div>
+<div class="container">
+	<h1>Admin tools</h1>
+
+	<div id="accordion">
+		<div class="card">
+			<div class="card-header" id="headingOne">
+				<h5 class="mb-0">
+					<button class="btn btn-outline-light text-dark"
+						data-toggle="collapse" data-target="#collapseOne"
+						aria-expanded="true" aria-controls="collapseOne">Excel
+						imports</button>
+				</h5>
+			</div>
+			<div id="collapseOne" class="collapse show"
+				aria-labelledby="headingOne" data-parent="#accordion">
+				<div class="card-body">
+					<div class="row">
+						<div class="col">
+							<div class="row">
+								<div class="col-9">
+									<p class="tool-text">Import all trades from the Excel
+										"TradeHistory" spreadsheet. Make sure you set the PATH to your
+										spreadsheet in application.properties file.</p>
+								</div>
+								<div class="col-sm">
+									<a th:href="@{/trade/excel/save}"
+										class="btn btn-sm btn-outline-dark float-right tradetracker-buttons"
+										role="button">Excel import</a>
+								</div>
+							</div>
+						</div>
+						<div class="w-100"></div>
+						<div class="col">
+							<div class="row">
+								<div class="col-9">
+									<p class="tool-text">Binance Api import is working but the
+										data is not been properly managed. Coming soon!</p>
+								</div>
+								<div class="col-sm">
+									<a th:href="@{/}"
+										class="btn btn-sm btn-outline-dark float-right tradetracker-buttons"
+										role="button">Binance import</a>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="card">
+			<div class="card-header" id="headingTwo">
+				<h5 class="mb-0">
+					<button class="btn btn-outline-light text-dark collapsed"
+						data-toggle="collapse" data-target="#collapseTwo"
+						aria-expanded="false" aria-controls="collapseTwo">Trades</button>
+				</h5>
+			</div>
+			<div id="collapseTwo" class="collapse" aria-labelledby="headingTwo"
+				data-parent="#accordion">
+				<div class="card-body">
+					<div class="row">
+						<div class="col-9">
+							<p class="tool-text">
+								Add all the raw imported Excel data together and try to combine
+								partially filled orders into one trade. <br> <b>Example:</b>
+								Order is 10 VEN. It got filled in parts of 5, 3 and 2. <b>Combine
+									trades</b> will add those trades together into one buy order.
+							</p>
+						</div>
+						<div class="col-sm">
+							<a th:href="@{/trade/excel/load}"
+								class="btn btn-sm btn-outline-dark float-right tradetracker-buttons"
+								role="button">Combine trades</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="card">
+		<div class="card-header" id="headingThree">
+			<h5 class="mb-0">
+				<button class="btn btn-outline-light text-dark collapsed"
+					data-toggle="collapse" data-target="#collapseThree"
+					aria-expanded="false" aria-controls="collapseThree">Profits</button>
+			</h5>
+		</div>
+		<div id="collapseThree" class="collapse"
+			aria-labelledby="headingThree" data-parent="#accordion">
+			<div class="card-body">
+				<div class="row">
+					<div class="col-9">
+						<p class="tool-text">Simple. Add all buy and sell trade pairs
+							together and calculate all the profit you made ;)</p>
+					</div>
+					<div class="col-sm">
+						<a th:href="@{/profit/save}"
+							class="btn btn-sm btn-outline-dark float-right tradetracker-buttons"
+							role="button">Calculate profits</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="card">
+		<div class="card-header" id="headingFour">
+			<h5 class="mb-0">
+				<button class="btn btn-outline-light text-dark collapsed"
+					data-toggle="collapse" data-target="#collapseFour"
+					aria-expanded="false" aria-controls="collapseFour">Delete
+					data</button>
+			</h5>
+		</div>
+		<div id="collapseFour" class="collapse" aria-labelledby="headingFour"
+			data-parent="#accordion">
+			<div class="card-body">
+				<div class="row">
+					<div class="col-6">
+						<p class="tool-text">
+							Clean up all tables in case something went wrong and you want a
+							fresh start. <b>Be careful</b> this will delete everything in
+							your database. <b class="text-danger">Delete imports</b> will
+							clear the trade table. <b class="text-danger">Delete trades</b>
+							will delete everything in aggregated_trade table. <b
+								class="text-danger">Delete profits</b> will delete everything in
+							profits table.
+						</p>
+					</div>
+					<div class="col-sm">
+						<div class="btn-group float-right" role="group"
+							aria-label="Basic example">
+							<a th:href="@{/trade/raw/truncate}"
+								class="btn btn-sm btn-outline-danger" role="button">Delete
+								imports</a> <a th:href="@{/trade/truncate}"
+								class="btn btn-sm btn-outline-danger" role="button">Delete
+								trades</a> <a th:href="@{/profit/truncate}"
+								class="btn btn-sm btn-outline-danger" role="button">Delete
+								profits</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div th:replace="fragments/footer :: footer"></div>
+</div>
