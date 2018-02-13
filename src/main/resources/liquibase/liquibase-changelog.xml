@@ -1,0 +1,61 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+    <changeSet author="Arghh" id="1518545821731-1">
+        <createTable tableName="aggregated_trade">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="buy" type="BIT(1)">
+                <constraints nullable="false"/>
+            </column>
+            <column defaultValueComputed="NULL" name="fee" type="DECIMAL(13, 9)"/>
+            <column name="fee_coin" type="VARCHAR(255)"/>
+            <column defaultValueComputed="NULL" name="price" type="DECIMAL(13, 9)"/>
+            <column defaultValueComputed="NULL" name="quantity" type="DECIMAL(13, 9)"/>
+            <column name="symbol" type="VARCHAR(255)"/>
+            <column defaultValueComputed="NULL" name="total" type="DECIMAL(13, 9)"/>
+            <column defaultValueComputed="NULL" name="trade_time" type="datetime(6)"/>
+            <column defaultValueComputed="NULL" name="profit_fk" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="Arghh" id="1518545821731-2">
+        <createTable tableName="profit">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="base_currency" type="VARCHAR(255)"/>
+            <column defaultValueComputed="NULL" name="price_difference" type="DECIMAL(13, 8)"/>
+            <column defaultValueComputed="NULL" name="profit_value" type="DECIMAL(13, 8)"/>
+            <column defaultValueComputed="NULL" name="quantity" type="DECIMAL(13, 8)"/>
+            <column name="time_difference" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="Arghh" id="1518545821731-3">
+        <createTable tableName="trade">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints primaryKey="true"/>
+            </column>
+            <column defaultValueComputed="NULL" name="binance_id" type="BIGINT"/>
+            <column name="buy" type="BIT(1)">
+                <constraints nullable="false"/>
+            </column>
+            <column defaultValueComputed="NULL" name="fee" type="DECIMAL(13, 9)"/>
+            <column name="fee_coin" type="VARCHAR(255)"/>
+            <column defaultValueComputed="NULL" name="price" type="DECIMAL(13, 9)"/>
+            <column defaultValueComputed="NULL" name="quantity" type="DECIMAL(13, 9)"/>
+            <column name="symbol" type="VARCHAR(255)"/>
+            <column defaultValueComputed="NULL" name="total" type="DECIMAL(13, 9)"/>
+            <column defaultValueComputed="NULL" name="trade_time" type="datetime(6)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="Argh" id="1518545821731-4">
+        <createIndex indexName="FK5b5fmxrrmwukmg1g8ltg2h19i" tableName="aggregated_trade">
+            <column name="profit_fk"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="Arghh" id="1518545821731-5">
+        <addForeignKeyConstraint baseColumnNames="profit_fk" baseTableName="aggregated_trade" constraintName="FK5b5fmxrrmwukmg1g8ltg2h19i" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="id" referencedTableName="profit"/>
+    </changeSet>
+</databaseChangeLog>

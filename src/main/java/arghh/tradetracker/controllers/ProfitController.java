@@ -1,10 +1,14 @@
 package arghh.tradetracker.controllers;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import arghh.tradetracker.commands.ProfitList;
 import arghh.tradetracker.services.AggregatedTradeService;
 import arghh.tradetracker.services.ExcelTradeService;
 import arghh.tradetracker.services.ProfitService;
@@ -31,9 +35,17 @@ public class ProfitController {
 	}
 
 	@RequestMapping({ "/profit/list/daily" })
-	public String listDailyProfits(Model model) {
-		model.addAttribute("profits", profitService.listDailyTradeProfits());
-		return "profit/profitlist";
+	public String listDailyProfits(Model model, @RequestParam(value = "date", required = false) String date) {
+
+		// if (date == null) {
+		// System.out.println("date null");
+		// }
+		List<String> totalProfitsDaily = profitService.totalDailyProfits("asd");
+		List<ProfitList> profitsDaily = profitService.listDailyTradeProfits("asd");
+
+		model.addAttribute("totalProfitsDaily", totalProfitsDaily);
+		model.addAttribute("profitsDaily", profitsDaily);
+		return "profit/profitlistdaily";
 	}
 
 	@RequestMapping({ "/profit/save" })

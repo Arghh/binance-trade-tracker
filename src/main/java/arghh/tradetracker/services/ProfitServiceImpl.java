@@ -162,12 +162,6 @@ public class ProfitServiceImpl implements ProfitService {
 	}
 
 	@Override
-	public List<Profit> listDailyTradeProfits() {
-		// TODO Auto-generated method stub
-		return new ArrayList<>();
-	}
-
-	@Override
 	public List<String> totalProfits() {
 		List<String> allProfits = new ArrayList<>();
 		for (BaseCurrency currency : BaseCurrency.values()) {
@@ -180,6 +174,9 @@ public class ProfitServiceImpl implements ProfitService {
 			}
 		}
 
+		// if (allProfits.isEmpty()) {
+		// return new ArrayList<>();
+		// }
 		return allProfits;
 
 	}
@@ -193,6 +190,24 @@ public class ProfitServiceImpl implements ProfitService {
 	@Override
 	public void deleteAll() {
 		profitRepository.deleteAll();
+	}
+
+	@Override
+	public List<ProfitList> listDailyTradeProfits(String date) {
+		List<ProfitList> profits = new ArrayList<>();
+		ProfitList profit1 = new ProfitList();
+		profit1.setSymbol("asdasds");
+		profits.add(profit1);
+		return profits;
+	}
+
+	@Override
+	public List<String> totalDailyProfits(String date) {
+		// TODO Auto-generated method stub
+		List<String> profits = new ArrayList<>();
+		profits.add("test");
+		profits.add("test2");
+		return profits;
 	}
 
 }

@@ -9,7 +9,9 @@ public interface ProfitService {
 
 	void saveAllTradeProfits();
 
-	List<Profit> listDailyTradeProfits();
+	List<ProfitList> listDailyTradeProfits(String date);
+
+	List<String> totalDailyProfits(String date);
 
 	List<Profit> listAllProfits();
 

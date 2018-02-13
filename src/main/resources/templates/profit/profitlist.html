@@ -3,26 +3,27 @@
 </head>
 <div th:replace="fragments/sidebar :: sidebar"></div>
 
-<div th:if="${!profits.empty}">
-	<div class="d-flex flex-row">
-		<div class="p-2">
-			<h1>Profit List</h1>
-		</div>
-		<div class="p-2">
-			<div th:if="${!totalProfits.empty}">
-				<button type="button" id="heading-total-profits"
-					class="btn btn-outline-dark" data-toggle="collapse"
-					data-target="#collapse-total-profits">Total profits</button>
-			</div>
-		</div>
-		<div id="collapse-total-profits" class="collapse list-group-flush p-2">
-			<ul class="list-inline">
-				<li id="total-profit-currencies" class="list-inline-item" th:each="currency : ${totalProfits}"
-					th:text="${currency}"></li>
-			</ul>
-		</div>
 
+<div class="d-flex flex-row">
+	<div class="p-2">
+		<h1>Profit List</h1>
 	</div>
+	<div class="p-2">
+		<div th:if="${!totalProfits.empty}">
+			<button type="button" id="heading-total-profits"
+				class="btn btn-outline-dark" data-toggle="collapse"
+				data-target="#collapse-total-profits">Total profits</button>
+		</div>
+	</div>
+	<div id="collapse-total-profits" class="collapse list-group-flush p-2">
+		<ul class="list-inline">
+			<li id="total-profit-currencies" class="list-inline-item"
+				th:each="currency : ${totalProfits}" th:text="${currency}"></li>
+		</ul>
+	</div>
+
+</div>
+<div th:if="${!profits.empty}">
 	<table class="table table-striped">
 		<tr>
 			<th>Symbol</th>
