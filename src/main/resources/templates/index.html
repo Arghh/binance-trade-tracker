@@ -1,11 +1,26 @@
 <head lang="en" th:replace="fragments/header :: header">
 </head>
-<body>
-	<div th:replace="fragments/sidebar"></div>
-	
-	<!-- 2 divs are for body from sidebar. last div is to close wrapper.-->
-	</div>
-	</div>
-		<div lang="en" th:replace="fragments/footer :: footer"></div>
-	<!-- /#page-content-wrapper -->
-	</div>
+<div th:replace="fragments/sidebar"></div>
+<div class="container">
+	<h1 class="display-2">Welcome fellow trader!</h1>
+	<br>
+	<p class="lead">Head over to the Tools page to get started.
+		Remember it is still a work in progress.</p>
+	<br>
+	<h4>
+		<b>Notes:</b>
+	</h4>
+	<ul class="list-group list-group-flush">
+		<li class="list-group-item">The daily profits page will only
+			count and analyze all trades closed on that day.</li>
+		<li class="list-group-item">If you have bought some coins and
+			transferred them off Binance please delete that order to keep the
+			results correct.</li>
+		<li class="list-group-item">If you want to recalculate profits
+			delete all profits first using the Tools menu</li>
+	</ul>
+	<!-- 1 div is to close the container. last div is to close page content wrapper.-->
+</div>
+<div lang="en" th:replace="fragments/footer :: footer"></div>
+<!-- /#page-content-wrapper -->
+</div>

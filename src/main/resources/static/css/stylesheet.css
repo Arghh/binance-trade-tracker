@@ -164,14 +164,14 @@ html {
 
 	/* Tools Menu*/
 	.tool-text {
-		font-size: 13px;
+		
 	}
 
 	/* Profit List*/
-	#total-profit-currencies {
-		margin-top: 21px;
+	#collapse-total-profits ul li {
+		margin-top: 16px;
 	}
-	#total-daily-currencies {
-		margin-top: 21px;
+	#collapse-daily-profits ul li {
+		margin-top: 8px;
 	}
 }

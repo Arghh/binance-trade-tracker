@@ -7,6 +7,9 @@
 		<div class="p-2">
 			<h1>Daily stats</h1>
 		</div>
+				<div class="p-2">
+			<h4>Number of trades closed:</h4>
+		</div>
 		<div class="p-2 ml-auto">
 			<form th:action="@{/profit/list/daily/}" method="get">
 				<div class="input-group mb-3">
@@ -20,19 +23,20 @@
 	</div>
 	<div class="d-flex flex-row">
 		<div class="p-2">
+			<div id="collapse-daily-profits" class="collapse">
+
+				<ul class="list-inline">
+					<li class="list-inline-item" id="total-daily-currencies"
+						th:each="currency : ${totalProfitsDaily}" th:text="${currency}"></li>
+				</ul>
+			</div>
+		</div>
+		<div class="p-2 ml-auto">
 			<div th:if="${!totalProfitsDaily.empty}">
 				<button type="button" id="heading-daily-profits"
 					class="btn btn-outline-dark" data-toggle="collapse"
 					data-target="#collapse-daily-profits">Total profits</button>
 			</div>
-			<div id="collapse-daily-profits" class="collapse list-group-flush">
-				<ul class="list-inline">
-					<li id="total-daily-currencies" class="list-inline-item"
-						th:each="currency : ${totalProfitsDaily}" th:text="${currency}"></li>
-				</ul>
-			</div>
-
-
 		</div>
 	</div>
 
