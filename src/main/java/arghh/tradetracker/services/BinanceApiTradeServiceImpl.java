@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import com.webcerebrium.binance.api.BinanceApi;
 import com.webcerebrium.binance.api.BinanceApiException;
 import com.webcerebrium.binance.datatype.BinanceSymbol;
 import com.webcerebrium.binance.datatype.BinanceTrade;
@@ -20,7 +19,7 @@ public class BinanceApiTradeServiceImpl implements BinanceApiTradeService {
 
 	private TradeService tradeService;
 	private BinanceTradeToTrade tradeConverter;
-	private BinanceApi api;
+	// private BinanceApi api = new BinanceApi();
 
 	@Value("${tradeHistory.path}")
 	private String filePath;
@@ -29,7 +28,6 @@ public class BinanceApiTradeServiceImpl implements BinanceApiTradeService {
 	public BinanceApiTradeServiceImpl(TradeService tradeService, BinanceTradeToTrade tradeConverter) {
 		this.tradeService = tradeService;
 		this.tradeConverter = tradeConverter;
-		this.api = new BinanceApi();
 	}
 
 	@Override
@@ -50,7 +48,8 @@ public class BinanceApiTradeServiceImpl implements BinanceApiTradeService {
 	public List<Trade> saveAllBinanaceTrades(String symbol) {
 		try {
 			BinanceSymbol sy = new BinanceSymbol(symbol);
-			List<BinanceTrade> trades = api.myTrades(sy);
+			List<BinanceTrade> trades = new ArrayList<>();
+			// List<BinanceTrade> trades = api.myTrades(sy);
 			System.out.println(trades);
 			for (BinanceTrade binanceTrade : trades) {
 				saveNewBinanceTrade(binanceTrade);

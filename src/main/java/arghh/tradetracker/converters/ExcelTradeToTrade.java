@@ -6,23 +6,14 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
 import arghh.tradetracker.exception.TradeException;
 import arghh.tradetracker.model.Trade;
-import arghh.tradetracker.repositories.TradeRepository;
 
 @Component
 public class ExcelTradeToTrade implements Converter<List<String>, Trade> {
-
-	private TradeRepository tradeRepository;
-
-	@Autowired
-	public ExcelTradeToTrade(TradeRepository tradeRepository) {
-		this.tradeRepository = tradeRepository;
-	}
 
 	@Override
 	public Trade convert(List<String> source) {

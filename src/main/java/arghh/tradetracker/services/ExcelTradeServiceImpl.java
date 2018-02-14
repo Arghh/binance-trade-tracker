@@ -27,17 +27,14 @@ public class ExcelTradeServiceImpl implements ExcelTradeService {
 
 	private ExcelTradeToTrade excelTradeToTrade;
 	private TradeService tradeService;
-	private AggregatedTradeService aggService;
 
 	@Value("${tradeHistory.path}")
 	private String filePath;
 
 	@Autowired
-	public ExcelTradeServiceImpl(ExcelTradeToTrade productFormToProduct, TradeService tradeService,
-			AggregatedTradeService aggService) {
+	public ExcelTradeServiceImpl(ExcelTradeToTrade productFormToProduct, TradeService tradeService) {
 		this.excelTradeToTrade = productFormToProduct;
 		this.tradeService = tradeService;
-		this.aggService = aggService;
 	}
 
 	@Override

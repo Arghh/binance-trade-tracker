@@ -3,25 +3,16 @@ package arghh.tradetracker.converters;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
 import arghh.tradetracker.commands.ProfitList;
 import arghh.tradetracker.model.AggregatedTrade;
 import arghh.tradetracker.model.Profit;
-import arghh.tradetracker.repositories.ProfitRepository;
 import arghh.tradetracker.util.TradeHelper;
 
 @Component
 public class ProfitToProfitList implements Converter<List<Profit>, List<ProfitList>> {
-
-	private ProfitRepository tradeRepository;
-
-	@Autowired
-	public ProfitToProfitList(ProfitRepository tradeRepository) {
-		this.tradeRepository = tradeRepository;
-	}
 
 	@Override
 	public List<ProfitList> convert(List<Profit> profitsForSymbol) {

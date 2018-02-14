@@ -2,25 +2,16 @@ package arghh.tradetracker.converters;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
 import arghh.tradetracker.exception.ProfitException;
 import arghh.tradetracker.model.AggregatedTrade;
 import arghh.tradetracker.model.Profit;
-import arghh.tradetracker.repositories.AggregatedTradeRepository;
 import arghh.tradetracker.util.TradeHelper;
 
 @Component
 public class AggTradeToProfit implements Converter<List<AggregatedTrade>, Profit> {
-
-	private AggregatedTradeRepository tradeRepository;
-
-	@Autowired
-	public AggTradeToProfit(AggregatedTradeRepository tradeRepository) {
-		this.tradeRepository = tradeRepository;
-	}
 
 	@Override
 	public Profit convert(List<AggregatedTrade> buySellPair) {

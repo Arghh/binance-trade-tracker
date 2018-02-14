@@ -10,21 +10,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import arghh.tradetracker.commands.ProfitList;
-import arghh.tradetracker.services.AggregatedTradeService;
-import arghh.tradetracker.services.ExcelTradeService;
 import arghh.tradetracker.services.ProfitService;
 
 @Controller
 public class ProfitController {
-	private AggregatedTradeService tradeService;
-	private ExcelTradeService excelService;
 	private ProfitService profitService;
 
 	@Autowired
-	public void setTradeService(AggregatedTradeService TradeService, ExcelTradeService excelService,
-			ProfitService profitService) {
-		this.tradeService = TradeService;
-		this.excelService = excelService;
+	public void setTradeService(ProfitService profitService) {
 		this.profitService = profitService;
 	}
 

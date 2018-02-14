@@ -11,21 +11,17 @@ import arghh.tradetracker.converters.TradeToAggTrade;
 import arghh.tradetracker.model.AggregatedTrade;
 import arghh.tradetracker.model.Trade;
 import arghh.tradetracker.repositories.AggregatedTradeRepository;
-import arghh.tradetracker.repositories.TradeRepository;
 
 @Service
 public class AggregatedTradeServiceImpl implements AggregatedTradeService {
 
 	private AggregatedTradeRepository aggTradeRepository;
-	private TradeRepository tradeRepository;
 	private TradeToAggTrade aggTradeConverter;
 
 	@Autowired
-	public AggregatedTradeServiceImpl(AggregatedTradeRepository aggTradeRepository, TradeToAggTrade aggTradeConverter,
-			TradeRepository tradeRepository) {
+	public AggregatedTradeServiceImpl(AggregatedTradeRepository aggTradeRepository, TradeToAggTrade aggTradeConverter) {
 		this.aggTradeRepository = aggTradeRepository;
 		this.aggTradeConverter = aggTradeConverter;
-		this.tradeRepository = tradeRepository;
 	}
 
 	@Override
