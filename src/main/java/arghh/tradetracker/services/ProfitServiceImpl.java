@@ -2,8 +2,11 @@ package arghh.tradetracker.services;
 
 import java.math.BigDecimal;
 import java.text.MessageFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
@@ -162,21 +165,16 @@ public class ProfitServiceImpl implements ProfitService {
 	}
 
 	@Override
-	public List<String> totalProfits() {
+	public List<String> allTimeProfits() {
 		List<String> allProfits = new ArrayList<>();
 		for (BaseCurrency currency : BaseCurrency.values()) {
 			List<Profit> profits = profitRepository.findByBaseCurrency(currency);
 
 			if (!profits.isEmpty()) {
-				BigDecimal totalProfitProCurrency = TradeHelper
-						.addBigDecimals(profits.stream().map(x -> x.getProfitValue()).collect(Collectors.toList()));
-				allProfits.add(TradeHelper.addBaseCurrencyProfit(totalProfitProCurrency, currency));
+				allProfits.add(calculateProfitProCurrency(profits, currency));
 			}
 		}
 
-		// if (allProfits.isEmpty()) {
-		// return new ArrayList<>();
-		// }
 		return allProfits;
 
 	}
@@ -194,20 +192,52 @@ public class ProfitServiceImpl implements ProfitService {
 
 	@Override
 	public List<ProfitList> listDailyTradeProfits(String date) {
-		List<ProfitList> profits = new ArrayList<>();
-		ProfitList profit1 = new ProfitList();
-		profit1.setSymbol("asdasds");
-		profits.add(profit1);
-		return profits;
+		List<ProfitList> profitsForWeb = new ArrayList<>();
+		if (date != null) {
+			Date day = stringToDate(date);
+
+			List<Profit> profits = profitRepository.findBySellTimeBetween(TradeHelper.getStartOfDay(day),
+					TradeHelper.getEndOfDay(day));
+			profitsForWeb = webConverter.convert(profits);
+		}
+
+		return profitsForWeb;
+	}
+
+	private Date stringToDate(String day) {
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+		try {
+			return formatter.parse(day);
+		} catch (ParseException e) {
+			System.out.println(e.getMessage());
+		}
+		return null;
 	}
 
 	@Override
-	public List<String> totalDailyProfits(String date) {
-		// TODO Auto-generated method stub
-		List<String> profits = new ArrayList<>();
-		profits.add("test");
-		profits.add("test2");
-		return profits;
+	public List<String> calculatedTotalDailyProfits(String date) {
+		List<String> dailyTotalProfits = new ArrayList<>();
+		Date day = stringToDate(date);
+		List<Profit> profits = profitRepository.findBySellTimeBetween(TradeHelper.getStartOfDay(day),
+				TradeHelper.getEndOfDay(day));
+
+		for (BaseCurrency currency : BaseCurrency.values()) {
+			List<Profit> profitsProCurrency = profits.stream().filter(x -> x.getBaseCurrency() == currency)
+					.collect(Collectors.toList());
+
+			if (!profitsProCurrency.isEmpty()) {
+				dailyTotalProfits.add(calculateProfitProCurrency(profits, currency));
+			}
+		}
+
+		return dailyTotalProfits;
+	}
+
+	private String calculateProfitProCurrency(List<Profit> profits, BaseCurrency currency) {
+		BigDecimal totalProfitProCurrency = TradeHelper
+				.addBigDecimals(profits.stream().map(x -> x.getProfitValue()).collect(Collectors.toList()));
+
+		return TradeHelper.addBaseCurrencyProfit(totalProfitProCurrency, currency);
 	}
 
 }

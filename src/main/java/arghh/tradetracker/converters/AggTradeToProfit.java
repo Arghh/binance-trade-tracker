@@ -38,6 +38,7 @@ public class AggTradeToProfit implements Converter<List<AggregatedTrade>, Profit
 			profit.setQuantity(buy.getQuantity());
 			profit.setProfitValue(TradeHelper.substractBigDecimals(buy.getTotal(), sell.getTotal()));
 			profit.setPriceDifference(TradeHelper.substractBigDecimals(buy.getPrice(), sell.getPrice()));
+			profit.setSellTime(sell.getTradeTime());
 			profit.setTimeDifference(TradeHelper.getMsBetweenTrades(buy.getTradeTime(), sell.getTradeTime()));
 			buy.setProfit(profit);
 			sell.setProfit(profit);

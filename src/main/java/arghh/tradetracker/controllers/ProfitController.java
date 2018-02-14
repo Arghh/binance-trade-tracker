@@ -1,5 +1,6 @@
 package arghh.tradetracker.controllers;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,18 +31,22 @@ public class ProfitController {
 	@RequestMapping({ "/profit/list", "/profit/" })
 	public String listAllProfits(Model model) {
 		model.addAttribute("profits", profitService.showAllProfits());
-		model.addAttribute("totalProfits", profitService.totalProfits());
+		model.addAttribute("totalProfits", profitService.allTimeProfits());
 		return "profit/profitlist";
 	}
 
 	@RequestMapping({ "/profit/list/daily" })
-	public String listDailyProfits(Model model, @RequestParam(value = "date", required = false) String date) {
-
-		// if (date == null) {
-		// System.out.println("date null");
-		// }
-		List<String> totalProfitsDaily = profitService.totalDailyProfits("asd");
-		List<ProfitList> profitsDaily = profitService.listDailyTradeProfits("asd");
+	public String listDailyProfits(Model model, @RequestParam(value = "date", required = false) String day) {
+		List<String> totalProfitsDaily = new ArrayList<>();
+		List<ProfitList> profitsDaily = new ArrayList<>();
+		if (day == null || day.isEmpty()) {
+			System.out.println("Date not set");
+			model.addAttribute("totalProfitsDaily", totalProfitsDaily);
+			model.addAttribute("profitsDaily", profitsDaily);
+			return "profit/profitlistdaily";
+		}
+		totalProfitsDaily = profitService.calculatedTotalDailyProfits(day);
+		profitsDaily = profitService.listDailyTradeProfits(day);
 
 		model.addAttribute("totalProfitsDaily", totalProfitsDaily);
 		model.addAttribute("profitsDaily", profitsDaily);

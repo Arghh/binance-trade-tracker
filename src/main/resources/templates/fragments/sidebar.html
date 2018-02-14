@@ -4,14 +4,16 @@
 		<!-- Sidebar -->
 		<div id="sidebar-wrapper">
 			<ul class="sidebar-nav">
-				<li class="sidebar-brand"><a href="https://github.com/Arghh/binance-trade-tracker">Binance Trade Tracker</a></li>
+				<li class="sidebar-brand"><a
+					href="https://github.com/Arghh/binance-trade-tracker">Binance
+						Trade Tracker</a></li>
 				<li class="active"><a th:href="@{/}">Home</a></li>
 
 				<li><a href="#" data-toggle="collapse"
 					data-target="#trades-submenu" aria-expanded="false">Trades</a>
 					<ul id="trades-submenu" class="collapse">
 						<li><a th:href="@{/trade/list}">All trades</a></li>
-						<li><a th:href="@{/trade/list/raw}">Raw excel imports</a></li>
+						<li><a th:href="@{/trade/list/raw}">Raw excel data</a></li>
 					</ul></li>
 
 				<li><a href="#" data-toggle="collapse"
@@ -19,12 +21,6 @@
 					<ul id="profits-submenu" class="collapse">
 						<li><a th:href="@{/profit/list}">All</a></li>
 						<li><a th:href="@{/profit/list/daily}">Daily</a></li>
-					</ul></li>
-
-				<li><a href="#" data-toggle="collapse"
-					data-target="#import-submenu" aria-expanded="false">Imports</a>
-					<ul id="import-submenu" class="collapse">
-						<li><a th:href="@{/trade/api/save}">Binance API import</a></li>
 					</ul></li>
 
 				<li><a th:href="@{/tools/}">Tools</a></li>
@@ -35,9 +31,11 @@
 		<!-- /#sidebar-wrapper -->
 		<!-- Page Content -->
 		<div class="page-content-wrapper">
-			<div class="container">
-					<div class="col-xs-18 col-md-12">
-						<a id="menu-toggle" class="btn btn-outline-light text-dark float-right"
-							role="button">Toggle Menu</a>
-						<!-- /#wrapper -->
-					</div>
+			<div class="d-flex flex-row">
+				<div class="p-2  ml-auto">
+					<a id="menu-toggle"
+						class="btn btn-outline-light text-dark float-right" role="button">Toggle
+						Menu</a>
+					<!-- /#wrapper -->
+				</div>
+			</div>

@@ -2,6 +2,7 @@ package arghh.tradetracker.model;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -46,6 +47,8 @@ public class Profit {
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "profit")
 	private List<AggregatedTrade> aggregatedTrade = new ArrayList<>();
+
+	private Date sellTime;
 
 	public Long getId() {
 		return id;
@@ -108,6 +111,14 @@ public class Profit {
 
 	public void setTimeDifference(long timeDifference) {
 		this.timeDifference = timeDifference;
+	}
+
+	public Date getSellTime() {
+		return sellTime;
+	}
+
+	public void setSellTime(Date sellTime) {
+		this.sellTime = sellTime;
 	}
 
 }

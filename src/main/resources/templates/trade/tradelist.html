@@ -1,39 +1,44 @@
 <!DOCTYPE html>
 <head lang="en" th:replace="fragments/header :: header">
 </head>
-<body>
-	<div th:replace="fragments/sidebar :: sidebar"></div>
-	<div th:if="${!trades.empty}">
-		<div class="d-flex flex-row">
+<div th:replace="fragments/sidebar :: sidebar"></div>
+<div class="container">
+	<div class="d-flex flex-row">
+
 		<div class="p-2">
-		<h1>Trade List</h1>
+			<h1>Trade List</h1>
 		</div>
-		</div>
-		<table class="table table-striped">
-			<tr>
-				<th>Type</th>
-				<th>Symbol</th>
-				<th>Price</th>
-				<th>Total</th>
-				<th>Fee</th>
-				<th>Fee Coin</th>
-				<th>Time Of Trade</th>
-				<th>View</th>
-			</tr>
-			<tr th:each="trade : ${trades}">
-				<td th:if="${trade.buy} == true">Buy</td>
-				<td th:unless="${trade.buy}">Sell</td>
-				<td th:text="${trade.symbol}"></td>
-				<td th:text="${trade.price}"></td>
-				<td th:text="${trade.total}"></td>
-				<td th:text="${trade.fee}"></td>
-				<td th:text="${trade.feeCoin}"></td>
-				<td
-					th:text="${#dates.format(trade.tradeTime, 'yyyy-MM-dd hh:mm:ss')}"></td>
-			</tr>
+
+	</div>
+	<div th:if="${!trades.empty}">
+		<table class="table table-striped table-responsive">
+			<thead>
+				<tr>
+					<th>Type</th>
+					<th>Symbol</th>
+					<th>Price</th>
+					<th>Total</th>
+					<th>Fee</th>
+					<th>Fee Coin</th>
+					<th>Time Of Trade</th>
+					<th>View</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="trade : ${trades}">
+					<td th:if="${trade.buy} == true">Buy</td>
+					<td th:unless="${trade.buy}">Sell</td>
+					<td th:text="${trade.symbol}"></td>
+					<td th:text="${trade.price}"></td>
+					<td th:text="${trade.total}"></td>
+					<td th:text="${trade.fee}"></td>
+					<td th:text="${trade.feeCoin}"></td>
+					<td
+						th:text="${#dates.format(trade.tradeTime, 'yyyy-MM-dd hh:mm:ss')}"></td>
+				</tr>
+			</tbody>
 		</table>
 	</div>
-	</div>
-	</div>
-	<div lang="en" th:replace="fragments/footer :: footer"></div>
-	</div>
+</div>
+<div lang="en" th:replace="fragments/footer :: footer"></div>
+</div>

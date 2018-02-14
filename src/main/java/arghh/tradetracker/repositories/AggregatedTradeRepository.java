@@ -1,5 +1,6 @@
 package arghh.tradetracker.repositories;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.Query;
@@ -15,4 +16,6 @@ public interface AggregatedTradeRepository extends CrudRepository<AggregatedTrad
 
 	@Query("select DISTINCT(at.symbol) from AggregatedTrade at")
 	List<String> findDistinctSymbols();
+
+	List<AggregatedTrade> findByTradeTime(Date time);
 }

@@ -11,13 +11,13 @@ public interface ProfitService {
 
 	List<ProfitList> listDailyTradeProfits(String date);
 
-	List<String> totalDailyProfits(String date);
+	List<String> calculatedTotalDailyProfits(String date);
 
 	List<Profit> listAllProfits();
 
 	List<ProfitList> showAllProfits();
 
-	List<String> totalProfits();
+	List<String> allTimeProfits();
 
 	Profit saveOrUpdate(Profit profit);
 

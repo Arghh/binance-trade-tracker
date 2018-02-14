@@ -2,7 +2,7 @@ html {
 	height: 100%;
 }
 
-.page-content-wrapper {
+.container {
 	min-height: calc(100vh - 70px);
 }
 
@@ -147,7 +147,19 @@ html {
 	#heading-total-profits {
 		color: #000000;
 		background-color: #e0e0e0;
-		font-size: 12px;
+		margin-top: 10px;
+		margin-left: 20px;
+	}
+	#heading-daily-profits {
+		color: #000000;
+		background-color: #e0e0e0;
+		margin-top: 10px;
+		margin-left: 20px;
+	}
+	#show-daily-profits {
+		color: #000000;
+		background-color: #e0e0e0;
+		margin-left: 5px;
 	}
 
 	/* Tools Menu*/
@@ -156,12 +168,10 @@ html {
 	}
 
 	/* Profit List*/
-	#heading-total-profits {
-		margin-top: 15px;
-		margin-left: 20px;
-	}
 	#total-profit-currencies {
-		font-size: 12px;
+		margin-top: 21px;
+	}
+	#total-daily-currencies {
 		margin-top: 21px;
 	}
 }
