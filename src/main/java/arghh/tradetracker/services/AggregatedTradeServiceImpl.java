@@ -2,6 +2,7 @@ package arghh.tradetracker.services;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,17 +12,21 @@ import arghh.tradetracker.converters.TradeToAggTrade;
 import arghh.tradetracker.model.AggregatedTrade;
 import arghh.tradetracker.model.Trade;
 import arghh.tradetracker.repositories.AggregatedTradeRepository;
+import arghh.tradetracker.repositories.ProfitRepository;
 
 @Service
 public class AggregatedTradeServiceImpl implements AggregatedTradeService {
 
 	private AggregatedTradeRepository aggTradeRepository;
+	private ProfitRepository profitRepository;
 	private TradeToAggTrade aggTradeConverter;
 
 	@Autowired
-	public AggregatedTradeServiceImpl(AggregatedTradeRepository aggTradeRepository, TradeToAggTrade aggTradeConverter) {
+	public AggregatedTradeServiceImpl(AggregatedTradeRepository aggTradeRepository, TradeToAggTrade aggTradeConverter,
+			ProfitRepository profitRepository) {
 		this.aggTradeRepository = aggTradeRepository;
 		this.aggTradeConverter = aggTradeConverter;
+		this.profitRepository = profitRepository;
 	}
 
 	@Override
@@ -40,7 +45,11 @@ public class AggregatedTradeServiceImpl implements AggregatedTradeService {
 
 	@Override
 	public void delete(Long id) {
-		aggTradeRepository.deleteById(id);
+		Optional<AggregatedTrade> tradeToDelete = aggTradeRepository.findById(id);
+		if (tradeToDelete.get().getProfit() != null) {
+			profitRepository.delete(tradeToDelete.get().getProfit());
+		}
+		aggTradeRepository.delete(tradeToDelete.get());
 	}
 
 	@Override

@@ -5,6 +5,7 @@ import java.util.Date;
 
 public class ProfitList {
 
+	private long id;
 	private String symbol;
 	private Date buyTime;
 	private Date sellTime;
@@ -14,6 +15,14 @@ public class ProfitList {
 	private String profit;
 	private String quantity;
 	private BigDecimal totalProfit;
+
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
 
 	public String getSymbol() {
 		return symbol;

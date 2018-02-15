@@ -25,18 +25,25 @@ public class ProfitToProfitList implements Converter<List<Profit>, List<ProfitLi
 
 		for (Profit data : profitsForSymbol) {
 			ProfitList profit = new ProfitList();
-			AggregatedTrade buy = data.getbuySellPair().get(0);
-			AggregatedTrade sell = data.getbuySellPair().get(1);
-			profit.setSymbol(buy.getSymbol());
-			profit.setBuyPrice(buy.getPrice());
-			profit.setSellPrice(sell.getPrice());
-			profit.setProfit(TradeHelper.addBaseCurrencyProfit(data.getProfitValue(), data.getBaseCurrency()));
-			profit.setQuantity(TradeHelper.addStringToBigDecimal(data.getQuantity(), buy.getSymbol()));
-			profit.setBuyTime(buy.getTradeTime());
-			profit.setSellTime(sell.getTradeTime());
-			// profit.setTimeDifference(TradeHelper.getTimeDifference(buy.getTradeTime(),
-			// sell.getTradeTime()));
-			profit.setTimeDifference(TradeHelper.getTimeDifference(buy.getTradeTime(), sell.getTradeTime()));
+			AggregatedTrade buy = new AggregatedTrade();
+			AggregatedTrade sell = new AggregatedTrade();
+			if (data.getbuySellPair().size() > 1) {
+				buy = data.getbuySellPair().get(0);
+				sell = data.getbuySellPair().get(1);
+				profit.setId(data.getId());
+				profit.setSymbol(buy.getSymbol());
+				profit.setBuyPrice(buy.getPrice());
+				profit.setSellPrice(sell.getPrice());
+				profit.setProfit(TradeHelper.addBaseCurrencyProfit(data.getProfitValue(), data.getBaseCurrency()));
+				profit.setQuantity(TradeHelper.addStringToBigDecimal(data.getQuantity(), buy.getSymbol()));
+				profit.setBuyTime(buy.getTradeTime());
+				profit.setSellTime(sell.getTradeTime());
+				// profit.setTimeDifference(TradeHelper.getTimeDifference(buy.getTradeTime(),
+				// sell.getTradeTime()));
+				profit.setTimeDifference(TradeHelper.getTimeDifference(buy.getTradeTime(), sell.getTradeTime()));
+			} else {
+				System.out.println("profit " + profit.getId() + " has lost he's buy or sell trade.");
+			}
 			profits.add(profit);
 		}
 

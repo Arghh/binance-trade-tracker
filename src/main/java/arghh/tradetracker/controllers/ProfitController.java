@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -56,6 +57,12 @@ public class ProfitController {
 	public String truncateProfits() {
 		profitService.deleteAll();
 		return "tools";
+	}
+
+	@RequestMapping("/profit/delete/{id}")
+	public String delete(@PathVariable String id) {
+		profitService.delete(Long.valueOf(id));
+		return "redirect:/profit/list";
 	}
 
 }

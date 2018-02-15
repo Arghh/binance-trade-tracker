@@ -49,8 +49,8 @@ public class TradeController {
 
 	@RequestMapping({ "/trade/list/raw" })
 	public String listRawTrades(Model model) {
-		model.addAttribute("trades", tradeService.listAllRaw());
-		return "trade/tradelist";
+		model.addAttribute("rawTrades", tradeService.listAllRaw());
+		return "trade/tradelistraw";
 	}
 
 	@RequestMapping({ "/trade/list", "/trade" })
@@ -116,9 +116,15 @@ public class TradeController {
 	// }
 
 	@RequestMapping("/trade/delete/{id}")
-	public String delete(@PathVariable String id) {
+	public String deleteAggregatedTrade(@PathVariable String id) {
+		aggService.delete(Long.valueOf(id));
+		return "redirect:/trade/list";
+	}
+
+	@RequestMapping("/trade/raw/delete/{id}")
+	public String deleteTrade(@PathVariable String id) {
 		tradeService.delete(Long.valueOf(id));
-		return "trade/tradelist";
+		return "redirect:/trade/list/raw";
 	}
 
 	@RequestMapping("/trade/raw/truncate")

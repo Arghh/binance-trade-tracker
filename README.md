@@ -71,7 +71,9 @@ java -jar binance-profit-tracker-0.0.1-SNAPSHOT.jar --spring.config.location="ap
 ## Digital tip jar
 
 BTC: 16AoWFGFRE2G15x2zBLTTX7C4h13tcMToP
+
 ETH: 0xBeA6fC790Ad1171132fC257aA8173dA20847eB92
+
 XLM: GBJUUZKDU3PIPMX6LPS34RVAL7EBBSBP2EWU45LO4Z5PH3WFBJ55HOWA
 
 ## License

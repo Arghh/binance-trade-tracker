@@ -67,8 +67,11 @@ public class ProfitServiceImpl implements ProfitService {
 		for (String s : symbols) {
 
 			trades = aggTradeRepository.findBySymbol(s);
+
 			System.out.println("Calculating profits for trade pair " + s);
-			trades = filterOutOpenTrades(trades);
+			if (!trades.isEmpty() || !(trades.size() < 2)) {
+				trades = filterOutOpenTrades(trades);
+			}
 
 			// skip profits with no trade pair
 			if (trades.isEmpty() || trades.size() < 2) {
@@ -108,16 +111,17 @@ public class ProfitServiceImpl implements ProfitService {
 		// filteredTrades.remove(filteredTrades.size() - 1);
 		// System.out.println("Skipping last trade because it's still open");
 		// }
-		// filter out open trades if the quantity has not been sold
+		// filter out open trades if the quantity has not been sold unless the fee coin
+		// is not BNB
 		for (int i = 0; i < filteredTrades.size() - 2; i++) {
 			if (filteredTrades.get(i).isBuy()) {
 				// if the next trade is also a buy
 				while (filteredTrades.get(i + 1).isBuy()) {
 					// if the next trade after a buy is sell with same quantity skip
 					if (!filteredTrades.get(i + 2).isBuy() && filteredTrades.get(i).getQuantity()
-							.compareTo(filteredTrades.get(i + 1).getQuantity()) == 0)
+							.compareTo(filteredTrades.get(i + 1).getQuantity()) == 0) {
 						continue;
-
+					}
 					// otherwise remove buys
 					filteredTrades.remove(i);
 					System.out.println("Skipping a trade because it's still open");
@@ -188,6 +192,11 @@ public class ProfitServiceImpl implements ProfitService {
 	@Override
 	public void deleteAll() {
 		profitRepository.deleteAll();
+	}
+
+	@Override
+	public void delete(Long id) {
+		profitRepository.deleteById(id);
 	}
 
 	@Override

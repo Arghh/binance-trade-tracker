@@ -97,8 +97,13 @@ public class ExcelTradeServiceImpl implements ExcelTradeService {
 		Collections.sort(rawTrades, new Comparator<Trade>() {
 			@Override
 			public int compare(Trade o1, Trade o2) {
-				if (o1.getTradeTime() == null || o2.getTradeTime() == null)
+				if (o1.getTradeTime() == null || o2.getTradeTime() == null) {
+					System.out.println("Trade times are not set.");
 					return 0;
+				} else if (o1.getTradeTime().compareTo(o2.getTradeTime()) == 0) {
+					System.out.println("Trade time is same the same. Saving buy first");
+					return -1;
+				}
 				return o1.getTradeTime().compareTo(o2.getTradeTime());
 			}
 		});

@@ -23,4 +23,6 @@ public interface ProfitService {
 
 	void deleteAll();
 
+	void delete(Long id);
+
 }
