@@ -58,7 +58,6 @@ public class AggregatedTradeServiceImpl implements AggregatedTradeService {
 	}
 
 	@Override
-	@Transactional
 	public void convertAndSaveAllAggTrades(List<Trade> trades) {
 		AggregatedTrade savedTrade = null;
 

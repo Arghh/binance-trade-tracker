@@ -1,6 +1,6 @@
 # Binance Trade Tracker
 
-Trades and profits tracking for day trades in one easy to use web front end. Basically it just imports all your trades, adds your partial trades together and calculates the profit you made on a daily bases or overall. More features are planned (See TODO-s). This App is build using Spring Boot, Thymeleaf and Bootstrap. Trade Tracker uses the [webcerebrium binance api.](https://github.com/webcerebrium/java-binance-api)
+Trades and profits tracking for day trades and bots in one easy to use web front end. Basically it just imports all your trades, adds your partial trades together and calculates the profit you made on a daily bases or overall. More features are planned (See TODO-s). This App is build using Spring Boot, Thymeleaf and Bootstrap. Trade Tracker uses the [webcerebrium binance api.](https://github.com/webcerebrium/java-binance-api)
 
 ## Getting Started
 
@@ -39,7 +39,6 @@ For example Linux:
 ```
 home/Argh/Downloads/TradeHistory.xlsx
 ```
-__Note:__ Please make sure you only have unique trades in the Excel spreadsheet. Trade Tracker can't filter out any duplicates. Just yet..
 
 ##### OPTIONAL FIELDS:
 * BINANCE_API_KEY - Please make sure you only use a READ-ONLY key.
@@ -57,10 +56,8 @@ java -jar binance-profit-tracker-0.0.1-SNAPSHOT.jar --spring.config.location="ap
 ## Todos
 
 * Error handling
-* Ignoring duplicate trades
 * Prices in USD
 * Proper logging
-* Wallet overview
 * Proper front end
 * integration- and unit-tests
 * performance
@@ -69,8 +66,6 @@ java -jar binance-profit-tracker-0.0.1-SNAPSHOT.jar --spring.config.location="ap
 
 
 ## Digital tip jar
-
-BTC: 16AoWFGFRE2G15x2zBLTTX7C4h13tcMToP
 
 ETH: 0xBeA6fC790Ad1171132fC257aA8173dA20847eB92
 

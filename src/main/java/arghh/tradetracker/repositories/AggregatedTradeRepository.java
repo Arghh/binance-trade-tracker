@@ -17,5 +17,9 @@ public interface AggregatedTradeRepository extends CrudRepository<AggregatedTrad
 	@Query("select DISTINCT(at.symbol) from AggregatedTrade at")
 	List<String> findDistinctSymbols();
 
+	@Query("select COUNT(at) from AggregatedTrade at")
+	Long countAll();
+
 	List<AggregatedTrade> findByTradeTime(Date time);
+
 }

@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
@@ -107,12 +108,10 @@ public class ProfitServiceImpl implements ProfitService {
 			filteredTrades.remove(filteredTrades.size() - 1);
 			System.out.println("Skipping last trade because it's still open");
 		}
-		// if (!(filteredTrades.size() % 2 == 0)) {
-		// filteredTrades.remove(filteredTrades.size() - 1);
-		// System.out.println("Skipping last trade because it's still open");
-		// }
-		// filter out open trades if the quantity has not been sold unless the fee coin
-		// is not BNB
+
+		// filter out open trades if the quantity has not been sold TODO: unless the fee
+		// coin
+		// is NOT BNB
 		for (int i = 0; i < filteredTrades.size() - 2; i++) {
 			if (filteredTrades.get(i).isBuy()) {
 				// if the next trade is also a buy
@@ -135,9 +134,6 @@ public class ProfitServiceImpl implements ProfitService {
 		// divide the even list into sets each size 2
 		final AtomicInteger counter = new AtomicInteger(0);
 
-		// Integer key = entry.getKey();
-		// String value = entry.getValue();
-		// Profit profit = new Profit();
 		final Collection<List<AggregatedTrade>> pairs = filteredTrades.stream()
 				.collect(Collectors.groupingBy(t -> counter.getAndIncrement() / 2)).values();
 		//
@@ -147,13 +143,6 @@ public class ProfitServiceImpl implements ProfitService {
 		return pairs;
 
 	}
-	// private List<AggregatedTrade> calculateProfitsPerSymbol(List<AggregatedTrade>
-	// allTrades) {
-	// BigDecimal buyTotal = allTrades.get(i).getTotal();
-	// BigDecimal sellTotal = allTrades.get(i + 1).getTotal();
-	// BigDecimal profit = TradeHelper.substractBigDecimals(buyTotal, sellTotal);
-	//
-	// }
 
 	private Profit saveNewProfit(List<AggregatedTrade> buySellPair) {
 		Profit savedProfit = profitConverter.convert(buySellPair);
@@ -214,7 +203,9 @@ public class ProfitServiceImpl implements ProfitService {
 	}
 
 	private Date stringToDate(String day) {
+		TimeZone tz = TimeZone.getTimeZone("Europe/London");
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+		formatter.setTimeZone(tz);
 		try {
 			return formatter.parse(day);
 		} catch (ParseException e) {

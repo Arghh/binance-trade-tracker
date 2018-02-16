@@ -8,12 +8,15 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
 
 @Entity
 @Table(name = "trade")
+@NamedQuery(name = "Trade.findDuplicates", query = "select t from Trade t WHERE t.tradeTime = ?1 "
+		+ "and t.symbol = ?2 and t.buy = ?3 and t.price = ?4")
 public class Trade {
 
 	@Id

@@ -80,7 +80,7 @@ public class ExcelTradeServiceImpl implements ExcelTradeService {
 	public Trade saveNewExcelTrade(Trade newTradeToSave) {
 		if (newTradeToSave != null) {
 			newTradeToSave = tradeService.saveOrUpdate(newTradeToSave);
-			System.out.println(MessageFormat.format("Saved a trade from Excel with the Symbol {0} and price {1}",
+			System.out.println(MessageFormat.format("Saved a trade from Excel with the Symbol {0} and total amount {1}",
 					newTradeToSave.getSymbol(), newTradeToSave.getTotal()));
 		} else {
 			System.out.println("Could not save a new trade");

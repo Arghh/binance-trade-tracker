@@ -11,15 +11,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import arghh.tradetracker.commands.ProfitList;
+import arghh.tradetracker.commands.StatsList;
 import arghh.tradetracker.services.ProfitService;
+import arghh.tradetracker.services.StatsService;
 
 @Controller
 public class ProfitController {
 	private ProfitService profitService;
+	private StatsService statsService;
 
 	@Autowired
-	public void setTradeService(ProfitService profitService) {
+	public void setTradeService(ProfitService profitService, StatsService statsService) {
 		this.profitService = profitService;
+		this.statsService = statsService;
 	}
 
 	@RequestMapping({ "/profit/list", "/profit/" })
@@ -63,6 +67,13 @@ public class ProfitController {
 	public String delete(@PathVariable String id) {
 		profitService.delete(Long.valueOf(id));
 		return "redirect:/profit/list";
+	}
+
+	@RequestMapping({ "/stats" })
+	public String getStats(Model model) {
+		StatsList marketStats = statsService.showAllStats();
+		model.addAttribute("marketStats", marketStats);
+		return "stats";
 	}
 
 }

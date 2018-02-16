@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 import arghh.tradetracker.exception.ProfitException;
 import arghh.tradetracker.services.BaseCurrency;
@@ -35,7 +36,10 @@ public class TradeHelper {
 	}
 
 	public static long getMsBetweenTrades(Date buy, Date sell) throws ProfitException {
-		SimpleDateFormat formatter = new SimpleDateFormat("dd hh:mm:ss");
+		TimeZone tz = TimeZone.getTimeZone("Europe/London");
+		SimpleDateFormat formatter = new SimpleDateFormat("dd HH:mm:ss");
+		formatter.setTimeZone(tz);
+
 		String buyTime = formatter.format(buy.getTime());
 		String sellTime = formatter.format(sell.getTime());
 

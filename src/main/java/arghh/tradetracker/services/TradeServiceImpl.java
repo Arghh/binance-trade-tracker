@@ -60,19 +60,16 @@ public class TradeServiceImpl implements TradeService {
 
 	private ArrayList<Trade> combineTrades(List<Trade> rawTrades) {
 		ArrayList<Trade> aggregatedTrades = new ArrayList<>();
-		// Trade lastTrade = new Trade();
+
 		for (int i = 0; i < rawTrades.size();) {
 			Trade currentTrade = rawTrades.get(i);
-			// if (lastTrade.getId() != null) {
+
 			ArrayList<Trade> partialCanditates = new ArrayList<>();
 			partialCanditates.add(currentTrade);
 
-			if (currentTrade.getSymbol().equals("IOTAETH")) {
-				System.out.println(currentTrade.getQuantity());
-			}
 			// check if the next trades might all be part of the current trade
 			for (int j = i + 1; j < rawTrades.size(); j++) {
-				System.out.println(rawTrades.get(j).getQuantity());
+
 				if ((currentTrade.isBuy() != rawTrades.get(j).isBuy())
 						|| (currentTrade.getPrice().compareTo(rawTrades.get(j).getPrice()) != 0)) {
 					break;
@@ -98,20 +95,11 @@ public class TradeServiceImpl implements TradeService {
 			i++;
 		}
 
-		// else {
-		// aggregatedTrades.add(trade);
-		// }
-
-		// lastTrade = trade;
-
-		// }
-
 		return aggregatedTrades;
 	}
 
 	private ArrayList<Trade> checkIfPartialTrade(ArrayList<Trade> partialCanditates) {
 		BigDecimal price = partialCanditates.get(0).getPrice();
-		long date = partialCanditates.get(0).getTradeTime().getTime();
 
 		// TODO: crtieria for partial trade next sell quantity = all buy quantities or
 		// reversed
@@ -142,16 +130,16 @@ public class TradeServiceImpl implements TradeService {
 	}
 
 	private Trade addTradesTogether(ArrayList<Trade> partialTrades) {
-		Trade firstTrade = partialTrades.get(0);
+		Trade lastTrade = partialTrades.get(partialTrades.size() - 1);
 		Trade combinedTrade = new Trade();
 		List<BigDecimal> totalQuantity = new ArrayList<>();
 		List<BigDecimal> totalCost = new ArrayList<>();
 		List<BigDecimal> totalFee = new ArrayList<>();
-		combinedTrade.setTradeTime(firstTrade.getTradeTime());
-		combinedTrade.setSymbol(firstTrade.getSymbol());
-		combinedTrade.setBuy(firstTrade.isBuy());
-		combinedTrade.setPrice(firstTrade.getPrice());
-		combinedTrade.setFeeCoin(firstTrade.getFeeCoin());
+		combinedTrade.setTradeTime(lastTrade.getTradeTime());
+		combinedTrade.setSymbol(lastTrade.getSymbol());
+		combinedTrade.setBuy(lastTrade.isBuy());
+		combinedTrade.setPrice(lastTrade.getPrice());
+		combinedTrade.setFeeCoin(lastTrade.getFeeCoin());
 
 		partialTrades.forEach(t -> {
 			totalCost.add(t.getTotal());
