@@ -9,10 +9,10 @@ import org.springframework.data.repository.CrudRepository;
 import arghh.tradetracker.model.AggregatedTrade;
 
 public interface AggregatedTradeRepository extends CrudRepository<AggregatedTrade, Long> {
-	// @Query("SELECT MAX(t) FROM Trade t")
-	// Trade findLastInterId();
 
 	List<AggregatedTrade> findBySymbol(String symbol);
+
+	List<AggregatedTrade> findBySymbolAndProfitIsNull(String symbol);
 
 	@Query("select DISTINCT(at.symbol) from AggregatedTrade at")
 	List<String> findDistinctSymbols();
@@ -21,5 +21,7 @@ public interface AggregatedTradeRepository extends CrudRepository<AggregatedTrad
 	Long countAll();
 
 	List<AggregatedTrade> findByTradeTime(Date time);
+
+	AggregatedTrade findByBinanceId(Long Id);
 
 }

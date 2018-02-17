@@ -3,7 +3,6 @@ package arghh.tradetracker.services;
 import java.util.List;
 
 import arghh.tradetracker.model.AggregatedTrade;
-import arghh.tradetracker.model.Trade;
 
 public interface AggregatedTradeService {
 
@@ -15,7 +14,7 @@ public interface AggregatedTradeService {
 
 	void delete(Long id);
 
-	void convertAndSaveAllAggTrades(List<Trade> trades);
+	void saveAllAggTrades(List<AggregatedTrade> trades);
 
 	void deleteAll();
 

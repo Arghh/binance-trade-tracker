@@ -38,13 +38,12 @@ public class ProfitToProfitList implements Converter<List<Profit>, List<ProfitLi
 				profit.setQuantity(TradeHelper.addStringToBigDecimal(data.getQuantity(), buy.getSymbol()));
 				profit.setBuyTime(buy.getTradeTime());
 				profit.setSellTime(sell.getTradeTime());
-				// profit.setTimeDifference(TradeHelper.getTimeDifference(buy.getTradeTime(),
-				// sell.getTradeTime()));
 				profit.setTimeDifference(TradeHelper.getTimeDifference(buy.getTradeTime(), sell.getTradeTime()));
+
+				profits.add(profit);
 			} else {
 				System.out.println("profit " + profit.getId() + " has lost he's buy or sell trade.");
 			}
-			profits.add(profit);
 		}
 
 		return profits;

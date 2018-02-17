@@ -11,31 +11,32 @@ import com.webcerebrium.binance.api.BinanceApiException;
 import com.webcerebrium.binance.datatype.BinanceSymbol;
 import com.webcerebrium.binance.datatype.BinanceTrade;
 
-import arghh.tradetracker.converters.BinanceTradeToTrade;
+import arghh.tradetracker.converters.BinanceTradeToAggTrade;
+import arghh.tradetracker.model.AggregatedTrade;
 import arghh.tradetracker.model.Trade;
 
 @Service
 public class BinanceApiTradeServiceImpl implements BinanceApiTradeService {
 
-	private TradeService tradeService;
-	private BinanceTradeToTrade tradeConverter;
+	private AggregatedTradeService aggTradeService;
+	private BinanceTradeToAggTrade aggTradeConverter;
 	// private BinanceApi api = new BinanceApi();
 
 	@Value("${tradeHistory.path}")
 	private String filePath;
 
 	@Autowired
-	public BinanceApiTradeServiceImpl(TradeService tradeService, BinanceTradeToTrade tradeConverter) {
-		this.tradeService = tradeService;
-		this.tradeConverter = tradeConverter;
+	public BinanceApiTradeServiceImpl(AggregatedTradeService aggTradeService, BinanceTradeToAggTrade tradeConverter) {
+		this.aggTradeService = aggTradeService;
+		this.aggTradeConverter = tradeConverter;
 	}
 
 	@Override
-	public Trade saveNewBinanceTrade(BinanceTrade newTrade) {
+	public AggregatedTrade saveNewBinanceTrade(BinanceTrade newTrade) {
 
-		Trade savedTrade = tradeConverter.convert(newTrade);
+		AggregatedTrade savedTrade = aggTradeConverter.convert(newTrade);
 		if (savedTrade != null) {
-			tradeService.saveOrUpdate(savedTrade);
+			aggTradeService.saveOrUpdate(savedTrade);
 			System.out.println("Saved a trade with Binance Id: " + savedTrade.getBinanceId());
 		} else {
 			System.out.println("Could not save a new trade");

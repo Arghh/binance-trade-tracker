@@ -13,6 +13,7 @@ import arghh.tradetracker.model.AggregatedTrade;
 import arghh.tradetracker.model.Trade;
 import arghh.tradetracker.repositories.AggregatedTradeRepository;
 import arghh.tradetracker.repositories.ProfitRepository;
+import arghh.tradetracker.repositories.TradeRepository;
 
 @Service
 public class AggregatedTradeServiceImpl implements AggregatedTradeService {
@@ -20,13 +21,15 @@ public class AggregatedTradeServiceImpl implements AggregatedTradeService {
 	private AggregatedTradeRepository aggTradeRepository;
 	private ProfitRepository profitRepository;
 	private TradeToAggTrade aggTradeConverter;
+	private TradeRepository tradeRepositorty;
 
 	@Autowired
 	public AggregatedTradeServiceImpl(AggregatedTradeRepository aggTradeRepository, TradeToAggTrade aggTradeConverter,
-			ProfitRepository profitRepository) {
+			ProfitRepository profitRepository, TradeRepository tradeRepositorty) {
 		this.aggTradeRepository = aggTradeRepository;
 		this.aggTradeConverter = aggTradeConverter;
 		this.profitRepository = profitRepository;
+		this.tradeRepositorty = tradeRepositorty;
 	}
 
 	@Override
@@ -46,9 +49,6 @@ public class AggregatedTradeServiceImpl implements AggregatedTradeService {
 	@Override
 	public void delete(Long id) {
 		Optional<AggregatedTrade> tradeToDelete = aggTradeRepository.findById(id);
-		if (tradeToDelete.get().getProfit() != null) {
-			profitRepository.delete(tradeToDelete.get().getProfit());
-		}
 		aggTradeRepository.delete(tradeToDelete.get());
 	}
 
@@ -58,16 +58,18 @@ public class AggregatedTradeServiceImpl implements AggregatedTradeService {
 	}
 
 	@Override
-	public void convertAndSaveAllAggTrades(List<Trade> trades) {
-		AggregatedTrade savedTrade = null;
+	public void saveAllAggTrades(List<AggregatedTrade> trades) {
 
-		for (Trade trade : trades) {
-			savedTrade = aggTradeConverter.convert(trade);
-			if (savedTrade != null) {
-				saveOrUpdate(savedTrade);
-				System.out.println("Saved an aggregated trade with ID: " + savedTrade.getId());
-			} else {
-				System.out.println("Could not convert and save an aggregated trade");
+		for (AggregatedTrade trade : trades) {
+			saveOrUpdate(trade);
+			System.out.println("Saved an aggregated trade with ID: " + trade.getId());
+
+			if (!trade.getTrade().isEmpty()) {
+				for (Trade tradeToUpdate : trade.getTrade()) {
+					tradeToUpdate.setAggregatedTrade(trade);
+					tradeRepositorty.save(tradeToUpdate);
+					System.out.println("Updated the raw trade with the ID:" + tradeToUpdate.getId());
+				}
 			}
 		}
 

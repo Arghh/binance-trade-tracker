@@ -5,9 +5,12 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
@@ -24,7 +27,6 @@ public class Trade {
 	@GenericGenerator(name = "native", strategy = "native")
 	private Long id;
 	private String symbol;
-	private Long binanceId;
 	private boolean buy;
 	@Column(name = "price", precision = 13, scale = 9)
 	private BigDecimal price;
@@ -36,6 +38,10 @@ public class Trade {
 	@Column(name = "total", precision = 13, scale = 9)
 	private BigDecimal total;
 	private Date tradeTime;
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "aggregated_trade_fk")
+	private AggregatedTrade aggregatedTrade;
 
 	public Long getId() {
 		return id;
@@ -101,19 +107,19 @@ public class Trade {
 		this.buy = buy;
 	}
 
-	public Long getBinanceId() {
-		return binanceId;
-	}
-
-	public void setBinanceId(Long binanceId) {
-		this.binanceId = binanceId;
-	}
-
 	public BigDecimal getTotal() {
 		return total;
 	}
 
 	public void setTotal(BigDecimal total) {
 		this.total = total;
+	}
+
+	public AggregatedTrade getAggregatedTrade() {
+		return aggregatedTrade;
+	}
+
+	public void setAggregatedTrade(AggregatedTrade aggregatedTrade) {
+		this.aggregatedTrade = aggregatedTrade;
 	}
 }

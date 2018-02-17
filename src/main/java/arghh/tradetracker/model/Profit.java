@@ -45,7 +45,7 @@ public class Profit {
 
 	private long timeDifference;
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "profit")
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "profit", orphanRemoval = true)
 	private List<AggregatedTrade> aggregatedTrade = new ArrayList<>();
 
 	private Date sellTime;

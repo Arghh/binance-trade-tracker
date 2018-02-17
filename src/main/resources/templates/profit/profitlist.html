@@ -49,9 +49,9 @@
 					<td th:text="${profit.profit}"></td>
 					<td th:text="${profit.quantity}"></td>
 					<td
-						th:text="${#dates.format(profit.buyTime, 'yyyy-MM-dd hh:mm:ss')}"></td>
+						th:text="${#dates.format(profit.buyTime, 'yyyy-MM-dd HH:mm:ss')}"></td>
 					<td
-						th:text="${#dates.format(profit.sellTime, 'yyyy-MM-dd hh:mm:ss')}"></td>
+						th:text="${#dates.format(profit.sellTime, 'yyyy-MM-dd HH:mm:ss')}"></td>
 					<td th:text="${profit.timeDifference}"></td>
 					<td><a th:href="${'/profit/delete/' + profit.id}">Delete</a>
 				</tr>

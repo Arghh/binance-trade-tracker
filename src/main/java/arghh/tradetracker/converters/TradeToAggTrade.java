@@ -1,5 +1,8 @@
 package arghh.tradetracker.converters;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
@@ -11,6 +14,8 @@ public class TradeToAggTrade implements Converter<Trade, AggregatedTrade> {
 
 	@Override
 	public AggregatedTrade convert(Trade trade) {
+		List<Trade> tradesToSave = new ArrayList<>();
+		tradesToSave.add(trade);
 
 		AggregatedTrade aggTrade = new AggregatedTrade();
 		aggTrade.setTradeTime(trade.getTradeTime());
@@ -21,6 +26,7 @@ public class TradeToAggTrade implements Converter<Trade, AggregatedTrade> {
 		aggTrade.setTotal(trade.getTotal());
 		aggTrade.setFee(trade.getFee());
 		aggTrade.setFeeCoin(trade.getFeeCoin());
+		aggTrade.setTrade(tradesToSave);
 
 		return aggTrade;
 

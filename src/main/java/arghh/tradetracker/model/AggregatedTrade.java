@@ -1,8 +1,11 @@
 package arghh.tradetracker.model;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -11,6 +14,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
@@ -25,6 +29,7 @@ public class AggregatedTrade {
 	private Long id;
 	private String symbol;
 	private boolean buy;
+	private Long binanceId;
 	@Column(name = "price", precision = 13, scale = 9)
 	private BigDecimal price;
 	@Column(name = "quantity", precision = 13, scale = 9)
@@ -39,6 +44,9 @@ public class AggregatedTrade {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "profit_fk")
 	Profit profit;
+
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "aggregatedTrade", orphanRemoval = true)
+	List<Trade> trade = new ArrayList<>();
 
 	public Profit getProfit() {
 		return profit;
@@ -119,4 +127,24 @@ public class AggregatedTrade {
 	public void setBuy(boolean buy) {
 		this.buy = buy;
 	}
+
+	public Long getBinanceId() {
+		return binanceId;
+	}
+
+	public void setBinanceId(Long binanceId) {
+		this.binanceId = binanceId;
+	}
+
+	public List<Trade> getTrade() {
+		if (trade == null) {
+			return new ArrayList<>();
+		}
+		return trade;
+	}
+
+	public void setTrade(List<Trade> trade) {
+		this.trade = trade;
+	}
+
 }

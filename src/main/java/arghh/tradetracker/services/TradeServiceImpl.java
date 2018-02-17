@@ -3,10 +3,13 @@ package arghh.tradetracker.services;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import arghh.tradetracker.converters.TradeToAggTrade;
+import arghh.tradetracker.model.AggregatedTrade;
 import arghh.tradetracker.model.Trade;
 import arghh.tradetracker.repositories.TradeRepository;
 import arghh.tradetracker.util.TradeHelper;
@@ -16,11 +19,14 @@ public class TradeServiceImpl implements TradeService {
 
 	private TradeRepository tradeRepository;
 	private AggregatedTradeService aggTradeService;
+	private TradeToAggTrade aggTradeConverter;
 
 	@Autowired
-	public TradeServiceImpl(TradeRepository tradeRepository, AggregatedTradeService aggTradeService) {
+	public TradeServiceImpl(TradeRepository tradeRepository, AggregatedTradeService aggTradeService,
+			TradeToAggTrade aggTradeConverter) {
 		this.tradeRepository = tradeRepository;
 		this.aggTradeService = aggTradeService;
+		this.aggTradeConverter = aggTradeConverter;
 	}
 
 	@Override
@@ -54,12 +60,22 @@ public class TradeServiceImpl implements TradeService {
 		for (String string : allSymbols) {
 			rawTrades.addAll(tradeRepository.findBySymbol(string));
 		}
-		List<Trade> aggregatedTrades = combineTrades(rawTrades);
-		aggTradeService.convertAndSaveAllAggTrades(aggregatedTrades);
+
+		// TODO: save trade list on aggTrade table to check if already calculated
+		List<Trade> newTrades = rawTrades.stream().filter(x -> x.getAggregatedTrade() == null)
+				.collect(Collectors.toList());
+
+		if (!newTrades.isEmpty()) {
+			List<AggregatedTrade> aggregatedTrades = combineTrades(newTrades);
+			aggTradeService.saveAllAggTrades(aggregatedTrades);
+		} else {
+			System.out.println("No new trades to combine found. Please import some new trades first");
+		}
+
 	}
 
-	private ArrayList<Trade> combineTrades(List<Trade> rawTrades) {
-		ArrayList<Trade> aggregatedTrades = new ArrayList<>();
+	private ArrayList<AggregatedTrade> combineTrades(List<Trade> rawTrades) {
+		ArrayList<AggregatedTrade> aggregatedTrades = new ArrayList<>();
 
 		for (int i = 0; i < rawTrades.size();) {
 			Trade currentTrade = rawTrades.get(i);
@@ -83,14 +99,17 @@ public class TradeServiceImpl implements TradeService {
 				i = i + partialCanditates.size();
 
 				// add the combined trade of list of partial trades together
-				Trade combinedTrade = addTradesTogether(partialCanditates);
+				AggregatedTrade combinedTrade = addTradesTogether(partialCanditates);
 				aggregatedTrades.add(combinedTrade);
 				// -1 for the added combined trade to continue checking at the right position
 				i--;
 				// remove the partial trades
-				aggregatedTrades.removeAll(partialCanditates);
+				for (Trade trade : partialCanditates) {
+					aggregatedTrades.remove(aggTradeConverter.convert(trade));
+				}
+
 			} else {
-				aggregatedTrades.add(currentTrade);
+				aggregatedTrades.add(aggTradeConverter.convert(currentTrade));
 			}
 			i++;
 		}
@@ -129,9 +148,9 @@ public class TradeServiceImpl implements TradeService {
 		return new ArrayList<>();
 	}
 
-	private Trade addTradesTogether(ArrayList<Trade> partialTrades) {
+	private AggregatedTrade addTradesTogether(ArrayList<Trade> partialTrades) {
 		Trade lastTrade = partialTrades.get(partialTrades.size() - 1);
-		Trade combinedTrade = new Trade();
+		AggregatedTrade combinedTrade = new AggregatedTrade();
 		List<BigDecimal> totalQuantity = new ArrayList<>();
 		List<BigDecimal> totalCost = new ArrayList<>();
 		List<BigDecimal> totalFee = new ArrayList<>();
@@ -147,6 +166,7 @@ public class TradeServiceImpl implements TradeService {
 			totalFee.add(t.getFee());
 		});
 
+		combinedTrade.setTrade(partialTrades);
 		combinedTrade.setQuantity(TradeHelper.addBigDecimals(totalQuantity));
 		combinedTrade.setTotal(TradeHelper.addBigDecimals(totalCost));
 		combinedTrade.setFee(TradeHelper.addBigDecimals(totalFee));

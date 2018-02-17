@@ -17,6 +17,7 @@
 					<th>Type</th>
 					<th>Market</th>
 					<th>Price</th>
+					<th>Quantity</th>
 					<th>Total</th>
 					<th>Fee</th>
 					<th>Fee Coin</th>
@@ -30,11 +31,12 @@
 					<td th:unless="${trade.buy}">Sell</td>
 					<td th:text="${trade.symbol}"></td>
 					<td th:text="${trade.price}"></td>
+										<td th:text="${trade.quantity}"></td>
 					<td th:text="${trade.total}"></td>
 					<td th:text="${trade.fee}"></td>
 					<td th:text="${trade.feeCoin}"></td>
 					<td
-						th:text="${#dates.format(trade.tradeTime, 'yyyy-MM-dd hh:mm:ss')}"></td>
+						th:text="${#dates.format(trade.tradeTime, 'yyyy-MM-dd HH:mm:ss')}"></td>
 					<td><a th:href="${'/trade/delete/' + trade.id}">Delete</a>
 				</tr>
 			</tbody>

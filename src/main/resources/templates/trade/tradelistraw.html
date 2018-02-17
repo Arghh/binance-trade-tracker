@@ -34,7 +34,7 @@
 					<td th:text="${trade.fee}"></td>
 					<td th:text="${trade.feeCoin}"></td>
 					<td
-						th:text="${#dates.format(trade.tradeTime, 'yyyy-MM-dd hh:mm:ss')}"></td>
+						th:text="${#dates.format(trade.tradeTime, 'yyyy-MM-dd HH:mm:ss')}"></td>
 					<td><a th:href="${'/trade/raw/delete/' + trade.id}">Delete</a>
 				</tr>
 			</tbody>

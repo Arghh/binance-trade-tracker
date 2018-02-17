@@ -67,7 +67,7 @@ public class ProfitServiceImpl implements ProfitService {
 		// sort and filter trades into groups
 		for (String s : symbols) {
 
-			trades = aggTradeRepository.findBySymbol(s);
+			trades = aggTradeRepository.findBySymbolAndProfitIsNull(s);
 
 			System.out.println("Calculating profits for trade pair " + s);
 			if (!trades.isEmpty() || !(trades.size() < 2)) {

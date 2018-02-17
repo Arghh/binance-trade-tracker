@@ -9,24 +9,24 @@ import org.springframework.stereotype.Component;
 import com.webcerebrium.binance.datatype.BinanceTrade;
 
 import arghh.tradetracker.exception.TradeException;
-import arghh.tradetracker.model.Trade;
-import arghh.tradetracker.repositories.TradeRepository;
+import arghh.tradetracker.model.AggregatedTrade;
+import arghh.tradetracker.repositories.AggregatedTradeRepository;
 
 @Component
-public class BinanceTradeToTrade implements Converter<BinanceTrade, Trade> {
-	private TradeRepository tradeRepository;
+public class BinanceTradeToAggTrade implements Converter<BinanceTrade, AggregatedTrade> {
+	private AggregatedTradeRepository tradeRepository;
 
 	@Autowired
-	public BinanceTradeToTrade(TradeRepository tradeRepository) {
+	public BinanceTradeToAggTrade(AggregatedTradeRepository tradeRepository) {
 		this.tradeRepository = tradeRepository;
 	}
 
 	@Override
-	public Trade convert(BinanceTrade binanceTrade) {
-		Trade trade = null;
+	public AggregatedTrade convert(BinanceTrade binanceTrade) {
+		AggregatedTrade trade = null;
 		try {
 			checkIfTradeExists(binanceTrade);
-			trade = new Trade();
+			trade = new AggregatedTrade();
 			trade.setPrice(binanceTrade.getPrice());
 			trade.setFeeCoin(binanceTrade.getCommissionAsset());
 			trade.setBinanceId(binanceTrade.getId());
@@ -45,7 +45,7 @@ public class BinanceTradeToTrade implements Converter<BinanceTrade, Trade> {
 
 	private TradeException checkIfTradeExists(BinanceTrade newTrade) throws TradeException {
 
-		Trade oldTrade = tradeRepository.findByBinanceId(newTrade.getId());
+		AggregatedTrade oldTrade = tradeRepository.findByBinanceId(newTrade.getId());
 		if (oldTrade != null) {
 			throw new TradeException("The Trade with the ID " + oldTrade.getId() + " and Binance ID " + newTrade.getId()
 					+ " already exists.");
