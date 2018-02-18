@@ -8,6 +8,7 @@ public class StatsList {
 	private String tradeCount;
 	private Map<String, Long> marketTrades;
 	private Map<String, BigDecimal> marketProfits;
+	private Map<String, BigDecimal> coinFees;
 
 	public String getTradeCount() {
 		return tradeCount;
@@ -31,6 +32,14 @@ public class StatsList {
 
 	public void setMarketProfits(Map<String, BigDecimal> marketProfits) {
 		this.marketProfits = marketProfits;
+	}
+
+	public Map<String, BigDecimal> getCoinFees() {
+		return coinFees;
+	}
+
+	public void setCoinFees(Map<String, BigDecimal> coinFees) {
+		this.coinFees = coinFees;
 	}
 
 }

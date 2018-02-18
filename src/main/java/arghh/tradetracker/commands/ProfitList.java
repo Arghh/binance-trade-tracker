@@ -1,6 +1,5 @@
 package arghh.tradetracker.commands;
 
-import java.math.BigDecimal;
 import java.util.Date;
 
 public class ProfitList {
@@ -10,11 +9,11 @@ public class ProfitList {
 	private Date buyTime;
 	private Date sellTime;
 	private String timeDifference;
-	private BigDecimal buyPrice;
-	private BigDecimal sellPrice;
+	private String buyPrice;
+	private String sellPrice;
 	private String profit;
 	private String quantity;
-	private BigDecimal totalProfit;
+	private String totalProfit;
 
 	public long getId() {
 		return id;
@@ -56,19 +55,19 @@ public class ProfitList {
 		this.timeDifference = timeDifference;
 	}
 
-	public BigDecimal getBuyPrice() {
+	public String getBuyPrice() {
 		return buyPrice;
 	}
 
-	public void setBuyPrice(BigDecimal buyPrice) {
+	public void setBuyPrice(String buyPrice) {
 		this.buyPrice = buyPrice;
 	}
 
-	public BigDecimal getSellPrice() {
+	public String getSellPrice() {
 		return sellPrice;
 	}
 
-	public void setSellPrice(BigDecimal sellPrice) {
+	public void setSellPrice(String sellPrice) {
 		this.sellPrice = sellPrice;
 	}
 
@@ -88,11 +87,11 @@ public class ProfitList {
 		this.quantity = quantity;
 	}
 
-	public BigDecimal getTotalProfit() {
+	public String getTotalProfit() {
 		return totalProfit;
 	}
 
-	public void setTotalProfit(BigDecimal totalProfit) {
+	public void setTotalProfit(String totalProfit) {
 		this.totalProfit = totalProfit;
 	}
 

@@ -34,8 +34,12 @@ public class StatsServiceImpl implements StatsService {
 		statsForWeb.setTradesCount(aggTradeRepository.countAll().toString());
 
 		List<String> allSymbols = aggTradeRepository.findDistinctSymbols();
+		List<String> allFeeCoins = aggTradeRepository.findDistinctFeeCoin();
+
 		statsForWeb.setMarketTrades(findTradeCountProMarket(allSymbols));
 		statsForWeb.setMarketProfits(findProfitsProMarket(allSymbols));
+		statsForWeb.setCoinFees(findTotalFees(allFeeCoins));
+
 		return statsForWeb;
 	}
 
@@ -46,9 +50,7 @@ public class StatsServiceImpl implements StatsService {
 			tradesProMarket.put(s, tradeCount);
 		}
 
-		Map<String, Long> sortedTradesProMarket = tradesProMarket.entrySet().stream()
-				.sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
-				.collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
+		Map<String, Long> sortedTradesProMarket = sortMapBiggestValueFirstLong(tradesProMarket);
 
 		return sortedTradesProMarket;
 
@@ -71,7 +73,36 @@ public class StatsServiceImpl implements StatsService {
 			}
 		}
 
-		return profitsProMarket;
+		Map<String, BigDecimal> sortedProfits = sortMapBiggestValueFirstDecimal(profitsProMarket);
+
+		return sortedProfits;
 	}
 
+	private Map<String, BigDecimal> findTotalFees(List<String> allFeeCoins) {
+		Map<String, BigDecimal> fees = new HashMap<>();
+
+		for (String s : allFeeCoins) {
+			List<AggregatedTrade> trades = aggTradeRepository.findByFeeCoin(s);
+
+			BigDecimal totalFeesProCoin = TradeHelper
+					.addBigDecimals(trades.stream().map(x -> x.getFee()).collect(Collectors.toList()));
+
+			fees.put(s, totalFeesProCoin);
+		}
+
+		Map<String, BigDecimal> sortedFees = sortMapBiggestValueFirstDecimal(fees);
+
+		return sortedFees;
+	}
+
+	private Map<String, Long> sortMapBiggestValueFirstLong(Map<String, Long> unsorted) {
+		return unsorted.entrySet().stream().sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
+				.collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
+	}
+
+	private LinkedHashMap<String, BigDecimal> sortMapBiggestValueFirstDecimal(Map<String, BigDecimal> unsorted) {
+		return unsorted.entrySet().stream().sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
+				.collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (oldValue, newValue) -> oldValue,
+						LinkedHashMap::new));
+	}
 }

@@ -32,8 +32,8 @@ public class ProfitToProfitList implements Converter<List<Profit>, List<ProfitLi
 				sell = data.getbuySellPair().get(1);
 				profit.setId(data.getId());
 				profit.setSymbol(buy.getSymbol());
-				profit.setBuyPrice(buy.getPrice());
-				profit.setSellPrice(sell.getPrice());
+				profit.setBuyPrice(buy.getPrice().toPlainString());
+				profit.setSellPrice(sell.getPrice().toPlainString());
 				profit.setProfit(TradeHelper.addBaseCurrencyProfit(data.getProfitValue(), data.getBaseCurrency()));
 				profit.setQuantity(TradeHelper.addStringToBigDecimal(data.getQuantity(), buy.getSymbol()));
 				profit.setBuyTime(buy.getTradeTime());

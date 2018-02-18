@@ -22,10 +22,7 @@ public class TradeHelper {
 
 	public static BaseCurrency getBaseCurrency(String symbol) throws ProfitException {
 		String currency = symbol.substring(symbol.length() - 3);
-		// if (symbol.length() != 6) {
-		// System.out.println("The market symbol " + symbol + " is invalid");
-		// throw new ProfitException("The market symbol " + symbol + " is invalid");
-		// }
+
 		try {
 			return BaseCurrency.valueOf(currency);
 		} catch (IllegalArgumentException e) {
@@ -50,9 +47,6 @@ public class TradeHelper {
 		return sell.getTime() - buy.getTime();
 	}
 
-	// 1 minute = 60 seconds
-	// 1 hour = 60 x 60 = 3600
-	// 1 day = 3600 x 24 = 86400
 	public static String getTimeDifference(Date buy, Date sell) {
 
 		StringBuilder sb = new StringBuilder();
@@ -66,7 +60,7 @@ public class TradeHelper {
 
 		long elapsedDays = dif / daysInMilli;
 		if (elapsedDays != 0) {
-			sb.append(elapsedDays + " days, ");
+			sb.append(elapsedDays + " d, ");
 		}
 		dif = dif % daysInMilli;
 
@@ -87,28 +81,25 @@ public class TradeHelper {
 			sb.append(elapsedSeconds + "s");
 		}
 
-		// String message = "On the test run at {0,time} on {0,date}, we found {1} prime
-		// numbers";
-		//
-		// MessageFormat mf = new MessageFormat(message);
-		//
-		// return MessageFormat.format("{0} days, {1} hours {2} minutes {3}", arguments)
-		// return mf.format(();
-
-		// return System.out.printf("%d days, %d hours, %d minutes, %d seconds%n",
-		// elapsedDays, elapsedHours,
-		// elapsedMinutes, elapsedSeconds);
-
 		return sb.toString();
 	}
 
 	public static String addStringToBigDecimal(BigDecimal profit, String symbol) {
 		String coin = symbol.substring(0, symbol.length() - 3);
-		return profit.toString() + " " + coin;
+		String profitForWeb = removeExtraZerosForWebTables(profit);
+		return profitForWeb + " " + coin;
 	}
 
 	public static String addBaseCurrencyProfit(BigDecimal profit, BaseCurrency baseCurrency) {
-		return profit.toString() + " " + baseCurrency.toString();
+		return profit.toPlainString() + " " + baseCurrency.toString();
+	}
+
+	private static String removeExtraZerosForWebTables(BigDecimal bd) {
+		String WithZeros = bd.toPlainString();
+		String WithoutZeros = WithZeros.indexOf(".") < 0 ? WithZeros
+				: WithZeros.replaceAll("0*$", "").replaceAll("\\.$", "");
+
+		return WithoutZeros;
 	}
 
 	// TODO: Use java.time instead of java.util.date

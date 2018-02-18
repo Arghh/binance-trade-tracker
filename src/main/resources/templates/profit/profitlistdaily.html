@@ -38,39 +38,46 @@
 	</div>
 
 	<div th:if="${!profitsDaily.empty}">
-		<table class="table table-striped table-responsive">
+		<table data-toggle="table" data-sort-name="sell-time"
+			data-sort-order="asc" data-locale="en-US" data-pagination="true"
+			data-search="true" data-page-list="[50, 100, 200, ALL]"
+			data-page-size="50"
+			class="tracker-tables table table-striped table-responsive">
 			<thead>
 				<tr>
-					<th>Market</th>
-					<th>Buy Price</th>
-					<th>Sell Price</th>
-					<th>Profit</th>
-					<th>Quantity</th>
-					<th>Buy Time</th>
-					<th>Sell Time</th>
-					<th>Trade took</th>
+					<th data-field="market" data-sortable="true" class="col">Market</th>
+					<th data-field="buy" data-sortable="true" class="col">Buy
+						Price</th>
+					<th data-field="sell" data-sortable="true" class="col">Sell
+						Price</th>
+					<th data-field="profit" data-sortable="true" class="col">Profit</th>
+					<th data-field="quantity" data-sortable="true" class="col">Quantity</th>
+					<th data-field="buy-time" data-sortable="true" class="col">Buy
+						Time</th>
+					<th data-field="sell-time" data-sortable="true" class="col">Sell
+						Time</th>
+					<th data-field="trade-took" data-sortable="true" class="col">Trade
+						took</th>
 				</tr>
 			</thead>
 			<tbody>
 				<tr th:each="profit : ${profitsDaily}">
-					<td th:text="${profit.symbol}"></td>
-					<td th:text="${profit.buyPrice}"></td>
-					<td th:text="${profit.sellPrice}"></td>
-					<td th:text="${profit.profit}"></td>
-					<td th:text="${profit.quantity}"></td>
-					<td
+					<td scope="row" class="text-center" th:text="${profit.symbol}"></td>
+					<td scope="row" th:text="${profit.buyPrice}"></td>
+					<td scope="row" th:text="${profit.sellPrice}"></td>
+					<td scope="row" th:text="${profit.profit}"></td>
+					<td scope="row" th:text="${profit.quantity}"></td>
+					<td scope="row"
 						th:text="${#dates.format(profit.buyTime, 'yyyy-MM-dd HH:mm:ss')}"></td>
-					<td
+					<td scope="row"
 						th:text="${#dates.format(profit.sellTime, 'yyyy-MM-dd HH:mm:ss')}"></td>
-					<td th:text="${profit.timeDifference}"></td>
+					<td scope="row" th:text="${profit.timeDifference}"></td>
 				</tr>
 			</tbody>
 		</table>
 	</div>
 </div>
 <div lang="en" th:replace="fragments/footer :: footer"></div>
-</div>
-
 <!-- Script -->
 <script>
 	var datepicker = $('#datepicker').datepicker({
@@ -78,3 +85,4 @@
 		format : 'yyyy-mm-dd',
 	});
 </script>
+</div>

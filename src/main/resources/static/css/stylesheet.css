@@ -21,6 +21,25 @@ html {
 	color: #000000;
 	background: rgba(255, 255, 255, 0.2);
 }
+
+/* Tables */
+.tracker-tables {
+	table-layout: fixed;
+	width: 100%;
+	white-space: nowrap;
+}
+
+.tracker-tables th {
+	text-align: center;
+}
+
+.tracker-tables td {
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	text-align: right;
+}
+
 /* Toggle Styles */
 #wrapper {
 	padding-left: 0;
@@ -174,4 +193,6 @@ html {
 	#collapse-daily-profits ul li {
 		margin-top: 8px;
 	}
+	
+	
 }

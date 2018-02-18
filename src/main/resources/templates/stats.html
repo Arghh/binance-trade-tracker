@@ -13,7 +13,7 @@
 			</div>
 			<div class="row">
 				<div class="col">
-					<h3>Market volume</h3>
+					<h3>Volume</h3>
 					<div th:if="${!marketStats.marketTrades.empty}">
 						<table class="table table-sm">
 							<thead>
@@ -30,7 +30,7 @@
 					</div>
 				</div>
 				<div class="col">
-					<h3>Market win</h3>
+					<h3>Gains/Losses</h3>
 					<div th:if="${!marketStats.marketProfits.empty}">
 						<table class="table table-sm">
 							<thead>
@@ -46,14 +46,30 @@
 						</table>
 					</div>
 				</div>
+				<div class="col">
+					<h3>Paid Fees</h3>
+					<div th:if="${!marketStats.coinFees.empty}">
+						<table class="table table-sm">
+							<thead>
+								<tr>
+									<th>Coin</th>
+									<th>Total Paid</th>
+								</tr>
+							</thead>
+							<tr th:each="instance : ${marketStats.coinFees}">
+								<td th:text="${instance.key}">keyvalue</td>
+								<td th:text="${instance.value}">num</td>
+							</tr>
+						</table>
+					</div>
+				</div>
 			</div>
+			<div class="w-100"></div>
+			<div class="col">Column</div>
+			<div class="col">Column</div>
 		</div>
-		<div class="w-100"></div>
-		<div class="col">Column</div>
-		<div class="col">Column</div>
 	</div>
-</div>
-<!-- 1 div is to close the container. last div is to close page content wrapper.-->
+	<!-- 1 div is to close the container. last div is to close page content wrapper.-->
 </div>
 <div lang="en" th:replace="fragments/footer :: footer"></div>
 <!-- /#page-content-wrapper -->

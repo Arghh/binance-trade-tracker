@@ -38,9 +38,6 @@ public class ExcelTradeToTrade implements Converter<List<String>, Trade> {
 			trade.setSymbol(source.get(1));
 			trade.setBuy(convertBuy(source.get(2)));
 			trade.setPrice(convertDecimal(source.get(3)));
-			if (trade.getPrice().compareTo(new BigDecimal("00139238")) == 0) {
-				System.out.println("asd");
-			}
 			trade.setQuantity(convertDecimal(source.get(4)));
 			trade.setTotal(convertDecimal(source.get(5)));
 			trade.setFee(convertDecimal(source.get(6)));
@@ -105,7 +102,7 @@ public class ExcelTradeToTrade implements Converter<List<String>, Trade> {
 
 	private BigDecimal convertDecimal(String cell) {
 		String filteredString = cell.replaceAll(",", ".");
-		BigDecimal amount = new BigDecimal(filteredString);
+		BigDecimal amount = new BigDecimal(filteredString).stripTrailingZeros();
 		return amount;
 	}
 

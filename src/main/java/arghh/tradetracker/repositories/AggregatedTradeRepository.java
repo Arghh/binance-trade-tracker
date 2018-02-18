@@ -24,4 +24,9 @@ public interface AggregatedTradeRepository extends CrudRepository<AggregatedTrad
 
 	AggregatedTrade findByBinanceId(Long Id);
 
+	@Query("select DISTINCT(at.feeCoin) from AggregatedTrade at")
+	List<String> findDistinctFeeCoin();
+
+	List<AggregatedTrade> findByFeeCoin(String coin);
+
 }

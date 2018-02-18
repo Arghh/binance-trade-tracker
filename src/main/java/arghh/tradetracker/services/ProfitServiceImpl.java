@@ -100,10 +100,7 @@ public class ProfitServiceImpl implements ProfitService {
 
 	private List<AggregatedTrade> filterOutOpenTrades(List<AggregatedTrade> allTrades) {
 		List<AggregatedTrade> filteredTrades = allTrades;
-		if (!filteredTrades.get(0).isBuy()) {
-			filteredTrades.remove(0);
-			System.out.println("Skipping a trade. First trade has to be a buy");
-		}
+
 		if (filteredTrades.get(filteredTrades.size() - 1).isBuy()) {
 			filteredTrades.remove(filteredTrades.size() - 1);
 			System.out.println("Skipping last trade because it's still open");

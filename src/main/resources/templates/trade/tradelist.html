@@ -11,33 +11,39 @@
 
 	</div>
 	<div th:if="${!trades.empty}">
-		<table class="table table-striped table-responsive">
+		<table data-toggle="table" data-sort-name="trade-time"
+			data-sort-order="desc" data-locale="en-US" data-pagination="true"
+			data-search="true" data-page-list="[50, 100, 200, ALL]"
+			data-page-size="50"
+			class="tracker-tables table table-striped table-responsive">
 			<thead>
 				<tr>
-					<th>Type</th>
-					<th>Market</th>
-					<th>Price</th>
-					<th>Quantity</th>
-					<th>Total</th>
-					<th>Fee</th>
-					<th>Fee Coin</th>
-					<th>Trade Time</th>
-					<th></th>
+					<th data-field="market" data-sortable="true" class="col">Market</th>
+					<th data-field="type" data-sortable="true" class="col">Type</th>
+					<th data-field="price" data-sortable="true" class="col">Price</th>
+					<th data-field="quantity" data-sortable="true" class="col">Quantity</th>
+					<th data-field="total" data-sortable="true" class="col">Total</th>
+					<th data-field="fee" data-sortable="true" class="col">Fee</th>
+					<th data-field="fee-coin" data-sortable="true" class="col">Fee
+						Coin</th>
+					<th data-field="trade-time" data-sortable="true" class="col">Trade
+						Time</th>
+					<th class="col"></th>
 				</tr>
 			</thead>
 			<tbody>
 				<tr th:each="trade : ${trades}">
-					<td th:if="${trade.buy} == true">Buy</td>
-					<td th:unless="${trade.buy}">Sell</td>
-					<td th:text="${trade.symbol}"></td>
-					<td th:text="${trade.price}"></td>
-										<td th:text="${trade.quantity}"></td>
-					<td th:text="${trade.total}"></td>
-					<td th:text="${trade.fee}"></td>
-					<td th:text="${trade.feeCoin}"></td>
-					<td
+					<td scope="row" class="text-center" th:text="${trade.symbol}"></td>
+					<td scope="row" class="text-center" th:if="${trade.buy} == true">Buy</td>
+					<td scope="row" class="text-center" th:unless="${trade.buy}">Sell</td>
+					<td scope="row" th:text="${trade.price}"></td>
+					<td scope="row" th:text="${trade.quantity}"></td>
+					<td scope="row" th:text="${trade.total}"></td>
+					<td scope="row" th:text="${trade.fee}"></td>
+					<td scope="row" class="text-center" th:text="${trade.feeCoin}"></td>
+					<td scope="row"
 						th:text="${#dates.format(trade.tradeTime, 'yyyy-MM-dd HH:mm:ss')}"></td>
-					<td><a th:href="${'/trade/delete/' + trade.id}">Delete</a>
+					<td scope="row"><a th:href="${'/trade/delete/' + trade.id}">Delete</a></td>
 				</tr>
 			</tbody>
 		</table>
