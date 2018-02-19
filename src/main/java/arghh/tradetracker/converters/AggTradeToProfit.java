@@ -21,6 +21,11 @@ public class AggTradeToProfit implements Converter<List<AggregatedTrade>, Profit
 			if (!buySellPair.get(0).isBuy()) {
 				return null;
 			}
+
+			if (buySellPair.get(1).isBuy()) {
+				return null;
+			}
+
 			Profit profit = new Profit();
 			AggregatedTrade buy = buySellPair.get(0);
 			AggregatedTrade sell = buySellPair.get(1);

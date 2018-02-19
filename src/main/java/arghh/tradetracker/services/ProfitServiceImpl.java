@@ -92,10 +92,6 @@ public class ProfitServiceImpl implements ProfitService {
 			System.out.println("Finished calculating profits for trade pair " + s);
 		}
 
-		// convert and save all trade profits
-		// for (AggregatedTrade trade : trades) {
-		// saveNewProfit(trade);
-		// }
 	}
 
 	private List<AggregatedTrade> filterOutOpenTrades(List<AggregatedTrade> allTrades) {
@@ -109,22 +105,36 @@ public class ProfitServiceImpl implements ProfitService {
 		// filter out open trades if the quantity has not been sold TODO: unless the fee
 		// coin
 		// is NOT BNB
-		for (int i = 0; i < filteredTrades.size() - 2; i++) {
+		for (int i = 0; i < filteredTrades.size() - 1; i++) {
 			if (filteredTrades.get(i).isBuy()) {
 				// if the next trade is also a buy
-				while (filteredTrades.get(i + 1).isBuy()) {
+				if (filteredTrades.get(i + 1).isBuy()) {
 					// if the next trade after a buy is sell with same quantity skip
-					if (!filteredTrades.get(i + 2).isBuy() && filteredTrades.get(i).getQuantity()
-							.compareTo(filteredTrades.get(i + 1).getQuantity()) == 0) {
-						continue;
-					}
 					// otherwise remove buys
 					filteredTrades.remove(i);
-					System.out.println("Skipping a trade because it's still open");
+
+				}
+				System.out.println("Skipping a trade because it's still open");
+			}
+		}
+
+		// // filter out sells that happend later
+		for (int i = 0; i < filteredTrades.size(); i++) {
+			if (filteredTrades.get(i).isBuy() && !filteredTrades.get(i + 1).isBuy()) {
+				// with BNB the quantity will be different
+				if (!filteredTrades.get(i).getFeeCoin().equals("BNB")) {
+					continue;
+				} else if (filteredTrades.get(i).getQuantity()
+						.compareTo(filteredTrades.get(i + 1).getQuantity()) != 0) {
+					filteredTrades.remove(i + 1);
 				}
 			}
 		}
+
+		// TODO: same quantity buy order after eachother. later find the matching sell
+
 		return filteredTrades;
+
 	}
 
 	private Collection<List<AggregatedTrade>> createTradePairs(List<AggregatedTrade> filteredTrades) {

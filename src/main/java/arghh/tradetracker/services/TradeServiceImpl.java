@@ -124,21 +124,6 @@ public class TradeServiceImpl implements TradeService {
 		// reversed
 		boolean partialTrade = partialCanditates.stream().allMatch((x) -> x.getPrice().compareTo(price) == 0);
 
-		// if (trade.getSymbol().equals(lastTrade.getSymbol())) {
-		// System.out.println("The last two trades have the same symbol: " +
-		// trade.getSymbol());
-		// if (trade.getPrice().equals(lastTrade.getPrice())) {
-		// System.out.println("The last two trades have the same fee symbol.");
-		// long seconds = Math.abs(trade.getTimeOfTrade().getTime() -
-		// lastTrade.getTimeOfTrade().getTime()) / 1000;
-		// if (seconds < 10) {
-		// partialTrade = true;
-		// System.out.println("The last two trades took place only " + seconds
-		// + " seconds appart from eachother. Adding two partial trades together.");
-		// }
-		//
-		// }
-		// }
 		if (partialTrade) {
 			System.out.println("The last " + partialCanditates.size()
 					+ " trades look like partial trades. Adding trades together.");

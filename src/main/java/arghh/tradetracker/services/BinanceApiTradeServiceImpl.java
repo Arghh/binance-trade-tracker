@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.webcerebrium.binance.api.BinanceApiException;
@@ -20,10 +19,6 @@ public class BinanceApiTradeServiceImpl implements BinanceApiTradeService {
 
 	private AggregatedTradeService aggTradeService;
 	private BinanceTradeToAggTrade aggTradeConverter;
-	// private BinanceApi api = new BinanceApi();
-
-	@Value("${tradeHistory.path}")
-	private String filePath;
 
 	@Autowired
 	public BinanceApiTradeServiceImpl(AggregatedTradeService aggTradeService, BinanceTradeToAggTrade tradeConverter) {
