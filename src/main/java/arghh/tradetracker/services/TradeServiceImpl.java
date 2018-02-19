@@ -66,8 +66,10 @@ public class TradeServiceImpl implements TradeService {
 				.collect(Collectors.toList());
 
 		if (!newTrades.isEmpty()) {
+			System.out.println("Starting task: Combine trades");
 			List<AggregatedTrade> aggregatedTrades = combineTrades(newTrades);
 			aggTradeService.saveAllAggTrades(aggregatedTrades);
+			System.out.println("Completed task: Combine trades");
 		} else {
 			System.out.println("No new trades to combine found. Please import some new trades first");
 		}
@@ -161,6 +163,7 @@ public class TradeServiceImpl implements TradeService {
 	@Override
 	public void deleteAll() {
 		tradeRepository.deleteAll();
+		System.out.println("Deleted all Excel imports");
 	}
 
 }

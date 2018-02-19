@@ -107,8 +107,9 @@ public class ExcelTradeServiceImpl implements ExcelTradeService {
 				return o1.getTradeTime().compareTo(o2.getTradeTime());
 			}
 		});
-
+		System.out.println("Starting task: Excel import");
 		rawTrades.forEach(t -> saveNewExcelTrade(t));
+		System.out.println("Completed task: Excel import");
 	}
 
 }

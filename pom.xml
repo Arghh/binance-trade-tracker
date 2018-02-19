@@ -8,7 +8,7 @@
 	<packaging>jar</packaging>
 
 	<name>ProfitTracker</name>
-	<description>Demo project for tracking trading gains/losses on Binance exchange</description>
+	<description>Tracking your trading gains and losses on the 10 minutes agoBinance exchange</description>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>

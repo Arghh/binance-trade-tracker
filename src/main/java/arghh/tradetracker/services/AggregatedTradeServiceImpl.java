@@ -78,6 +78,7 @@ public class AggregatedTradeServiceImpl implements AggregatedTradeService {
 	@Override
 	public void deleteAll() {
 		aggTradeRepository.deleteAll();
+		System.out.println("Deleted all trades");
 	}
 
 }

@@ -61,6 +61,7 @@ public class ProfitServiceImpl implements ProfitService {
 		List<AggregatedTrade> trades = aggTradeService.listAllAggregated();
 		List<String> symbols = aggTradeRepository.findDistinctSymbols();
 
+		System.out.println("Starting task: Calculate profits");
 		// TODO: use stream groupingBy to divide trades into groups
 		// Map<Enum, Set<AggregatedTrade>> tradesBySymbols = trades.stream()
 		// .collect(groupingBy(AggregatedTrade::getSymbol, toSet()));
@@ -76,21 +77,16 @@ public class ProfitServiceImpl implements ProfitService {
 
 			// skip profits with no trade pair
 			if (trades.isEmpty() || trades.size() < 2) {
-				System.out.println(MessageFormat.format("The trade pair {0} only has {1} trades saved. Skipping", s,
-						trades.size()));
+				System.out.println(
+						MessageFormat.format("The trade pair {0} only has {1} new trades. Skipping", s, trades.size()));
 			} else {
 				Collection<List<AggregatedTrade>> buySellSet = createTradePairs(trades);
 				buySellSet.forEach(x -> saveNewProfit(x));
 			}
 
-			// for (Set<AggregatedTrade> set : buySellSet) {
-			// set.forEach(x -> {
-			// System.out.println(x.getId());
-			// System.out.println(x.isBuy());
-			// });
-			// }
 			System.out.println("Finished calculating profits for trade pair " + s);
 		}
+		System.out.println("Finished task: Calculate profits");
 
 	}
 
@@ -188,6 +184,7 @@ public class ProfitServiceImpl implements ProfitService {
 	@Override
 	public void deleteAll() {
 		profitRepository.deleteAll();
+		System.out.println("Deleted all profits");
 	}
 
 	@Override
