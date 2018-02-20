@@ -305,7 +305,7 @@ public class ProfitServiceImpl implements ProfitService {
 	}
 
 	private Date stringToDate(String day) {
-		TimeZone tz = TimeZone.getDefault();
+		TimeZone tz = TimeZone.getTimeZone(("UTC"));
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 		formatter.setTimeZone(tz);
 		try {

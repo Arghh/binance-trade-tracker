@@ -33,7 +33,7 @@ public class TradeHelper {
 	}
 
 	public static long getMsBetweenTrades(Date buy, Date sell) throws ProfitException {
-		TimeZone tz = TimeZone.getDefault();
+		TimeZone tz = TimeZone.getTimeZone(("UTC"));
 		SimpleDateFormat formatter = new SimpleDateFormat("dd HH:mm:ss");
 		formatter.setTimeZone(tz);
 
