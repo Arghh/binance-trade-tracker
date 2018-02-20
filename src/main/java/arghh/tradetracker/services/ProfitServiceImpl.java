@@ -7,6 +7,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.TimeZone;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -16,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import arghh.tradetracker.commands.ProfitList;
+import arghh.tradetracker.converters.AggTradeListToProfit;
 import arghh.tradetracker.converters.AggTradeToProfit;
 import arghh.tradetracker.converters.ProfitToProfitList;
 import arghh.tradetracker.model.AggregatedTrade;
@@ -33,11 +35,12 @@ public class ProfitServiceImpl implements ProfitService {
 	private AggTradeToProfit profitConverter;
 	private ProfitToProfitList webConverter;
 	private CryptoCompareApiService cryptoApi;
+	private AggTradeListToProfit profitListConverter;
 
 	@Autowired
 	public ProfitServiceImpl(AggregatedTradeRepository aggTradeRepository, AggregatedTradeService aggTradeService,
 			ProfitRepository profitRepository, AggTradeToProfit profitConverter, ProfitToProfitList webConverter,
-			CryptoCompareApiService cryptoApi) {
+			CryptoCompareApiService cryptoApi, AggTradeListToProfit profitListConverter) {
 
 		this.aggTradeRepository = aggTradeRepository;
 		this.aggTradeService = aggTradeService;
@@ -45,6 +48,7 @@ public class ProfitServiceImpl implements ProfitService {
 		this.profitConverter = profitConverter;
 		this.webConverter = webConverter;
 		this.cryptoApi = cryptoApi;
+		this.profitListConverter = profitListConverter;
 	}
 
 	@Override
@@ -72,31 +76,21 @@ public class ProfitServiceImpl implements ProfitService {
 
 			trades = aggTradeRepository.findBySymbolAndProfitIsNull(s);
 
-			System.out.println("Calculating profits for trade pair " + s);
 			if (trades.isEmpty() || trades.size() < 2) {
 				System.out.println(MessageFormat
 						.format("The trade pair {0} does not have enough trades to calculate profits.", s));
 			} else {
+				System.out.println("Calculating profits for trade pair " + s);
 				trades = filterOutOpenTrades(trades);
+				System.out.println("Finished calculating profits for trade pair " + s);
 			}
-
-			// skip profits with no trade pair
-			// if (trades.isEmpty() || trades.size() < 2) {
-			// System.out.println(
-			// MessageFormat.format("The trade pair {0} only has {1} new trades. Skipping",
-			// s, trades.size()));
-			// } else {
-			// Collection<List<AggregatedTrade>> buySellSet = createTradePairs(trades);
-			// buySellSet.forEach(x -> saveNewProfit(x));
-			// }
-
-			System.out.println("Finished calculating profits for trade pair " + s);
 		}
 		System.out.println("Finished task: Calculate profits");
 
 	}
 
 	private List<AggregatedTrade> filterOutOpenTrades(List<AggregatedTrade> allTrades) {
+
 		List<AggregatedTrade> filteredTrades = allTrades;
 
 		if (!filteredTrades.get(0).isBuy()) {
@@ -112,13 +106,11 @@ public class ProfitServiceImpl implements ProfitService {
 		List<AggregatedTrade> simpleTrades = new ArrayList<>();
 		List<AggregatedTrade> unclearTrades = new ArrayList<>();
 
-		for (int i = 0; i < filteredTrades.size() - 1; i++) {
+		for (int i = 0; i < filteredTrades.size(); i++) {
 
 			// filter out and save easy trade pairs with 0 sum and buy sell
 			if (filteredTrades.get(i).isBuy() && !filteredTrades.get(i + 1).isBuy()) {
-				if (filteredTrades.get(i).getSymbol().equals("LTCBTC")) {
-					System.out.println("stop");
-				}
+
 				if (filteredTrades.get(i).getQuantity().compareTo(filteredTrades.get(i + 1).getQuantity()) == 0) {
 					simpleTrades.add(filteredTrades.get(i));
 					simpleTrades.add(filteredTrades.get(i + 1));
@@ -142,83 +134,95 @@ public class ProfitServiceImpl implements ProfitService {
 
 		// skip profits with no trade pair
 		if (simpleTrades.isEmpty() || simpleTrades.size() < 2) {
-			// System.out.println(MessageFormat.format("The trade pair {0} only has {1} new
-			// trades. Skipping", s,
-			// simpleTrades.size()));
+			System.out.println("Could not find any 1 to 1 buy/sell pairs. Trying to calculate profits.");
 		} else {
 			Collection<List<AggregatedTrade>> buySellSet = createTradePairs(simpleTrades);
 			buySellSet.forEach(x -> saveNewProfit(x));
 		}
 
-		// // for(
-		// // int i = 0;i<filteredTrades.size()-1;i++)
-		// // {
-		// //
-		// // if (filteredTrades.get(i).isBuy() && filteredTrades.get(i + 1).isBuy()) {
-		// // if (!filteredTrades.get(i).getFeeCoin().equals("BNB")) {
-		// // continue;
-		// // } else if () {
-		// //
-		// // }
-		// // }
-		// // }
-		//
-		// // filter out open trades if the quantity has not been sold TODO: unless the
-		// fee
-		// // coin
-		// // is NOT BNB
-		// for (int i = 0; i < filteredTrades.size() - 1; i++) {
-		// if (filteredTrades.get(i).isBuy()) {
-		// // if the next trade is also a buy
-		// if (filteredTrades.get(i + 1).isBuy()) {
-		// // if the next trade after a buy is sell with same quantity skip
-		// // otherwise remove buys
-		// filteredTrades.remove(i);
-		//
-		// }
-		// System.out.println("Skipping a trade because it's still open");
-		// }
-		// }
-		//
-		// // // filter out unclear sells and buys
-		// for (int i = 0; i < filteredTrades.size(); i++) {
-		// if (filteredTrades.get(i).isBuy() && !filteredTrades.get(i + 1).isBuy()) {
-		// // with NOT BNB the quantity will be different
-		// if (!filteredTrades.get(i).getFeeCoin().equals("BNB")) {
-		// continue;
-		// } else if (filteredTrades.get(i).getQuantity()
-		// .compareTo(filteredTrades.get(i + 1).getQuantity()) != 0) {
-		//
-		// AggregatedTrade buy = filteredTrades.get(i);
-		// BigDecimal buyQuantity = buy.getQuantity();
-		// AggregatedTrade firstSell = filteredTrades.get(i + 1);
-		// BigDecimal sellQuantity = firstSell.getQuantity();
-		//
-		// List<AggregatedTrade> partialSellAndBuyPairs = new ArrayList<>();
-		// partialSellAndBuyPairs.add(buy);
-		// for (int j = i; j < filteredTrades.size() - i - 1; j++) {
-		// if (buyQuantity.compareTo(sellQuantity) == 0) {
-		// break;
-		// }
-		// sellQuantity = sellQuantity.add(filteredTrades.get(j).getQuantity());
-		// partialSellAndBuyPairs.add(filteredTrades.get(j));
-		// }
-		//
-		// saveNewProfit(partialSellAndBuyPairs);
-		//
-		// // filteredTrades.remove(i + 1);
-		// // System.out.println(
-		// // "Removed a trade with id" + filteredTrades.get(i + 1).getId() + " because
-		// it
-		// // was unclear");
-		// }
-		//
-		// }}
+		// weird stuff here like partial amounts bought and sold. add all sales or buys
+		// together and try to find a quantity that sums to 0 then
+		// save TODO: also withdraws
+		if (unclearTrades.size() > 2) {
+			for (int i = 0; i < unclearTrades.size() - 1; i++) {
+				LinkedList<AggregatedTrade> partialTrades = new LinkedList<>();
 
-		// TODO: same quantity buy order after eachother. later find the matching sell
+				partialTrades.add(unclearTrades.get(i));
+				while (unclearTrades.get(i).isBuy() == unclearTrades.get(i + 1).isBuy()) {
+
+					partialTrades.add(unclearTrades.get(i + 1));
+
+					// skip every trade we add to the partialTradesList
+					i++;
+
+					// just in case!
+					if (i == (unclearTrades.size() - 1)) {
+						System.out.println("The trade pair " + partialTrades.get(0).getSymbol()
+								+ " only has buy or sell trades. Can't calculate profits. Please check");
+						break;
+					}
+				}
+
+				if (partialTrades.get(0).getSymbol().equals("EOSETH")) {
+					System.out.println("asd");
+				}
+				// if we found something useful
+				if (partialTrades.size() > 1) {
+					List<BigDecimal> allQuantities = new ArrayList<>();
+
+					for (AggregatedTrade at : partialTrades) {
+						allQuantities.add(at.getQuantity());
+					}
+					BigDecimal totalAmount = TradeHelper.addBigDecimals(allQuantities);
+
+					if (!partialTrades.get(0).isBuy()) {
+						// if the next trade before the sell list is a buy
+						if (totalAmount.compareTo(unclearTrades.get(i - partialTrades.size()).getQuantity()) == 0) {
+							AggregatedTrade buyTrade = unclearTrades.get(i - partialTrades.size());
+							partialTrades.add(buyTrade);
+
+							convertAndSaveProfitLists(partialTrades);
+							partialTrades.clear();
+						}
+
+					} else if (partialTrades.get(0).isBuy()) {
+						// if the next trade after the buy list is a sell
+						if (totalAmount.compareTo(unclearTrades.get(i + partialTrades.size() - 1).getQuantity()) == 0) {
+							AggregatedTrade sellTrade = unclearTrades.get(i + partialTrades.size() - 1);
+							partialTrades.add(sellTrade);
+
+							convertAndSaveProfitLists(partialTrades);
+							partialTrades.clear();
+						}
+					} else {
+						System.out.println("Those sell and buy orders pairs in " + partialTrades.get(0).getSymbol()
+								+ " do not make sense. Skipping");
+						System.out.println("Delete the following trades:");
+
+						for (AggregatedTrade ats : partialTrades) {
+							System.out.println("Trade time: " + ats.getTradeTime() + " trade quantity: "
+									+ ats.getQuantity() + " and price: " + ats.getPrice());
+						}
+						partialTrades.clear();
+					}
+				}
+
+			}
+
+		}
 
 		return filteredTrades;
 
+	}
+
+	private void convertAndSaveProfitLists(List<AggregatedTrade> partialTrades) {
+		Profit profitToSave = profitListConverter.convert(partialTrades);
+		if (profitToSave != null) {
+			saveOrUpdate(profitToSave);
+			System.out.println("Saved a profit from combined trades.");
+		} else {
+			System.out.println("Something went wrong. Could not convert and save partial profits");
+		}
 	}
 
 	private Collection<List<AggregatedTrade>> createTradePairs(List<AggregatedTrade> filteredTrades) {
