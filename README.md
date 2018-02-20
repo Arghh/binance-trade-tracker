@@ -64,12 +64,11 @@ __Note:__ The API trade import is not yet ready.
 In order to run Binance Trade Tracker from the jar just navigate to the folder where you downloaded it and run:
 
 ```
-java -jar binance-profit-tracker-0.0.2-SNAPSHOT.jar --spring.config.location="app.properties"
+java -jar binance-profit-tracker-0.0.3-SNAPSHOT.jar --spring.config.location="app.properties"
 ```
 ## Todos
 
 * Error handling
-* Prices in USD
 * Proper logging
 * Proper front end
 * integration- and unit-tests

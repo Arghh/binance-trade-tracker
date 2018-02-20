@@ -29,7 +29,7 @@ public class ProfitController {
 	@RequestMapping({ "/profit/list", "/profit/" })
 	public String listAllProfits(Model model) {
 		model.addAttribute("profits", profitService.showAllProfits());
-		model.addAttribute("totalProfits", profitService.allTimeProfits());
+		model.addAttribute("totalProfits", profitService.allTimeProfitsSumInCurrencies());
 		return "profit/profitlist";
 	}
 

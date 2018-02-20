@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<artifactId>binance-profit-tracker</artifactId>
-	<version>0.0.2-SNAPSHOT</version>
+	<version>0.0.3-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
 	<name>ProfitTracker</name>
@@ -62,6 +62,11 @@
 			<groupId>org.webjars</groupId>
 			<artifactId>bootstrap</artifactId>
 			<version>4.0.0</version>
+		</dependency>
+		<dependency>
+			<groupId>com.github.jeffreytai</groupId>
+			<artifactId>cryptocompare-api-wrapper</artifactId>
+			<version>1.0.0</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

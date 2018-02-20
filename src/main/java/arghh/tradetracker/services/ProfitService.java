@@ -17,7 +17,7 @@ public interface ProfitService {
 
 	List<ProfitList> showAllProfits();
 
-	List<String> allTimeProfits();
+	List<String> allTimeProfitsSumInCurrencies();
 
 	Profit saveOrUpdate(Profit profit);
 

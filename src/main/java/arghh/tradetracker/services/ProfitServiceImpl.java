@@ -32,15 +32,19 @@ public class ProfitServiceImpl implements ProfitService {
 	private AggregatedTradeService aggTradeService;
 	private AggTradeToProfit profitConverter;
 	private ProfitToProfitList webConverter;
+	private CryptoCompareApiService cryptoApi;
 
 	@Autowired
 	public ProfitServiceImpl(AggregatedTradeRepository aggTradeRepository, AggregatedTradeService aggTradeService,
-			ProfitRepository profitRepository, AggTradeToProfit profitConverter, ProfitToProfitList webConverter) {
+			ProfitRepository profitRepository, AggTradeToProfit profitConverter, ProfitToProfitList webConverter,
+			CryptoCompareApiService cryptoApi) {
+
 		this.aggTradeRepository = aggTradeRepository;
 		this.aggTradeService = aggTradeService;
 		this.profitRepository = profitRepository;
 		this.profitConverter = profitConverter;
 		this.webConverter = webConverter;
+		this.cryptoApi = cryptoApi;
 	}
 
 	@Override
@@ -62,27 +66,29 @@ public class ProfitServiceImpl implements ProfitService {
 		List<String> symbols = aggTradeRepository.findDistinctSymbols();
 
 		System.out.println("Starting task: Calculate profits");
-		// TODO: use stream groupingBy to divide trades into groups
-		// Map<Enum, Set<AggregatedTrade>> tradesBySymbols = trades.stream()
-		// .collect(groupingBy(AggregatedTrade::getSymbol, toSet()));
+
 		// sort and filter trades into groups
 		for (String s : symbols) {
 
 			trades = aggTradeRepository.findBySymbolAndProfitIsNull(s);
 
 			System.out.println("Calculating profits for trade pair " + s);
-			if (!trades.isEmpty() || !(trades.size() < 2)) {
+			if (trades.isEmpty() || trades.size() < 2) {
+				System.out.println(MessageFormat
+						.format("The trade pair {0} does not have enough trades to calculate profits.", s));
+			} else {
 				trades = filterOutOpenTrades(trades);
 			}
 
 			// skip profits with no trade pair
-			if (trades.isEmpty() || trades.size() < 2) {
-				System.out.println(
-						MessageFormat.format("The trade pair {0} only has {1} new trades. Skipping", s, trades.size()));
-			} else {
-				Collection<List<AggregatedTrade>> buySellSet = createTradePairs(trades);
-				buySellSet.forEach(x -> saveNewProfit(x));
-			}
+			// if (trades.isEmpty() || trades.size() < 2) {
+			// System.out.println(
+			// MessageFormat.format("The trade pair {0} only has {1} new trades. Skipping",
+			// s, trades.size()));
+			// } else {
+			// Collection<List<AggregatedTrade>> buySellSet = createTradePairs(trades);
+			// buySellSet.forEach(x -> saveNewProfit(x));
+			// }
 
 			System.out.println("Finished calculating profits for trade pair " + s);
 		}
@@ -93,39 +99,121 @@ public class ProfitServiceImpl implements ProfitService {
 	private List<AggregatedTrade> filterOutOpenTrades(List<AggregatedTrade> allTrades) {
 		List<AggregatedTrade> filteredTrades = allTrades;
 
+		if (!filteredTrades.get(0).isBuy()) {
+			filteredTrades.remove(filteredTrades.get(0));
+			System.out.println("First trade has to be a buy. Skipping");
+		}
+
 		if (filteredTrades.get(filteredTrades.size() - 1).isBuy()) {
 			filteredTrades.remove(filteredTrades.size() - 1);
 			System.out.println("Skipping last trade because it's still open");
 		}
 
-		// filter out open trades if the quantity has not been sold TODO: unless the fee
-		// coin
-		// is NOT BNB
+		List<AggregatedTrade> simpleTrades = new ArrayList<>();
+		List<AggregatedTrade> unclearTrades = new ArrayList<>();
+
 		for (int i = 0; i < filteredTrades.size() - 1; i++) {
-			if (filteredTrades.get(i).isBuy()) {
-				// if the next trade is also a buy
-				if (filteredTrades.get(i + 1).isBuy()) {
-					// if the next trade after a buy is sell with same quantity skip
-					// otherwise remove buys
-					filteredTrades.remove(i);
 
-				}
-				System.out.println("Skipping a trade because it's still open");
-			}
-		}
-
-		// // filter out sells that happend later
-		for (int i = 0; i < filteredTrades.size(); i++) {
+			// filter out and save easy trade pairs with 0 sum and buy sell
 			if (filteredTrades.get(i).isBuy() && !filteredTrades.get(i + 1).isBuy()) {
-				// with BNB the quantity will be different
-				if (!filteredTrades.get(i).getFeeCoin().equals("BNB")) {
-					continue;
-				} else if (filteredTrades.get(i).getQuantity()
-						.compareTo(filteredTrades.get(i + 1).getQuantity()) != 0) {
-					filteredTrades.remove(i + 1);
+				if (filteredTrades.get(i).getSymbol().equals("LTCBTC")) {
+					System.out.println("stop");
 				}
+				if (filteredTrades.get(i).getQuantity().compareTo(filteredTrades.get(i + 1).getQuantity()) == 0) {
+					simpleTrades.add(filteredTrades.get(i));
+					simpleTrades.add(filteredTrades.get(i + 1));
+
+					// filter out and save easy buy sells when fee currency is not BNB TODO:
+					// calculate profits correctly. now we always lose profit because we sell
+					// smaller amout than we bought
+				} else if (!filteredTrades.get(i).getFeeCoin().equals(BaseCurrency.BNB.toString())) {
+					simpleTrades.add(filteredTrades.get(i));
+					simpleTrades.add(filteredTrades.get(i + 1));
+				} else {
+					unclearTrades.add(filteredTrades.get(i));
+					unclearTrades.add(filteredTrades.get(i + 1));
+				}
+				// skip over the sell because we add pairs together
+				i++;
+			} else {
+				unclearTrades.add(filteredTrades.get(i));
 			}
 		}
+
+		// skip profits with no trade pair
+		if (simpleTrades.isEmpty() || simpleTrades.size() < 2) {
+			// System.out.println(MessageFormat.format("The trade pair {0} only has {1} new
+			// trades. Skipping", s,
+			// simpleTrades.size()));
+		} else {
+			Collection<List<AggregatedTrade>> buySellSet = createTradePairs(simpleTrades);
+			buySellSet.forEach(x -> saveNewProfit(x));
+		}
+
+		// // for(
+		// // int i = 0;i<filteredTrades.size()-1;i++)
+		// // {
+		// //
+		// // if (filteredTrades.get(i).isBuy() && filteredTrades.get(i + 1).isBuy()) {
+		// // if (!filteredTrades.get(i).getFeeCoin().equals("BNB")) {
+		// // continue;
+		// // } else if () {
+		// //
+		// // }
+		// // }
+		// // }
+		//
+		// // filter out open trades if the quantity has not been sold TODO: unless the
+		// fee
+		// // coin
+		// // is NOT BNB
+		// for (int i = 0; i < filteredTrades.size() - 1; i++) {
+		// if (filteredTrades.get(i).isBuy()) {
+		// // if the next trade is also a buy
+		// if (filteredTrades.get(i + 1).isBuy()) {
+		// // if the next trade after a buy is sell with same quantity skip
+		// // otherwise remove buys
+		// filteredTrades.remove(i);
+		//
+		// }
+		// System.out.println("Skipping a trade because it's still open");
+		// }
+		// }
+		//
+		// // // filter out unclear sells and buys
+		// for (int i = 0; i < filteredTrades.size(); i++) {
+		// if (filteredTrades.get(i).isBuy() && !filteredTrades.get(i + 1).isBuy()) {
+		// // with NOT BNB the quantity will be different
+		// if (!filteredTrades.get(i).getFeeCoin().equals("BNB")) {
+		// continue;
+		// } else if (filteredTrades.get(i).getQuantity()
+		// .compareTo(filteredTrades.get(i + 1).getQuantity()) != 0) {
+		//
+		// AggregatedTrade buy = filteredTrades.get(i);
+		// BigDecimal buyQuantity = buy.getQuantity();
+		// AggregatedTrade firstSell = filteredTrades.get(i + 1);
+		// BigDecimal sellQuantity = firstSell.getQuantity();
+		//
+		// List<AggregatedTrade> partialSellAndBuyPairs = new ArrayList<>();
+		// partialSellAndBuyPairs.add(buy);
+		// for (int j = i; j < filteredTrades.size() - i - 1; j++) {
+		// if (buyQuantity.compareTo(sellQuantity) == 0) {
+		// break;
+		// }
+		// sellQuantity = sellQuantity.add(filteredTrades.get(j).getQuantity());
+		// partialSellAndBuyPairs.add(filteredTrades.get(j));
+		// }
+		//
+		// saveNewProfit(partialSellAndBuyPairs);
+		//
+		// // filteredTrades.remove(i + 1);
+		// // System.out.println(
+		// // "Removed a trade with id" + filteredTrades.get(i + 1).getId() + " because
+		// it
+		// // was unclear");
+		// }
+		//
+		// }}
 
 		// TODO: same quantity buy order after eachother. later find the matching sell
 
@@ -134,14 +222,12 @@ public class ProfitServiceImpl implements ProfitService {
 	}
 
 	private Collection<List<AggregatedTrade>> createTradePairs(List<AggregatedTrade> filteredTrades) {
+
 		// divide the even list into sets each size 2
 		final AtomicInteger counter = new AtomicInteger(0);
 
 		final Collection<List<AggregatedTrade>> pairs = filteredTrades.stream()
 				.collect(Collectors.groupingBy(t -> counter.getAndIncrement() / 2)).values();
-		//
-		// Map<Object, List<AggregatedTrade>> pairs =
-		// filteredTrades.stream().collect(Collectors.groupingBy(s -> s / 2));
 
 		return pairs;
 
@@ -151,28 +237,36 @@ public class ProfitServiceImpl implements ProfitService {
 		Profit savedProfit = profitConverter.convert(buySellPair);
 		if (savedProfit != null) {
 			saveOrUpdate(savedProfit);
-			System.out.println(MessageFormat.format("Saved a profit with ID: {0} and currency {1}", savedProfit.getId(),
-					savedProfit.getBaseCurrency()));
+			System.out.println(MessageFormat.format(
+					"Saved a profit with ID: {0}, currency {1}, quantity {2} and profit {3}", savedProfit.getId(),
+					savedProfit.getBaseCurrency(), savedProfit.getQuantity().stripTrailingZeros().toPlainString(),
+					savedProfit.getProfitValue().stripTrailingZeros().toPlainString()));
 		} else {
-			System.out.println("Could not convert and save a profit");
+			System.out.println("Something went wrong. Could not convert and save a profit pair");
 		}
 
 		return savedProfit;
 	}
 
 	@Override
-	public List<String> allTimeProfits() {
+	public List<String> allTimeProfitsSumInCurrencies() {
 		List<String> allProfits = new ArrayList<>();
 		for (BaseCurrency currency : BaseCurrency.values()) {
 			List<Profit> profits = profitRepository.findByBaseCurrency(currency);
 
 			if (!profits.isEmpty()) {
-				allProfits.add(calculateProfitProCurrency(profits, currency));
+				String profitAndCurrency = calculateProfitProCurrency(profits, currency);
+				BigDecimal valueInUsd = cryptoApi.getCurrentValueInUsd(profitAndCurrency);
+				if (valueInUsd != null) {
+					profitAndCurrency = profitAndCurrency + " ( " + valueInUsd.stripTrailingZeros().toPlainString()
+							+ " $)";
+				}
+
+				allProfits.add(profitAndCurrency);
 			}
 		}
 
 		return allProfits;
-
 	}
 
 	@Override
@@ -207,7 +301,7 @@ public class ProfitServiceImpl implements ProfitService {
 	}
 
 	private Date stringToDate(String day) {
-		TimeZone tz = TimeZone.getTimeZone("Europe/London");
+		TimeZone tz = TimeZone.getDefault();
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 		formatter.setTimeZone(tz);
 		try {

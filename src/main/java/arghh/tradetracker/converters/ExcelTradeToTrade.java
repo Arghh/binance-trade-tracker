@@ -80,7 +80,7 @@ public class ExcelTradeToTrade implements Converter<List<String>, Trade> {
 	}
 
 	private Date convertDate(String cell) throws TradeException {
-		TimeZone tz = TimeZone.getTimeZone("Europe/London");
+		TimeZone tz = TimeZone.getDefault();
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		formatter.setTimeZone(tz);
 		if (cell != null && cell.startsWith("2")) {
