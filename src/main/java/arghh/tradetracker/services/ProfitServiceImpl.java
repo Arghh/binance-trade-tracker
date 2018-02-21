@@ -13,6 +13,8 @@ import java.util.TimeZone;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -163,9 +165,6 @@ public class ProfitServiceImpl implements ProfitService {
 					}
 				}
 
-				if (partialTrades.get(0).getSymbol().equals("EOSETH")) {
-					System.out.println("asd");
-				}
 				// if we found something useful
 				if (partialTrades.size() > 1) {
 					List<BigDecimal> allQuantities = new ArrayList<>();
@@ -180,8 +179,11 @@ public class ProfitServiceImpl implements ProfitService {
 						if (totalAmount.compareTo(unclearTrades.get(i - partialTrades.size()).getQuantity()) == 0) {
 							AggregatedTrade buyTrade = unclearTrades.get(i - partialTrades.size());
 							partialTrades.add(buyTrade);
-
-							convertAndSaveProfitLists(partialTrades);
+							if (partialTrades.size() > 2) {
+								convertAndSaveProfitLists(partialTrades);
+							} else {
+								System.out.println("partialTrades list size has to be at least 3.");
+							}
 							partialTrades.clear();
 						}
 
@@ -191,7 +193,12 @@ public class ProfitServiceImpl implements ProfitService {
 							AggregatedTrade sellTrade = unclearTrades.get(i + partialTrades.size() - 1);
 							partialTrades.add(sellTrade);
 
-							convertAndSaveProfitLists(partialTrades);
+							if (partialTrades.size() > 2) {
+								convertAndSaveProfitLists(partialTrades);
+
+							} else {
+								System.out.println("partialTrades list size has to be at least 3.");
+							}
 							partialTrades.clear();
 						}
 					} else {
@@ -215,6 +222,7 @@ public class ProfitServiceImpl implements ProfitService {
 
 	}
 
+	@Transactional
 	private void convertAndSaveProfitLists(List<AggregatedTrade> partialTrades) {
 		Profit profitToSave = profitListConverter.convert(partialTrades);
 		if (profitToSave != null) {
@@ -237,6 +245,7 @@ public class ProfitServiceImpl implements ProfitService {
 
 	}
 
+	@Transactional
 	private Profit saveNewProfit(List<AggregatedTrade> buySellPair) {
 		Profit savedProfit = profitConverter.convert(buySellPair);
 		if (savedProfit != null) {

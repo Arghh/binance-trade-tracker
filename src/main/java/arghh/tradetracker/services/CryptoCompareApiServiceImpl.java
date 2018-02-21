@@ -42,9 +42,8 @@ public class CryptoCompareApiServiceImpl implements CryptoCompareApiService {
 			BigDecimal currentValue = data.get(0).getValue().getAsBigDecimal();
 
 			BigDecimal valueInUsd = new BigDecimal(splited[0]).multiply(currentValue);
-			System.out.println(valueInUsd);
+
 			valueInUsd = valueInUsd.setScale(2, RoundingMode.CEILING);
-			System.out.println(valueInUsd);
 
 			return valueInUsd;
 		} catch (Exception e) {

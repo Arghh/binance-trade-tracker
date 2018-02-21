@@ -5,9 +5,11 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Repository;
 
 import arghh.tradetracker.model.AggregatedTrade;
 
+@Repository
 public interface AggregatedTradeRepository extends CrudRepository<AggregatedTrade, Long> {
 
 	List<AggregatedTrade> findBySymbol(String symbol);

@@ -1,12 +1,12 @@
 # Binance Trade Tracker
 
-Trades and profits tracking for day trades and bots in one easy to use web front end. Basically it just imports all your trades, adds your partial trades together and calculates the profit you made on a daily bases or overall. More features are planned (See TODO-s). This App is build using Spring Boot, Thymeleaf and Bootstrap. Trade Tracker uses the [webcerebrium binance api.](https://github.com/webcerebrium/java-binance-api)
+Trades and profits tracking for day trades and bots in one easy to use web front end. Basically it just imports all your trades, adds your partial trades together and calculates the profit you made on a daily bases or overall. More features are planned (See TODO-s). This App is build using Spring Boot, Thymeleaf and Bootstrap. Trade Tracker uses the [webcerebrium binance api.](https://github.com/webcerebrium/java-binance-api) and [Java CryptoCompare Unofficial API Client (https://github.com/jeffreytai/cryptocompare-java-api-wrapper) wrappers. Special thanks to [Jeffery](https://github.com/jeffreytai) for uploading hes project to maven central!
 
 ![Profits Page](/img/profit_screenshot.png?raw=true "Profits Page Screenshot")
 
 ## Getting Started
 
-First download and install [mariadb](https://mariadb.org/) if you haven't already. Create and new user and start it up. Trade Tracker won't start without a running db instance.
+First download and install [mariadb](https://mariadb.org/) if you haven't already. Create a new user and start it up. Trade Tracker won't start without a running db instance.
 
 Installing mariadb on linux and creating a new user:
 
@@ -22,12 +22,13 @@ Ctrl-C
 sudo service mysql restart
 ```
 
+On Windows install HeidiSQL to create a new user.
 
 Alternatively: Binance Trade Tracker will also work with other SQL DB-s but you need to change the `pom.xml` and `application.properties` files accordingly.
 
 ### Installing
 
-Easiest way to install is to clone the repo and build from source. If you are not familiar with Java or don't want to build the source code yourself, just download the release [compiled jar](https://github.com/Arghh/binance-trade-tracker/releases) and run that. You will still need to create and fill out the `app.properties` file and place it in the same folder as the jar.
+Easiest way to install Trade Tracker is to clone the repo and build from source. If you are not familiar with Java and Maven or don't want to build the source code yourself, just download the release [compiled jar](https://github.com/Arghh/binance-trade-tracker/releases) and run that. You will still need to create and fill out the `app.properties` file and place it in the same folder as the jar.
 
 #### Application.properties
 

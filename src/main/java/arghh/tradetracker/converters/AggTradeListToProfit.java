@@ -27,12 +27,12 @@ public class AggTradeListToProfit implements Converter<List<AggregatedTrade>, Pr
 			if (buys.isEmpty() || sells.isEmpty()) {
 				return null;
 			}
+
 			Profit profit = new Profit();
 			AggregatedTrade firstBuy = buys.get(0);
 			AggregatedTrade lastSell = sells.get(sells.size() - 1);
 			List<BigDecimal> allQuantities = new ArrayList<>();
 			List<BigDecimal> allCosts = new ArrayList<>();
-			List<BigDecimal> allFees = new ArrayList<>();
 
 			profit.setBaseCurrency(TradeHelper.getBaseCurrency(firstBuy.getSymbol()));
 			profit.setSellTime(lastSell.getTradeTime());
@@ -46,13 +46,13 @@ public class AggTradeListToProfit implements Converter<List<AggregatedTrade>, Pr
 				sells.forEach(s -> {
 					allCosts.add(s.getTotal());
 					allQuantities.add(s.getQuantity());
-					allFees.add(s.getFee());
 					s.setProfit(profit);
 				});
 				BigDecimal totalCost = TradeHelper.addBigDecimals(allCosts);
 				profit.setProfitValue(TradeHelper.substractBigDecimals(firstBuy.getTotal(), totalCost));
+				BigDecimal priceDifference = calculatePriceBasedOnListValues(firstBuy, sells);
 				// TODO: price difference need to be avg of all sells or buys?
-				profit.setPriceDifference(TradeHelper.substractBigDecimals(firstBuy.getPrice(), lastSell.getPrice()));
+				profit.setPriceDifference(priceDifference);
 
 			} else {
 				profit.setQuantity(lastSell.getQuantity());
@@ -60,15 +60,18 @@ public class AggTradeListToProfit implements Converter<List<AggregatedTrade>, Pr
 				buys.forEach(b -> {
 					allCosts.add(b.getTotal());
 					allQuantities.add(b.getQuantity());
-					allFees.add(b.getFee());
 					b.setProfit(profit);
 				});
 
 				profit.setbuySellPair(trades);
 				BigDecimal totalCost = TradeHelper.addBigDecimals(allCosts);
 				profit.setProfitValue(TradeHelper.substractBigDecimals(totalCost, lastSell.getTotal()));
+				BigDecimal priceDifference = calculatePriceBasedOnListValues(lastSell, buys);
+				profit.setPriceDifference(priceDifference);
+
 				// TODO: price difference need to be avg of all sells or buys?
-				profit.setPriceDifference(TradeHelper.substractBigDecimals(firstBuy.getPrice(), lastSell.getPrice()));
+				// profit.setPriceDifference(TradeHelper.substractBigDecimals(firstBuy.getPrice(),
+				// lastSell.getPrice()));
 			}
 
 			return profit;
@@ -78,6 +81,20 @@ public class AggTradeListToProfit implements Converter<List<AggregatedTrade>, Pr
 		}
 
 		return null;
+	}
+
+	private BigDecimal calculatePriceBasedOnListValues(AggregatedTrade one, List<AggregatedTrade> many) {
+
+		// total price * quantity
+		BigDecimal x = one.getQuantity().multiply(one.getPrice());
+
+		// part prices with there quantities as weight
+		BigDecimal y = new BigDecimal("0");
+		for (AggregatedTrade aggregatedTrade : many) {
+			y = y.add(aggregatedTrade.getQuantity().multiply(aggregatedTrade.getPrice()));
+		}
+
+		return x.subtract(y);
 	}
 
 }

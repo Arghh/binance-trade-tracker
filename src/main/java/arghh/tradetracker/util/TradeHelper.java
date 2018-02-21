@@ -45,6 +45,7 @@ public class TradeHelper {
 		}
 
 		return sell.getTime() - buy.getTime();
+
 	}
 
 	public static String getTimeDifference(Date buy, Date sell) {
