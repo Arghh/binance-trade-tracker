@@ -82,4 +82,10 @@ public class AggregatedTradeServiceImpl implements AggregatedTradeService {
 		System.out.println("Deleted all trades");
 	}
 
+	@Override
+	public List<AggregatedTrade> listAllUnmatchedTrades() {
+		List<AggregatedTrade> unMatchedTrades = aggTradeRepository.findAllWhereProfitIsNull();
+		return unMatchedTrades;
+	}
+
 }

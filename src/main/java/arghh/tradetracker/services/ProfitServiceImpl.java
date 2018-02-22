@@ -336,7 +336,15 @@ public class ProfitServiceImpl implements ProfitService {
 					.collect(Collectors.toList());
 
 			if (!profitsProCurrency.isEmpty()) {
-				dailyTotalProfits.add(calculateProfitProCurrency(profits, currency));
+				String profitAndCurrency = calculateProfitProCurrency(profits, currency);
+				BigDecimal valueInUsd = cryptoApi.getHistoricalDailyValue(profitAndCurrency, day);
+
+				if (valueInUsd != null) {
+					profitAndCurrency = profitAndCurrency + " ( " + valueInUsd.stripTrailingZeros().toPlainString()
+							+ " $)";
+				}
+
+				dailyTotalProfits.add(profitAndCurrency);
 			}
 		}
 

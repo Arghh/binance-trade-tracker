@@ -31,4 +31,7 @@ public interface AggregatedTradeRepository extends CrudRepository<AggregatedTrad
 
 	List<AggregatedTrade> findByFeeCoin(String coin);
 
+	@Query("select at from AggregatedTrade at where profit_fk is null")
+	List<AggregatedTrade> findAllWhereProfitIsNull();
+
 }

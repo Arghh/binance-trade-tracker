@@ -33,21 +33,23 @@ public class ProfitController {
 		return "profit/profitlist";
 	}
 
-	@RequestMapping({ "/profit/list/daily" })
+	@RequestMapping({ "/profit/list/daily/" })
 	public String listDailyProfits(Model model, @RequestParam(value = "date", required = false) String day) {
 		List<String> totalProfitsDaily = new ArrayList<>();
 		List<ProfitList> profitsDaily = new ArrayList<>();
+
 		if (day == null || day.isEmpty()) {
-			System.out.println("Date not set");
 			model.addAttribute("totalProfitsDaily", totalProfitsDaily);
 			model.addAttribute("profitsDaily", profitsDaily);
+			System.out.println("Date not set");
 			return "profit/profitlistdaily";
 		}
+
 		totalProfitsDaily = profitService.calculatedTotalDailyProfits(day);
 		profitsDaily = profitService.listDailyTradeProfits(day);
-
 		model.addAttribute("totalProfitsDaily", totalProfitsDaily);
 		model.addAttribute("profitsDaily", profitsDaily);
+
 		return "profit/profitlistdaily";
 	}
 

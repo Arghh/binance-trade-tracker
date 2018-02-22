@@ -59,6 +59,12 @@ public class TradeController {
 		return "trade/tradelist";
 	}
 
+	@RequestMapping({ "/trade/list/unmatched" })
+	public String unmatchedTrades(Model model) {
+		model.addAttribute("trades", aggService.listAllUnmatchedTrades());
+		return "trade/unmatchedtrades";
+	}
+
 	@RequestMapping({ "/trade/api/save" })
 	public String loadAllTradesFromApi() {
 		apiService.saveAllBinanaceTrades("WTCBTC");

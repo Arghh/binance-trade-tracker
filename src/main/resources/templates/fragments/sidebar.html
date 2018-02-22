@@ -14,13 +14,14 @@
 					<ul id="trades-submenu" class="collapse">
 						<li><a th:href="@{/trade/list}">All trades</a></li>
 						<li><a th:href="@{/trade/list/raw}">Raw excel data</a></li>
+						<li><a th:href="@{/trade/list/unmatched}">Unmatched trades</a></li>
 					</ul></li>
 
 				<li><a href="#" data-toggle="collapse"
 					data-target="#profits-submenu" aria-expanded="false">Profits</a>
 					<ul id="profits-submenu" class="collapse">
 						<li><a th:href="@{/profit/list}">All</a></li>
-						<li><a th:href="@{/profit/list/daily}">Daily</a></li>
+						<li><a th:href="@{/profit/list/daily/}">Daily</a></li>
 					</ul></li>
 
 				<li><a th:href="@{/stats/}">Statistics</a></li>

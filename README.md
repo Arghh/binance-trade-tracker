@@ -1,7 +1,6 @@
 # Binance Trade Tracker
 
-Trades and profits tracking for day trades and bots in one easy to use web front end. Basically it just imports all your trades, adds your partial trades together and calculates the profit you made on a daily bases or overall. More features are planned (See TODO-s). This App is build using Spring Boot, Thymeleaf and Bootstrap. Trade Tracker uses the [webcerebrium binance api.](https://github.com/webcerebrium/java-binance-api) and [Java CryptoCompare Unofficial API Client (https://github.com/jeffreytai/cryptocompare-java-api-wrapper) wrappers. Special thanks to [Jeffery](https://github.com/jeffreytai) for uploading hes project to maven central!
-
+Trades and profits tracking for day trades and bots in one easy to use web front end. Basically it just imports all your trades, adds your partial trades together and calculates the profit you made on a daily bases or overall. More features are planned (See TODO-s). This App is build using Spring Boot, Thymeleaf and Bootstrap. Trade Tracker uses the [webcerebrium binance api.](https://github.com/webcerebrium/java-binance-api) and [Java CryptoCompare Unofficial API Client (https://github.com/jeffreytai/cryptocompare-java-api-wrapper) wrappers.
 ![Profits Page](/img/profit_screenshot.png?raw=true "Profits Page Screenshot")
 
 ## Getting Started
@@ -65,8 +64,9 @@ __Note:__ The API trade import is not yet ready.
 In order to run Binance Trade Tracker from the jar just navigate to the folder where you downloaded it and run:
 
 ```
-java -jar binance-profit-tracker-0.0.3-SNAPSHOT.jar --spring.config.location="app.properties"
+java -jar binance-profit-tracker-0.0.4-SNAPSHOT.jar --spring.config.location="app.properties"
 ```
+
 ## Todos
 
 * Error handling
@@ -77,6 +77,10 @@ java -jar binance-profit-tracker-0.0.3-SNAPSHOT.jar --spring.config.location="ap
 * daily coin prices
 * historical coin data
 
+### Special Thanks
+
+[Jeffery](https://github.com/jeffreytai) for uploading hes project to maven central.
+Everyone who has given feedback.
 
 ## Digital tip jar
 

@@ -18,4 +18,6 @@ public interface AggregatedTradeService {
 
 	void deleteAll();
 
+	List<AggregatedTrade> listAllUnmatchedTrades();
+
 }
