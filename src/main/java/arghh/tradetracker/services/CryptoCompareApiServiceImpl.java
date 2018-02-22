@@ -42,7 +42,7 @@ public class CryptoCompareApiServiceImpl implements CryptoCompareApiService {
 			List<Entry<String, JsonElement>> data = response.entrySet().stream().collect(Collectors.toList());
 
 			BigDecimal currentValue = data.get(0).getValue().getAsBigDecimal();
-			System.out.println(currentValue);
+
 			BigDecimal valueInUsd = new BigDecimal(splited[0]).multiply(currentValue);
 
 			valueInUsd = valueInUsd.setScale(2, RoundingMode.CEILING);
@@ -67,7 +67,6 @@ public class CryptoCompareApiServiceImpl implements CryptoCompareApiService {
 			optionalParams.put("toTs", date.getTime() / 1000);
 			optionalParams.put("extraParams", "binaceTradeTracker");
 
-			System.out.println(date.getTime());
 			JsonObject response = api.dayAvg(splited[1], usd, optionalParams);
 			if (response.isJsonNull()) {
 				System.out.println("Problems getting Historical USD price from CryptoCompare");
@@ -80,7 +79,7 @@ public class CryptoCompareApiServiceImpl implements CryptoCompareApiService {
 			// fiatAndValue.entrySet().stream().collect(Collectors.toList());
 
 			BigDecimal currentValue = data.get(0).getValue().getAsBigDecimal();
-			System.out.println(currentValue);
+
 			BigDecimal valueInUsd = new BigDecimal(splited[0]).multiply(currentValue);
 
 			valueInUsd = valueInUsd.setScale(2, RoundingMode.CEILING);
