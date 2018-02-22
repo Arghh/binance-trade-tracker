@@ -31,7 +31,6 @@ public class AggTradeListToProfit implements Converter<List<AggregatedTrade>, Pr
 			Profit profit = new Profit();
 			AggregatedTrade firstBuy = buys.get(0);
 			AggregatedTrade lastSell = sells.get(sells.size() - 1);
-			List<BigDecimal> allQuantities = new ArrayList<>();
 			List<BigDecimal> allCosts = new ArrayList<>();
 
 			profit.setBaseCurrency(TradeHelper.getBaseCurrency(firstBuy.getSymbol()));
@@ -45,9 +44,10 @@ public class AggTradeListToProfit implements Converter<List<AggregatedTrade>, Pr
 
 				sells.forEach(s -> {
 					allCosts.add(s.getTotal());
-					allQuantities.add(s.getQuantity());
 					s.setProfit(profit);
 				});
+				buys.get(0).setProfit(profit);
+				profit.setbuySellPair(trades);
 				BigDecimal totalCost = TradeHelper.addBigDecimals(allCosts);
 				profit.setProfitValue(TradeHelper.substractBigDecimals(firstBuy.getTotal(), totalCost));
 				BigDecimal priceDifference = calculatePriceBasedOnListValues(firstBuy, sells);
@@ -59,10 +59,9 @@ public class AggTradeListToProfit implements Converter<List<AggregatedTrade>, Pr
 
 				buys.forEach(b -> {
 					allCosts.add(b.getTotal());
-					allQuantities.add(b.getQuantity());
 					b.setProfit(profit);
 				});
-
+				sells.get(0).setProfit(profit);
 				profit.setbuySellPair(trades);
 				BigDecimal totalCost = TradeHelper.addBigDecimals(allCosts);
 				profit.setProfitValue(TradeHelper.substractBigDecimals(totalCost, lastSell.getTotal()));

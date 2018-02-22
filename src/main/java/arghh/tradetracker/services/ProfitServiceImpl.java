@@ -92,7 +92,6 @@ public class ProfitServiceImpl implements ProfitService {
 	}
 
 	private List<AggregatedTrade> filterOutOpenTrades(List<AggregatedTrade> allTrades) {
-
 		List<AggregatedTrade> filteredTrades = allTrades;
 
 		if (!filteredTrades.get(0).isBuy()) {
@@ -142,23 +141,31 @@ public class ProfitServiceImpl implements ProfitService {
 			buySellSet.forEach(x -> saveNewProfit(x));
 		}
 
+		sortAndSaveUnclearTradesToProfits(unclearTrades);
+
+		return filteredTrades;
+
+	}
+
+	private void sortAndSaveUnclearTradesToProfits(List<AggregatedTrade> unclearTrades) {
+		List<AggregatedTrade> tradesToCombine = unclearTrades;
 		// weird stuff here like partial amounts bought and sold. add all sales or buys
 		// together and try to find a quantity that sums to 0 then
 		// save TODO: also withdraws
-		if (unclearTrades.size() > 2) {
-			for (int i = 0; i < unclearTrades.size() - 1; i++) {
+		if (tradesToCombine.size() > 2) {
+			for (int i = 0; i < tradesToCombine.size() - 1; i++) {
 				LinkedList<AggregatedTrade> partialTrades = new LinkedList<>();
 
-				partialTrades.add(unclearTrades.get(i));
-				while (unclearTrades.get(i).isBuy() == unclearTrades.get(i + 1).isBuy()) {
+				partialTrades.add(tradesToCombine.get(i));
+				while (tradesToCombine.get(i).isBuy() == tradesToCombine.get(i + 1).isBuy()) {
 
-					partialTrades.add(unclearTrades.get(i + 1));
+					partialTrades.add(tradesToCombine.get(i + 1));
 
 					// skip every trade we add to the partialTradesList
 					i++;
 
 					// just in case!
-					if (i == (unclearTrades.size() - 1)) {
+					if (i == (tradesToCombine.size() - 1)) {
 						System.out.println("The trade pair " + partialTrades.get(0).getSymbol()
 								+ " only has buy or sell trades. Can't calculate profits. Please check");
 						break;
@@ -176,21 +183,20 @@ public class ProfitServiceImpl implements ProfitService {
 
 					if (!partialTrades.get(0).isBuy()) {
 						// if the next trade before the sell list is a buy
-						if (totalAmount.compareTo(unclearTrades.get(i - partialTrades.size()).getQuantity()) == 0) {
-							AggregatedTrade buyTrade = unclearTrades.get(i - partialTrades.size());
+						if (totalAmount.compareTo(tradesToCombine.get(i - partialTrades.size()).getQuantity()) == 0) {
+							AggregatedTrade buyTrade = tradesToCombine.get(i - partialTrades.size());
 							partialTrades.add(buyTrade);
 							if (partialTrades.size() > 2) {
 								convertAndSaveProfitLists(partialTrades);
 							} else {
 								System.out.println("partialTrades list size has to be at least 3.");
 							}
-							partialTrades.clear();
 						}
 
 					} else if (partialTrades.get(0).isBuy()) {
 						// if the next trade after the buy list is a sell
-						if (totalAmount.compareTo(unclearTrades.get(i + partialTrades.size() - 1).getQuantity()) == 0) {
-							AggregatedTrade sellTrade = unclearTrades.get(i + partialTrades.size() - 1);
+						if (totalAmount.compareTo(tradesToCombine.get(partialTrades.size()).getQuantity()) == 0) {
+							AggregatedTrade sellTrade = tradesToCombine.get(partialTrades.size());
 							partialTrades.add(sellTrade);
 
 							if (partialTrades.size() > 2) {
@@ -199,7 +205,6 @@ public class ProfitServiceImpl implements ProfitService {
 							} else {
 								System.out.println("partialTrades list size has to be at least 3.");
 							}
-							partialTrades.clear();
 						}
 					} else {
 						System.out.println("Those sell and buy orders pairs in " + partialTrades.get(0).getSymbol()
@@ -210,16 +215,10 @@ public class ProfitServiceImpl implements ProfitService {
 							System.out.println("Trade time: " + ats.getTradeTime() + " trade quantity: "
 									+ ats.getQuantity() + " and price: " + ats.getPrice());
 						}
-						partialTrades.clear();
 					}
 				}
-
 			}
-
 		}
-
-		return filteredTrades;
-
 	}
 
 	@Transactional

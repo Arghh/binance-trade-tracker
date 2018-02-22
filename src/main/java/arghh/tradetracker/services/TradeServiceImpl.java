@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import arghh.tradetracker.converters.TradeToAggTrade;
 import arghh.tradetracker.model.AggregatedTrade;
@@ -54,6 +55,7 @@ public class TradeServiceImpl implements TradeService {
 	}
 
 	@Override
+	@Transactional
 	public void saveAllAggregatedTrades() {
 		List<String> allSymbols = tradeRepository.findDistinctSymbols();
 		List<Trade> rawTrades = new ArrayList<>();

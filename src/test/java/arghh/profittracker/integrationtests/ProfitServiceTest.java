@@ -256,4 +256,93 @@ public class ProfitServiceTest {
 		Assert.assertEquals(new BigDecimal("15"), profits.get(0).getProfitValue());
 	}
 
+	@Test
+	@Transactional
+	public void saveUnclearSellTradeWithBuyListTest() throws Exception {
+		List<AggregatedTrade> trades = new ArrayList<>();
+		List<String> symbols = new ArrayList<>();
+		symbols.add("ETHBTC");
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+		String sellDateString = "27-02-2018 10:20:56";
+		String dateBuy1String = "15-02-2018 11:21:56";
+		String dateBuy2String = "24-02-2018 12:31:56";
+		String dateBuy3String = "25-02-2018 13:51:56";
+
+		Date sellDate = formatter.parse(sellDateString);
+		Date buyDate1 = formatter.parse(dateBuy1String);
+		Date buyDate2 = formatter.parse(dateBuy2String);
+		Date buyDate3 = formatter.parse(dateBuy3String);
+
+		AggregatedTrade buy1 = new AggregatedTrade();
+		buy1.setBuy(true);
+		buy1.setQuantity(new BigDecimal("1"));
+		buy1.setPrice(new BigDecimal("1"));
+		buy1.setTotal(new BigDecimal("10"));
+		buy1.setFee(new BigDecimal("0.1"));
+		buy1.setFeeCoin("BNB");
+		buy1.setSymbol("LSKETH");
+		buy1.setTradeTime(buyDate1);
+		trades.add(buy1);
+
+		AggregatedTrade buy2 = new AggregatedTrade();
+		buy2.setBuy(true);
+		buy2.setQuantity(new BigDecimal("1"));
+		buy2.setPrice(new BigDecimal("1"));
+		buy2.setTotal(new BigDecimal("10"));
+		buy2.setFee(new BigDecimal("0.1"));
+		buy2.setFeeCoin("BNB");
+		buy2.setSymbol("LSKETH");
+		buy2.setTradeTime(buyDate2);
+		trades.add(buy2);
+
+		AggregatedTrade buy3 = new AggregatedTrade();
+		buy3.setBuy(true);
+		buy3.setQuantity(new BigDecimal("1"));
+		buy3.setPrice(new BigDecimal("1"));
+		buy3.setTotal(new BigDecimal("10"));
+		buy3.setFee(new BigDecimal("0.1"));
+		buy3.setFeeCoin("BNB");
+		buy3.setSymbol("LSKETH");
+		buy3.setTradeTime(buyDate3);
+		trades.add(buy3);
+
+		AggregatedTrade buy4 = new AggregatedTrade();
+		buy4.setBuy(true);
+		buy4.setQuantity(new BigDecimal("1"));
+		buy4.setPrice(new BigDecimal("1"));
+		buy4.setTotal(new BigDecimal("10"));
+		buy4.setFee(new BigDecimal("0.1"));
+		buy4.setFeeCoin("BNB");
+		buy4.setSymbol("LSKETH");
+		buy4.setTradeTime(buyDate3);
+		trades.add(buy4);
+
+		AggregatedTrade sell = new AggregatedTrade();
+		sell.setBuy(false);
+		sell.setQuantity(new BigDecimal("4"));
+		sell.setPrice(new BigDecimal("2"));
+		sell.setTotal(new BigDecimal("55"));
+		sell.setFee(new BigDecimal("0.1"));
+		sell.setFeeCoin("BNB");
+		sell.setSymbol("LSKETH");
+		sell.setTradeTime(sellDate);
+		trades.add(sell);
+
+		Mockito.when(aggTradeService.listAllAggregated()).thenReturn(trades);
+		Mockito.when(aggTradeRepository.findDistinctSymbols()).thenReturn(symbols);
+		Mockito.when(aggTradeRepository.findBySymbolAndProfitIsNull(symbols.get(0))).thenReturn(trades);
+
+		profitService.saveAllTradeProfits();
+
+		List<Profit> profits = profitService.listAllProfits();
+
+		Assert.assertTrue(!profits.isEmpty());
+		Assert.assertEquals(1, profits.size());
+		Assert.assertEquals(new BigDecimal("4"), profits.get(0).getQuantity());
+		Assert.assertEquals(BaseCurrency.ETH, profits.get(0).getBaseCurrency());
+		Assert.assertEquals(new BigDecimal("15"), profits.get(0).getProfitValue());
+		Assert.assertEquals(new BigDecimal("4"), profits.get(0).getPriceDifference());
+	}
+
 }

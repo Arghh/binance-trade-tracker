@@ -18,6 +18,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import arghh.tradetracker.converters.ExcelTradeToTrade;
 import arghh.tradetracker.model.Trade;
@@ -77,6 +78,7 @@ public class ExcelTradeServiceImpl implements ExcelTradeService {
 	}
 
 	@Override
+	@Transactional
 	public Trade saveNewExcelTrade(Trade newTradeToSave) {
 		if (newTradeToSave != null) {
 			newTradeToSave = tradeService.saveOrUpdate(newTradeToSave);

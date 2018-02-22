@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.webcerebrium.binance.api.BinanceApiException;
 import com.webcerebrium.binance.datatype.BinanceSymbol;
@@ -41,6 +42,7 @@ public class BinanceApiTradeServiceImpl implements BinanceApiTradeService {
 	}
 
 	@Override
+	@Transactional
 	public List<Trade> saveAllBinanaceTrades(String symbol) {
 		try {
 			BinanceSymbol sy = new BinanceSymbol(symbol);
