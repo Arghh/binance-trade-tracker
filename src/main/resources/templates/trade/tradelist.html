@@ -28,7 +28,6 @@
 						Coin</th>
 					<th data-field="trade-time" data-sortable="true" class="col">Trade
 						Time</th>
-					<th class="col"></th>
 				</tr>
 			</thead>
 			<tbody>
@@ -43,7 +42,6 @@
 					<td scope="row" class="text-center" th:text="${trade.feeCoin}"></td>
 					<td scope="row"
 						th:text="${#dates.format(trade.tradeTime, 'yyyy-MM-dd HH:mm:ss')}"></td>
-					<td scope="row"><a th:href="${'/trade/delete/' + trade.id}">Delete</a></td>
 				</tr>
 			</tbody>
 		</table>

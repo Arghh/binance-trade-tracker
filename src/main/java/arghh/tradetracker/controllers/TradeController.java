@@ -124,7 +124,7 @@ public class TradeController {
 	@RequestMapping("/trade/delete/{id}")
 	public String deleteAggregatedTrade(@PathVariable String id) {
 		aggService.delete(Long.valueOf(id));
-		return "redirect:/trade/list";
+		return "redirect:/trade/list/unmatched";
 	}
 
 	@RequestMapping("/trade/raw/delete/{id}")

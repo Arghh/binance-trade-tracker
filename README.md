@@ -1,6 +1,6 @@
 # Binance Trade Tracker
 
-Trades and profits tracking for day trades and bots in one easy to use web front end. Basically it just imports all your trades, adds your partial trades together and calculates the profit you made on a daily bases or overall. More features are planned (See TODO-s). This App is build using Spring Boot, Thymeleaf and Bootstrap. Trade Tracker uses the [webcerebrium binance api.](https://github.com/webcerebrium/java-binance-api) and [Java CryptoCompare Unofficial API Client](https://github.com/jeffreytai/cryptocompare-java-api-wrapper) wrappers.
+Trades and profits tracking for day trades and bots in one easy to use web front end. Basically it just imports all your trades, adds your partial trades together and calculates the profit you made on a daily bases or overall. More features are planned (See TODO-s). This App is build using Spring Boot, Thymeleaf and Bootstrap. Trade Tracker uses the [webcerebrium binance api](https://github.com/webcerebrium/java-binance-api) and [Java CryptoCompare Unofficial API Client](https://github.com/jeffreytai/cryptocompare-java-api-wrapper) wrappers.
 ![Profits Page](/img/profit_screenshot.png?raw=true "Profits Page Screenshot")
 
 ## Getting Started
@@ -71,11 +71,8 @@ java -jar binance-profit-tracker-0.0.4-SNAPSHOT.jar --spring.config.location="ap
 
 * Error handling
 * Proper logging
-* Proper front end
 * integration- and unit-tests
 * performance
-* daily coin prices
-* historical coin data
 
 ### Special Thanks
 
