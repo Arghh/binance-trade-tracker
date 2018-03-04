@@ -33,11 +33,17 @@ public class CryptoCompareApiServiceImpl implements CryptoCompareApiService {
 
 	@Override
 	public String getCurrentValueInFiat(String symbolAndValue) {
-		String[] splited = symbolAndValue.split("\\s+");
-		String fiat = checkIfFiatIsCorrect(preferedFiat);
-		String result = "";
-		try {
 
+		try {
+			String[] splited = symbolAndValue.split("\\s+");
+			String fiat = checkIfFiatIsCorrect(preferedFiat);
+
+			if (fiat == null) {
+				System.out.println(
+						"The choosen currency is not set or not supported. Please choose EUR or USD in your properties. (preferedFiat)");
+				return null;
+			}
+			String result = "";
 			JsonObject response = api.price(splited[1], fiat, new HashMap<String, Object>());
 			if (response.isJsonNull()) {
 				System.out.println("Problems getting the " + fiat + " price from CryptoCompare");
@@ -74,7 +80,8 @@ public class CryptoCompareApiServiceImpl implements CryptoCompareApiService {
 
 			if (fiat == null) {
 				System.out.println(
-						"The choosen currency is not supported. Please choose EUR or USD in your properties. (preferedFiat)");
+						"The choosen currency is not set or not supported. Please choose EUR or USD in your properties. (preferedFiat)");
+				return null;
 			}
 			LinkedHashMap<String, Object> optionalParams = new LinkedHashMap<>();
 
