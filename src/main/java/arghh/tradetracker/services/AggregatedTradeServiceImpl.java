@@ -8,27 +8,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import arghh.tradetracker.converters.TradeToAggTrade;
 import arghh.tradetracker.model.AggregatedTrade;
 import arghh.tradetracker.model.Trade;
 import arghh.tradetracker.repositories.AggregatedTradeRepository;
-import arghh.tradetracker.repositories.ProfitRepository;
 import arghh.tradetracker.repositories.TradeRepository;
 
 @Service
 public class AggregatedTradeServiceImpl implements AggregatedTradeService {
 
 	private AggregatedTradeRepository aggTradeRepository;
-	private ProfitRepository profitRepository;
-	private TradeToAggTrade aggTradeConverter;
 	private TradeRepository tradeRepositorty;
 
 	@Autowired
-	public AggregatedTradeServiceImpl(AggregatedTradeRepository aggTradeRepository, TradeToAggTrade aggTradeConverter,
-			ProfitRepository profitRepository, TradeRepository tradeRepositorty) {
+	public AggregatedTradeServiceImpl(AggregatedTradeRepository aggTradeRepository, TradeRepository tradeRepositorty) {
 		this.aggTradeRepository = aggTradeRepository;
-		this.aggTradeConverter = aggTradeConverter;
-		this.profitRepository = profitRepository;
 		this.tradeRepositorty = tradeRepositorty;
 	}
 

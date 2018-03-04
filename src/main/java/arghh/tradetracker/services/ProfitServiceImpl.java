@@ -107,29 +107,32 @@ public class ProfitServiceImpl implements ProfitService {
 		List<AggregatedTrade> simpleTrades = new ArrayList<>();
 		List<AggregatedTrade> unclearTrades = new ArrayList<>();
 
-		for (int i = 0; i < filteredTrades.size(); i++) {
+		if (filteredTrades.size() > 1) {
 
-			// filter out and save easy trade pairs with 0 sum and buy sell
-			if (filteredTrades.get(i).isBuy() && !filteredTrades.get(i + 1).isBuy()) {
+			for (int i = 0; i < filteredTrades.size(); i++) {
 
-				if (filteredTrades.get(i).getQuantity().compareTo(filteredTrades.get(i + 1).getQuantity()) == 0) {
-					simpleTrades.add(filteredTrades.get(i));
-					simpleTrades.add(filteredTrades.get(i + 1));
+				// filter out and save easy trade pairs with 0 sum and buy sell
+				if (filteredTrades.get(i).isBuy() && !filteredTrades.get(i + 1).isBuy()) {
 
-					// filter out and save easy buy sells when fee currency is not BNB TODO:
-					// calculate profits correctly. now we always lose profit because we sell
-					// smaller amout than we bought
-				} else if (!filteredTrades.get(i).getFeeCoin().equals(BaseCurrency.BNB.toString())) {
-					simpleTrades.add(filteredTrades.get(i));
-					simpleTrades.add(filteredTrades.get(i + 1));
+					if (filteredTrades.get(i).getQuantity().compareTo(filteredTrades.get(i + 1).getQuantity()) == 0) {
+						simpleTrades.add(filteredTrades.get(i));
+						simpleTrades.add(filteredTrades.get(i + 1));
+
+						// filter out and save easy buy sells when fee currency is not BNB TODO:
+						// calculate profits correctly. now we always lose profit because we sell
+						// smaller amout than we bought
+					} else if (!filteredTrades.get(i).getFeeCoin().equals(BaseCurrency.BNB.toString())) {
+						simpleTrades.add(filteredTrades.get(i));
+						simpleTrades.add(filteredTrades.get(i + 1));
+					} else {
+						unclearTrades.add(filteredTrades.get(i));
+						unclearTrades.add(filteredTrades.get(i + 1));
+					}
+					// skip over the sell because we add pairs together
+					i++;
 				} else {
 					unclearTrades.add(filteredTrades.get(i));
-					unclearTrades.add(filteredTrades.get(i + 1));
 				}
-				// skip over the sell because we add pairs together
-				i++;
-			} else {
-				unclearTrades.add(filteredTrades.get(i));
 			}
 		}
 
