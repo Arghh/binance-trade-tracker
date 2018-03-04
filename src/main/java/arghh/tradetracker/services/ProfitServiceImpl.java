@@ -271,10 +271,9 @@ public class ProfitServiceImpl implements ProfitService {
 
 			if (!profits.isEmpty()) {
 				String profitAndCurrency = calculateProfitProCurrency(profits, currency);
-				BigDecimal valueInUsd = cryptoApi.getCurrentValueInUsd(profitAndCurrency);
-				if (valueInUsd != null) {
-					profitAndCurrency = profitAndCurrency + " ( " + valueInUsd.stripTrailingZeros().toPlainString()
-							+ " $)";
+				String valueInFiat = cryptoApi.getCurrentValueInFiat(profitAndCurrency);
+				if (valueInFiat != null) {
+					profitAndCurrency = profitAndCurrency + " ( " + valueInFiat + " )";
 				}
 
 				allProfits.add(profitAndCurrency);
@@ -340,11 +339,10 @@ public class ProfitServiceImpl implements ProfitService {
 
 			if (!profitsProCurrency.isEmpty()) {
 				String profitAndCurrency = calculateProfitProCurrency(profits, currency);
-				BigDecimal valueInUsd = cryptoApi.getHistoricalDailyValue(profitAndCurrency, day);
+				String valueInFiat = cryptoApi.getHistoricalDailyValue(profitAndCurrency, day);
 
-				if (valueInUsd != null) {
-					profitAndCurrency = profitAndCurrency + " ( " + valueInUsd.stripTrailingZeros().toPlainString()
-							+ " $)";
+				if (valueInFiat != null) {
+					profitAndCurrency = profitAndCurrency + " ( " + valueInFiat + " )";
 				}
 
 				dailyTotalProfits.add(profitAndCurrency);

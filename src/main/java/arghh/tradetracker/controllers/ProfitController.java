@@ -49,6 +49,7 @@ public class ProfitController {
 		profitsDaily = profitService.listDailyTradeProfits(day);
 		model.addAttribute("totalProfitsDaily", totalProfitsDaily);
 		model.addAttribute("profitsDaily", profitsDaily);
+		model.addAttribute("date", day);
 
 		return "profit/profitlistdaily";
 	}

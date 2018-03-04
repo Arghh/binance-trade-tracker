@@ -93,34 +93,6 @@ public class TradeController {
 		return "trade/show";
 	}
 
-	// @RequestMapping("trade/edit/{id}")
-	// public String edit(@PathVariable String id, Model model) {
-	// Trade Trade = tradeService.getById(Long.valueOf(id));
-	// TradeForm TradeForm = TradeToTradeForm.convert(Trade);
-	//
-	// model.addAttribute("tradeForm", TradeForm);
-	// return "trade/tradeform";
-	// }
-	//
-	// @RequestMapping("/trade/new")
-	// public String newTrade(Model model) {
-	// model.addAttribute("tradeForm", new TradeForm());
-	// return "trade/tradeform";
-	// }
-
-	// @RequestMapping(value = "/trade", method = RequestMethod.POST)
-	// public String saveOrUpdateTrade(@Valid TradeForm TradeForm, BindingResult
-	// bindingResult) {
-	//
-	// if (bindingResult.hasErrors()) {
-	// return "trade/tradeform";
-	// }
-	// // TradeService.saveOrUpdateTradeForm(TradeForm);
-	// Trade savedTrade = null;
-	//
-	// return "redirect:/trade/show/" + savedTrade.getId();
-	// }
-
 	@RequestMapping("/trade/delete/{id}")
 	public String deleteAggregatedTrade(@PathVariable String id) {
 		aggService.delete(Long.valueOf(id));

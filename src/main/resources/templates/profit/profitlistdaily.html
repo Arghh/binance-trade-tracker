@@ -10,8 +10,8 @@
 		<div class="p-2 ml-auto">
 			<form th:action="@{/profit/list/daily/}" method="get">
 				<div class="input-group mb-3">
-					<input id="datepicker" class="form-control" width="240"
-						th:name="date" />
+					<input id="datepicker" class="form-control" width="240" name="date"
+						th:value="${date}" />
 					<button class="btn btn-outline-dark" id="show-daily-profits"
 						type="submit">Show profits</button>
 				</div>
@@ -36,7 +36,10 @@
 			</div>
 		</div>
 	</div>
-
+	<div th:if="${profitsDaily.empty}">
+		<h4 class="lead text-center">Could not find any closed trades on
+			this day.</h4>
+	</div>
 	<div th:if="${!profitsDaily.empty}">
 		<table data-toggle="table" data-sort-name="sell-time"
 			data-sort-order="asc" data-locale="en-US" data-pagination="true"
@@ -80,11 +83,12 @@
 <div lang="en" th:replace="fragments/footer :: footer"></div>
 <!-- Script -->
 <script>
+	var date = document.getElementById("datepicker").value;
 	var datepicker = $('#datepicker').datepicker({
 		uiLibrary : 'bootstrap4',
 		format : 'yyyy-mm-dd',
 		weekStartDay : 1,
-		value : todaysDate()
+		value : todaysDate(date),
 	});
 </script>
 </div>

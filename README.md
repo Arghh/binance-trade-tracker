@@ -53,6 +53,10 @@ For example Linux:
 home/Argh/Downloads/TradeHistory.xlsx
 ```
 
+* __Prefered fiat__ - In order to see profits in $ or € set the `preferedFiat=` to currency of your choice.
+
+Currently supported values are: `EUR` and `USD`.
+
 ##### OPTIONAL FIELDS:
 * BINANCE_API_KEY - Please make sure you only use a READ-ONLY key.
 
@@ -64,7 +68,7 @@ __Note:__ The API trade import is not yet ready.
 In order to run Binance Trade Tracker from the jar just navigate to the folder where you downloaded it and run:
 
 ```
-java -jar binance-profit-tracker-0.0.4-SNAPSHOT.jar --spring.config.location="app.properties"
+java -jar binance-profit-tracker-0.0.5-SNAPSHOT.jar --spring.config.location="app.properties"
 ```
 
 ## Todos
