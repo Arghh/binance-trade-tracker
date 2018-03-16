@@ -7,7 +7,7 @@
 	<version>0.0.5-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
-	<name>ProfitTracker</name>
+	<name>Binance Trade Tracker</name>
 	<description>Track your gains and losses on Binance</description>
 
 	<parent>

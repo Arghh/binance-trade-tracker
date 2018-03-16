@@ -94,7 +94,7 @@ public class ProfitServiceImpl implements ProfitService {
 	private List<AggregatedTrade> filterOutOpenTrades(List<AggregatedTrade> allTrades) {
 		List<AggregatedTrade> filteredTrades = allTrades;
 
-		if (!filteredTrades.get(0).isBuy()) {
+		while (!filteredTrades.get(0).isBuy()) {
 			filteredTrades.remove(filteredTrades.get(0));
 			System.out.println("First trade has to be a buy. Skipping");
 		}

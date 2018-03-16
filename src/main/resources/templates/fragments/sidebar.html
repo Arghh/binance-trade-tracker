@@ -3,29 +3,29 @@
 
 		<!-- Sidebar -->
 		<div id="sidebar-wrapper">
-			<ul class="sidebar-nav">
+			<ul class="sidebar-nav" id="">
 				<li class="sidebar-brand"><a
 					href="https://github.com/Arghh/binance-trade-tracker">Binance
 						Trade Tracker</a></li>
 				<li class="active"><a th:href="@{/}">Home</a></li>
-
 				<li><a href="#" data-toggle="collapse"
 					data-target="#trades-submenu" aria-expanded="false">Trades</a>
 					<ul id="trades-submenu" class="collapse">
 						<li><a th:href="@{/trade/list}">All trades</a></li>
 						<li><a th:href="@{/trade/list/raw}">Raw excel data</a></li>
-						<li><a th:href="@{/trade/list/unmatched}">Unmatched trades</a></li>
+						<li><a th:href="@{/trade/list/unmatched}">Unmatched
+								trades</a></li>
 					</ul></li>
 
 				<li><a href="#" data-toggle="collapse"
 					data-target="#profits-submenu" aria-expanded="false">Profits</a>
 					<ul id="profits-submenu" class="collapse">
 						<li><a th:href="@{/profit/list}">All</a></li>
-						<li><a th:href="@{/profit/list/daily/}">Daily</a></li>
+						<li><a th:href="@{/profit/list/daily}">Daily</a></li>
 					</ul></li>
 
-				<li><a th:href="@{/stats/}">Statistics</a></li>
-				<li><a th:href="@{/tools/}">Tools</a></li>
+				<li><a th:href="@{/stats}">Statistics</a></li>
+				<li><a th:href="@{/tools}">Tools</a></li>
 				<li><a href="#">About</a></li>
 			</ul>
 		</div>

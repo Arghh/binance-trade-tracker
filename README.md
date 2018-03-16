@@ -1,6 +1,6 @@
 # Binance Trade Tracker
 
-Trades and profits tracking for all daytrades and bots in one easy-to-use web front end. Just import all your trades from Binance, add your partial trades together and calculates the profist you made on a daily bases and overall. More features are planned (See TODO-s). This App is build using Spring Boot, Thymeleaf and Bootstrap. Trade Tracker uses the [webcerebrium binance api](https://github.com/webcerebrium/java-binance-api) and [Java CryptoCompare Unofficial API Client](https://github.com/jeffreytai/cryptocompare-java-api-wrapper) wrappers.
+Trades and profits tracking for all daytrades and bots in one easy-to-use web front end. Just import all your trades from Binance, add your partial trades together and calculates the money you made daily or overall. More features are planned (See TODO-s). This App is build using Spring Boot, Thymeleaf and Bootstrap. Trade Tracker uses the [webcerebrium binance api](https://github.com/webcerebrium/java-binance-api) and [Java CryptoCompare Unofficial API Client](https://github.com/jeffreytai/cryptocompare-java-api-wrapper) wrappers.
 ![Profits Page](/img/profit_screenshot.png?raw=true "Profits Page Screenshot")
 
 ## Getting Started
@@ -31,7 +31,7 @@ Easiest way to install Trade Tracker is to clone the repo and build from source.
 
 #### Application.properties
 
-##### MANDATORY FIELDS:
+#### MANDATORY FIELDS:
 
 * __spring.datasource.username, password__ - Your user and pw from mariaDB that you created.
 * __server.port__ - on what port would you like to access the App.
@@ -57,7 +57,9 @@ home/Argh/Downloads/TradeHistory.xlsx
 
 Currently supported values are: `EUR` and `USD`.
 
-##### OPTIONAL FIELDS:
+
+
+#### OPTIONAL FIELDS:
 * BINANCE_API_KEY - Please make sure you only use a READ-ONLY key.
 
 __Note:__ The API trade import is not yet ready.

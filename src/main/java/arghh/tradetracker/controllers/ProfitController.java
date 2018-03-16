@@ -26,14 +26,14 @@ public class ProfitController {
 		this.statsService = statsService;
 	}
 
-	@RequestMapping({ "/profit/list", "/profit/" })
+	@RequestMapping({ "/profit/list", "/profit" })
 	public String listAllProfits(Model model) {
 		model.addAttribute("profits", profitService.showAllProfits());
 		model.addAttribute("totalProfits", profitService.allTimeProfitsSumInCurrencies());
 		return "profit/profitlist";
 	}
 
-	@RequestMapping({ "/profit/list/daily/" })
+	@RequestMapping({ "/profit/list/daily" })
 	public String listDailyProfits(Model model, @RequestParam(value = "date", required = false) String day) {
 		List<String> totalProfitsDaily = new ArrayList<>();
 		List<ProfitList> profitsDaily = new ArrayList<>();
