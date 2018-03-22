@@ -1,11 +1,11 @@
 # Binance Trade Tracker
 
-Trades and profits tracking for all daytrades and bots in one easy-to-use web front end. Just import all your trades from Binance, add your partial trades together and calculates the money you made daily or overall. More features are planned (See TODO-s). This App is build using Spring Boot, Thymeleaf and Bootstrap. Trade Tracker uses the [webcerebrium binance api](https://github.com/webcerebrium/java-binance-api) and [Java CryptoCompare Unofficial API Client](https://github.com/jeffreytai/cryptocompare-java-api-wrapper) wrappers.
+Trades and profits tracking for all daytrades and bots in one easy-to-use Web Front-end. Just import all your trades from Binance, add your partial trades together and calculate the profit you made daily and overall. More features are planned (See TODO-s). This App is build using Spring Boot, Thymeleaf and Bootstrap. Trade Tracker uses the [webcerebrium binance api](https://github.com/webcerebrium/java-binance-api) and [Java CryptoCompare Unofficial API Client](https://github.com/jeffreytai/cryptocompare-java-api-wrapper) wrappers.
 ![Profits Page](/img/profit_screenshot.png?raw=true "Profits Page Screenshot")
 
 ## Getting Started
 
-First download and install [mariadb](https://mariadb.org/), if you haven't already. Create a new user and start it up. Trade Tracker won't start without a running db instance.
+First download and install [mariadb](https://mariadb.org/). Create a new user and start it up. Trade Tracker won't start without a running db instance.
 
 Installing mariadb on linux and creating a new user:
 
@@ -70,7 +70,7 @@ __Note:__ The API trade import is not yet ready.
 In order to run Binance Trade Tracker from the jar just navigate to the folder where you downloaded it and run:
 
 ```
-java -jar binance-profit-tracker-0.0.5-SNAPSHOT.jar --spring.config.location="app.properties"
+java -jar binance-profit-tracker-0.0.6.jar --spring.config.location="app.properties"
 ```
 
 ## Todos

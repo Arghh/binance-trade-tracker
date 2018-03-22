@@ -20,4 +20,6 @@ public interface AggregatedTradeService {
 
 	List<AggregatedTrade> listAllUnmatchedTrades();
 
+	List<AggregatedTrade> matchTrades(List<Integer> ids);
+
 }

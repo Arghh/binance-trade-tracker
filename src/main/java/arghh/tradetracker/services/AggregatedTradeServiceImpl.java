@@ -1,8 +1,10 @@
 package arghh.tradetracker.services;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -79,6 +81,41 @@ public class AggregatedTradeServiceImpl implements AggregatedTradeService {
 	public List<AggregatedTrade> listAllUnmatchedTrades() {
 		List<AggregatedTrade> unMatchedTrades = aggTradeRepository.findAllWhereProfitIsNull();
 		return unMatchedTrades;
+	}
+
+	@Override
+	public List<AggregatedTrade> matchTrades(List<Integer> ids) {
+		List<AggregatedTrade> trades = new ArrayList<>();
+		for (Integer integer : ids) {
+			AggregatedTrade trade = getById((long) integer);
+			if (trade != null) {
+				trades.add(trade);
+			} else {
+				System.out.println("Could not find an AggregatedTrade with the ID " + integer);
+			}
+		}
+
+		if (trades.size() < 2) {
+			System.out.println("You need to select at least 2 trades to combine into one profit");
+			return null;
+		}
+		if (!trades.stream().anyMatch(x -> x.isBuy())) {
+			System.out.println("There needs to be at least one buy order selected");
+			return null;
+		}
+		if (!trades.stream().anyMatch(x -> !x.isBuy())) {
+			System.out.println("There needs to be at least one sell order selected");
+			return null;
+		}
+		if (!trades.stream().allMatch(x -> x.getSymbol().equals(trades.get(0).getSymbol()))) {
+			System.out.println("The market needs to be same for all the selected trades");
+			return null;
+		}
+
+		List<AggregatedTrade> sorted = trades.stream().sorted(Comparator.comparing(AggregatedTrade::isBuy).reversed())
+				.collect(Collectors.toList());
+
+		return sorted;
 	}
 
 }

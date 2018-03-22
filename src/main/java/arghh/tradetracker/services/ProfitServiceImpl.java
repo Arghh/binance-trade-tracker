@@ -224,8 +224,9 @@ public class ProfitServiceImpl implements ProfitService {
 		}
 	}
 
+	@Override
 	@Transactional
-	private void convertAndSaveProfitLists(List<AggregatedTrade> partialTrades) {
+	public void convertAndSaveProfitLists(List<AggregatedTrade> partialTrades) {
 		Profit profitToSave = profitListConverter.convert(partialTrades);
 		if (profitToSave != null) {
 			saveOrUpdate(profitToSave);
@@ -248,7 +249,7 @@ public class ProfitServiceImpl implements ProfitService {
 	}
 
 	@Transactional
-	private Profit saveNewProfit(List<AggregatedTrade> buySellPair) {
+	public Profit saveNewProfit(List<AggregatedTrade> buySellPair) {
 		Profit savedProfit = profitConverter.convert(buySellPair);
 		if (savedProfit != null) {
 			saveOrUpdate(savedProfit);

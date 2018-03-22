@@ -1,6 +1,8 @@
 package arghh.tradetracker.controllers;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -9,16 +11,19 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 import arghh.tradetracker.exception.ErrorDetails;
 import arghh.tradetracker.exception.TradeNotFoundException;
+import arghh.tradetracker.model.AggregatedTrade;
 import arghh.tradetracker.model.Trade;
 import arghh.tradetracker.services.AggregatedTradeService;
 import arghh.tradetracker.services.BinanceApiTradeService;
 import arghh.tradetracker.services.ExcelTradeService;
+import arghh.tradetracker.services.ProfitService;
 import arghh.tradetracker.services.TradeService;
 
 @Controller
@@ -27,14 +32,16 @@ public class TradeController {
 	private ExcelTradeService excelService;
 	private BinanceApiTradeService apiService;
 	private AggregatedTradeService aggService;
+	private ProfitService profitService;
 
 	@Autowired
 	public void setTradeService(TradeService TradeService, ExcelTradeService excelService,
-			BinanceApiTradeService apiService, AggregatedTradeService aggService) {
+			BinanceApiTradeService apiService, AggregatedTradeService aggService, ProfitService profitService) {
 		this.tradeService = TradeService;
 		this.excelService = excelService;
 		this.apiService = apiService;
 		this.aggService = aggService;
+		this.profitService = profitService;
 	}
 
 	@RequestMapping("/")
@@ -115,6 +122,27 @@ public class TradeController {
 	public String deleteAllAggTrades() {
 		aggService.deleteAll();
 		return "tools";
+	}
+
+	@RequestMapping("/trade/match")
+	public String matchTrades(@RequestParam(value = "idsChecked", required = false) List<Integer> idsChecked) {
+		List<AggregatedTrade> trades = new ArrayList<>();
+		if (idsChecked == null) {
+			System.out.println("No trades selected");
+			return "redirect:/trade/list/unmatched";
+		}
+		if (idsChecked != null) {
+			trades = aggService.matchTrades(idsChecked);
+
+		}
+		if (trades != null && trades.size() > 2) {
+			profitService.convertAndSaveProfitLists(trades);
+		}
+
+		if (trades != null && trades.size() == 2) {
+			profitService.saveNewProfit(trades);
+		}
+		return "redirect:/trade/list/unmatched";
 	}
 
 	@ExceptionHandler(TradeNotFoundException.class)

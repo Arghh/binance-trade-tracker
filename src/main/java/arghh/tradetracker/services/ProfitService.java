@@ -3,6 +3,7 @@ package arghh.tradetracker.services;
 import java.util.List;
 
 import arghh.tradetracker.commands.ProfitList;
+import arghh.tradetracker.model.AggregatedTrade;
 import arghh.tradetracker.model.Profit;
 
 public interface ProfitService {
@@ -24,5 +25,9 @@ public interface ProfitService {
 	void deleteAll();
 
 	void delete(Long id);
+
+	void convertAndSaveProfitLists(List<AggregatedTrade> trades);
+
+	Profit saveNewProfit(List<AggregatedTrade> trades);
 
 }

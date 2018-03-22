@@ -4,60 +4,73 @@
 <div th:replace="fragments/sidebar :: sidebar"></div>
 <div class="container">
 	<div class="d-flex flex-row">
-		<div class="p-2">
-			<h1>Unmatched Trades</h1>
+		<div class="d-flex flex-column">
+			<div class="p-2">
+				<h1>Unmatched Trades</h1>
+			</div>
+
 		</div>
 		<div class="p-2">
 			<p>
-				Here is a list of trades that are not paired into a buy/sell pair
-				that where found in the database. If you see any withdraws, they are
-				fine. Delete or leave - up to you.<br>If you see a buy/sell
-				pair that you think should be matched please delete both of those
-				trades and import the Excel spreadsheet again. Then combine trades
-				and calculate profit. (The normal steps.) They then should be
-				matched and not appear on this page again. If you notice some weird
+				Here you'll find a list of trades that are not paired into a
+				buy/sell pair that we found in the database. If you see any
+				withdraws, they are fine. Just leave them.<br>If you see a
+				buy/sell pair that should be matched please check them and click
+				"Combine trades". You can also select more than 2 trades and combine
+				them into one profit. After you have combined the trades they will
+				be paired and show up on the profit page. If you notice some weird
 				patterns please open an issue and let the developer know.
 			</p>
 		</div>
 	</div>
 
 	<div th:if="${!trades.empty}">
-		<table data-toggle="table" data-sort-name="market"
-			data-sort-order="asc" data-locale="en-US" data-pagination="true"
-			data-search="true" data-page-list="[10, 20, 50, 100, ALL]"
-			data-page-size="20"
-			class="tracker-tables table table-striped table-responsive">
-			<thead>
-				<tr>
-					<th data-field="market" data-sortable="true" class="col">Market</th>
-					<th data-field="type" data-sortable="true" class="col">Type</th>
-					<th data-field="price" data-sortable="true" class="col">Price</th>
-					<th data-field="quantity" data-sortable="true" class="col">Quantity</th>
-					<th data-field="total" data-sortable="true" class="col">Total</th>
-					<th data-field="fee" data-sortable="true" class="col">Fee</th>
-					<th data-field="fee-coin" data-sortable="true" class="col">Fee
-						Coin</th>
-					<th data-field="trade-time" data-sortable="true" class="col">Trade
-						Time</th>
-					<th class="col"></th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr th:each="trade : ${trades}">
-					<td scope="row" class="text-center" th:text="${trade.symbol}"></td>
-					<td scope="row" class="text-center" th:if="${trade.buy} == true">Buy</td>
-					<td scope="row" class="text-center" th:unless="${trade.buy}">Sell</td>
-					<td scope="row" th:text="${trade.price}"></td>
-					<td scope="row" th:text="${trade.quantity}"></td>
-					<td scope="row" th:text="${trade.total}"></td>
-					<td scope="row" th:text="${trade.fee}"></td>
-					<td scope="row" class="text-center" th:text="${trade.feeCoin}"></td>
-					<td scope="row"
-						th:text="${#dates.format(trade.tradeTime, 'yyyy-MM-dd HH:mm:ss')}"></td>
-					<td scope="row"><a th:href="${'/trade/delete/' + trade.id}">Delete</a></td>
-				</tr>
-			</tbody>
-		</table>
+		<form th:action="@{/trade/match}" method="post">
+			<div class="p-2">
+				<button class="btn btn-outline-dark" id="show-daily-profits"
+					type="submit">Match trades</button>
+
+			</div>
+			<table data-toggle="table" data-sort-name="market"
+				data-sort-order="asc" data-locale="en-US" data-pagination="true"
+				data-search="true" data-page-list="[10, 20, 50, 100, ALL]"
+				data-page-size="20" data-click-to-select="true"
+				class="tracker-tables table table-striped table-responsive">
+				<thead>
+					<tr>
+						<th></th>
+						<th data-field="market" data-sortable="true" class="col">Market</th>
+						<th data-field="type" data-sortable="true" class="col">Type</th>
+						<th data-field="price" data-sortable="true" class="col">Price</th>
+						<th data-field="quantity" data-sortable="true" class="col">Quantity</th>
+						<th data-field="total" data-sortable="true" class="col">Total</th>
+						<th data-field="fee" data-sortable="true" class="col">Fee</th>
+						<th data-field="fee-coin" data-sortable="true" class="col">Fee
+							Coin</th>
+						<th data-field="trade-time" data-sortable="true" class="col">Trade
+							Time</th>
+						<th class="col"></th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="trade : ${trades}">
+						<td><input type="checkbox" name="idsChecked"
+							 th:value="${trade.id}" /></td>
+						<td scope="row" class="text-center" th:text="${trade.symbol}"></td>
+						<td scope="row" class="text-center" th:if="${trade.buy} == true">Buy</td>
+						<td scope="row" class="text-center" th:unless="${trade.buy}">Sell</td>
+						<td scope="row" th:text="${trade.price}"></td>
+						<td scope="row" th:text="${trade.quantity}"></td>
+						<td scope="row" th:text="${trade.total}"></td>
+						<td scope="row" th:text="${trade.fee}"></td>
+						<td scope="row" class="text-center" th:text="${trade.feeCoin}"></td>
+						<td scope="row"
+							th:text="${#dates.format(trade.tradeTime, 'yyyy-MM-dd HH:mm:ss')}"></td>
+						<td scope="row"><a th:href="${'/trade/delete/' + trade.id}">Delete</a></td>
+					</tr>
+				</tbody>
+			</table>
+		</form>
 	</div>
 </div>
 <div lang="en" th:replace="fragments/footer :: footer"></div>
