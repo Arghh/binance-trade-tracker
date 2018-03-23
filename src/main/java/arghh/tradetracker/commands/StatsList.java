@@ -6,6 +6,8 @@ import java.util.Map;
 public class StatsList {
 
 	private String tradeCount;
+	private String profitsGained;
+	private String profitsLost;
 	private Map<String, Long> marketTrades;
 	private Map<String, BigDecimal> marketProfits;
 	private Map<String, BigDecimal> coinFees;
@@ -40,6 +42,22 @@ public class StatsList {
 
 	public void setCoinFees(Map<String, BigDecimal> coinFees) {
 		this.coinFees = coinFees;
+	}
+
+	public String getProfitsGained() {
+		return profitsGained;
+	}
+
+	public void setProfitsGained(String profitsGained) {
+		this.profitsGained = profitsGained;
+	}
+
+	public String getProfitsLost() {
+		return profitsLost;
+	}
+
+	public void setProfitsLost(String profitsLost) {
+		this.profitsLost = profitsLost;
 	}
 
 }

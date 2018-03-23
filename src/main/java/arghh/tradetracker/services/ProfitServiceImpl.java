@@ -248,6 +248,7 @@ public class ProfitServiceImpl implements ProfitService {
 
 	}
 
+	@Override
 	@Transactional
 	public Profit saveNewProfit(List<AggregatedTrade> buySellPair) {
 		Profit savedProfit = profitConverter.convert(buySellPair);
@@ -339,7 +340,7 @@ public class ProfitServiceImpl implements ProfitService {
 					.collect(Collectors.toList());
 
 			if (!profitsProCurrency.isEmpty()) {
-				String profitAndCurrency = calculateProfitProCurrency(profits, currency);
+				String profitAndCurrency = calculateProfitProCurrency(profitsProCurrency, currency);
 				String valueInFiat = cryptoApi.getHistoricalDailyValue(profitAndCurrency, day);
 
 				if (valueInFiat != null) {
@@ -356,7 +357,7 @@ public class ProfitServiceImpl implements ProfitService {
 	private String calculateProfitProCurrency(List<Profit> profits, BaseCurrency currency) {
 		BigDecimal totalProfitProCurrency = TradeHelper
 				.addBigDecimals(profits.stream().map(x -> x.getProfitValue()).collect(Collectors.toList()));
-
+		System.out.println(totalProfitProCurrency);
 		return TradeHelper.addBaseCurrencyProfit(totalProfitProCurrency, currency);
 	}
 

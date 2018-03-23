@@ -14,16 +14,19 @@ import org.springframework.stereotype.Service;
 import arghh.tradetracker.commands.StatsList;
 import arghh.tradetracker.model.AggregatedTrade;
 import arghh.tradetracker.repositories.AggregatedTradeRepository;
+import arghh.tradetracker.repositories.ProfitRepository;
 import arghh.tradetracker.util.TradeHelper;
 
 @Service
 public class StatsServiceImpl implements StatsService {
 
 	private AggregatedTradeRepository aggTradeRepository;
+	private ProfitRepository profitRepository;
 
 	@Autowired
-	public StatsServiceImpl(AggregatedTradeRepository aggTradeRepository) {
+	public StatsServiceImpl(AggregatedTradeRepository aggTradeRepository, ProfitRepository profitRepository) {
 		this.aggTradeRepository = aggTradeRepository;
+		this.profitRepository = profitRepository;
 	}
 
 	@Override
@@ -32,7 +35,8 @@ public class StatsServiceImpl implements StatsService {
 
 		// front end needs a string
 		statsForWeb.setTradesCount(aggTradeRepository.countAll().toString());
-
+		statsForWeb.setProfitsGained(profitRepository.findByPositiveProfitValue().toString());
+		statsForWeb.setProfitsLost(profitRepository.findByNegativeProfitValue().toString());
 		List<String> allSymbols = aggTradeRepository.findDistinctSymbols();
 		List<String> allFeeCoins = aggTradeRepository.findDistinctFeeCoin();
 

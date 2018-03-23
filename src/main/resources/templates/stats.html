@@ -7,69 +7,88 @@
 		<div class="row">
 			<div class="col">
 				<div th:if="${!marketStats.tradeCount.empty}">
-					<h3>Total trades</h3>
-					<p th:text="${marketStats.tradeCount}"></p>
+					<h5>
+						Total trades: <span th:text="${marketStats.tradeCount}"></span>
+					</h5>
 				</div>
 			</div>
-			<div class="row">
-				<div class="col">
-					<h3>Volume</h3>
-					<div th:if="${!marketStats.marketTrades.empty}">
-						<table class="table table-sm">
-							<thead>
-								<tr>
-									<th>Market</th>
-									<th>Trades</th>
-								</tr>
-							</thead>
-							<tr th:each="instance : ${marketStats.marketTrades}">
-								<td th:text="${instance.key}">keyvalue</td>
-								<td th:text="${instance.value}">num</td>
-							</tr>
-						</table>
-					</div>
-				</div>
-				<div class="col">
-					<h3>Gains/Losses</h3>
-					<div th:if="${!marketStats.marketProfits.empty}">
-						<table class="table table-sm">
-							<thead>
-								<tr>
-									<th>Market</th>
-									<th>Profit</th>
-								</tr>
-							</thead>
-							<tr th:each="instance : ${marketStats.marketProfits}">
-								<td th:text="${instance.key}">keyvalue</td>
-								<td th:text="${instance.value}">num</td>
-							</tr>
-						</table>
-					</div>
-				</div>
-				<div class="col">
-					<h3>Paid Fees</h3>
-					<div th:if="${!marketStats.coinFees.empty}">
-						<table class="table table-sm">
-							<thead>
-								<tr>
-									<th>Coin</th>
-									<th>Total Paid</th>
-								</tr>
-							</thead>
-							<tr th:each="instance : ${marketStats.coinFees}">
-								<td th:text="${instance.key}">keyvalue</td>
-								<td th:text="${instance.value}">num</td>
-							</tr>
-						</table>
-					</div>
+			<div class="col">
+				<div th:if="${!marketStats.profitsGained.empty}">
+					<h5>
+						Profits gained <span th:text="${marketStats.profitsGained}"></span>
+						times
+					</h5>
 				</div>
 			</div>
-			<div class="w-100"></div>
-			<div class="col"></div>
-			<div class="col"></div>
+			<div class="col">
+				<div th:if="${!marketStats.profitsLost.empty}">
+					<h5>
+						Profits lost <span th:text="${marketStats.profitsLost}"></span>
+						times
+					</h5>
+				</div>
+			</div>
 		</div>
+		<div class="row"></div>
+		<div class="row">
+			<div class="col">
+				<h3>Volume</h3>
+				<div th:if="${!marketStats.marketTrades.empty}">
+					<table class="table table-sm">
+						<thead>
+							<tr>
+								<th>Market</th>
+								<th>Trades</th>
+							</tr>
+						</thead>
+						<tr th:each="instance : ${marketStats.marketTrades}">
+							<td th:text="${instance.key}">keyvalue</td>
+							<td th:text="${instance.value}">num</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+			<div class="col">
+				<h3>Gains/Losses</h3>
+				<div th:if="${!marketStats.marketProfits.empty}">
+					<table class="table table-sm">
+						<thead>
+							<tr>
+								<th>Market</th>
+								<th>Profit</th>
+							</tr>
+						</thead>
+						<tr th:each="instance : ${marketStats.marketProfits}">
+							<td th:text="${instance.key}">keyvalue</td>
+							<td th:text="${instance.value}">num</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+			<div class="col">
+				<h3>Paid Fees</h3>
+				<div th:if="${!marketStats.coinFees.empty}">
+					<table class="table table-sm">
+						<thead>
+							<tr>
+								<th>Coin</th>
+								<th>Total Paid</th>
+							</tr>
+						</thead>
+						<tr th:each="instance : ${marketStats.coinFees}">
+							<td th:text="${instance.key}">keyvalue</td>
+							<td th:text="${instance.value}">num</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+		</div>
+		<div class="w-100"></div>
+		<div class="col"></div>
+		<div class="col"></div>
 	</div>
-	<!-- 1 div is to close the container. last div is to close page content wrapper.-->
+</div>
+<!-- 1 div is to close the container. last div is to close page content wrapper.-->
 </div>
 <div lang="en" th:replace="fragments/footer :: footer"></div>
 <!-- /#page-content-wrapper -->
