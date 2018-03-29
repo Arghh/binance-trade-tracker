@@ -10,10 +10,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import arghh.tradetracker.exception.ProfitException;
 import arghh.tradetracker.model.AggregatedTrade;
 import arghh.tradetracker.model.Trade;
 import arghh.tradetracker.repositories.AggregatedTradeRepository;
 import arghh.tradetracker.repositories.TradeRepository;
+import arghh.tradetracker.util.TradeHelper;
 
 @Service
 public class AggregatedTradeServiceImpl implements AggregatedTradeService {
@@ -109,6 +111,16 @@ public class AggregatedTradeServiceImpl implements AggregatedTradeService {
 		}
 		if (!trades.stream().allMatch(x -> x.getSymbol().equals(trades.get(0).getSymbol()))) {
 			System.out.println("The market needs to be same for all the selected trades");
+			return null;
+		}
+
+		AggregatedTrade buy = trades.stream().filter(x -> x.isBuy()).findFirst().get();
+		AggregatedTrade sell = trades.stream().filter(x -> !x.isBuy()).findFirst().get();
+		try {
+			TradeHelper.getMsBetweenTrades(buy.getTradeTime(), sell.getTradeTime());
+		} catch (ProfitException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 			return null;
 		}
 

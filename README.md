@@ -75,6 +75,8 @@ java -jar binance-profit-tracker-0.0.6.jar --spring.config.location="app.propert
 
 ## Todos
 
+* More statistics
+* Better UI handling
 * Error handling
 * Proper logging
 * integration- and unit-tests

@@ -82,9 +82,17 @@ public class ProfitServiceImpl implements ProfitService {
 				System.out.println(MessageFormat
 						.format("The trade pair {0} does not have enough trades to calculate profits.", s));
 			} else {
-				System.out.println("Calculating profits for trade pair " + s);
-				trades = filterOutOpenTrades(trades);
-				System.out.println("Finished calculating profits for trade pair " + s);
+				AggregatedTrade buy = trades.stream().filter(x -> x.isBuy()).findFirst().orElse(null);
+				AggregatedTrade sell = trades.stream().filter(x -> !x.isBuy()).findFirst().orElse(null);
+
+				if (buy == null || sell == null) {
+					System.out.println(MessageFormat
+							.format("The trade pair {0} has only buy or sell trades. Can't calculate profits", s));
+				} else {
+					System.out.println("Calculating profits for trade pair " + s);
+					trades = filterOutOpenTrades(trades);
+					System.out.println("Finished calculating profits for trade pair " + s);
+				}
 			}
 		}
 		System.out.println("Finished task: Calculate profits");
@@ -357,7 +365,7 @@ public class ProfitServiceImpl implements ProfitService {
 	private String calculateProfitProCurrency(List<Profit> profits, BaseCurrency currency) {
 		BigDecimal totalProfitProCurrency = TradeHelper
 				.addBigDecimals(profits.stream().map(x -> x.getProfitValue()).collect(Collectors.toList()));
-		System.out.println(totalProfitProCurrency);
+
 		return TradeHelper.addBaseCurrencyProfit(totalProfitProCurrency, currency);
 	}
 
