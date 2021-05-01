@@ -29,6 +29,8 @@ Alternatively: Binance Trade Tracker will also work with other SQL DB-s but you 
 
 Easiest way to install Trade Tracker is to clone the repo and build from source. If you are not familiar with Java and Maven or don't want to build from source code yourself, just download the release [compiled jar](https://github.com/Arghh/binance-trade-tracker/releases) and run that. You will still need to create and fill out the `app.properties` file and place it in the same folder as the jar.
 
+__Update__: Binace trade tracker now only runs with Java 11.
+
 #### Application.properties
 
 #### MANDATORY FIELDS:
