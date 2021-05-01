@@ -26,92 +26,92 @@ import arghh.tradetracker.model.Trade;
 @Service
 public class ExcelTradeServiceImpl implements ExcelTradeService {
 
-	private ExcelTradeToTrade excelTradeToTrade;
-	private TradeService tradeService;
+    private ExcelTradeToTrade excelTradeToTrade;
+    private TradeService tradeService;
 
-	@Value("${tradeHistory.path}")
-	private String filePath;
+    @Value("${tradeHistory.path}")
+    private String filePath;
 
-	@Autowired
-	public ExcelTradeServiceImpl(ExcelTradeToTrade productFormToProduct, TradeService tradeService) {
-		this.excelTradeToTrade = productFormToProduct;
-		this.tradeService = tradeService;
-	}
+    @Autowired
+    public ExcelTradeServiceImpl(ExcelTradeToTrade productFormToProduct, TradeService tradeService) {
+	this.excelTradeToTrade = productFormToProduct;
+	this.tradeService = tradeService;
+    }
 
-	@Override
-	public List<Trade> saveAllTradesFromFile() {
-		try (FileInputStream file = new FileInputStream(new File(filePath))) {
+    @Override
+    public List<Trade> saveAllTradesFromFile() {
+	try (FileInputStream file = new FileInputStream(new File(filePath))) {
 
-			Workbook workbook = new XSSFWorkbook(file);
-			Sheet sheet = workbook.getSheetAt(0);
+	    Workbook workbook = new XSSFWorkbook(file);
+	    Sheet sheet = workbook.getSheetAt(0);
 
-			List<String> excelData = new ArrayList<>();
-			List<Trade> rawTrades = new ArrayList<>();
-			for (Row row : sheet) {
-				for (Cell cell : row) {
-					switch (cell.getCellTypeEnum()) {
-					case STRING:
-						excelData.add(cell.getStringCellValue());
-						break;
-					default:
-						excelData.add(" ");
-					}
-				}
-				Trade newTrade = excelTradeToTrade.convert(excelData);
-
-				if (newTrade != null) {
-					rawTrades.add(newTrade);
-				}
-				System.out.println(excelData);
-
-				excelData.clear();
-			}
-			workbook.close();
-			// sort all imported trades so we get the oldest first
-			sortExcelTradesBeforeSave(rawTrades);
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
+	    List<String> excelData = new ArrayList<>();
+	    List<Trade> rawTrades = new ArrayList<>();
+	    for (Row row : sheet) {
+		for (Cell cell : row) {
+		    switch (cell.getCellType()) {
+		    case STRING:
+			excelData.add(cell.getStringCellValue());
+			break;
+		    default:
+			excelData.add(" ");
+		    }
 		}
-		return null;
-	}
+		Trade newTrade = excelTradeToTrade.convert(excelData);
 
-	@Override
-	@Transactional
-	public Trade saveNewExcelTrade(Trade newTradeToSave) {
-		if (newTradeToSave != null) {
-			newTradeToSave = tradeService.saveOrUpdate(newTradeToSave);
-			System.out.println(MessageFormat.format("Saved a trade from Excel with the Symbol {0} and total amount {1}",
-					newTradeToSave.getSymbol(), newTradeToSave.getTotal()));
-		} else {
-			System.out.println("Could not save a new trade");
-			return newTradeToSave;
+		if (newTrade != null) {
+		    rawTrades.add(newTrade);
 		}
+		System.out.println(excelData);
 
-		return newTradeToSave;
+		excelData.clear();
+	    }
+	    workbook.close();
+	    // sort all imported trades so we get the oldest first
+	    sortExcelTradesBeforeSave(rawTrades);
+	} catch (FileNotFoundException e) {
+	    e.printStackTrace();
+	} catch (IOException e) {
+	    e.printStackTrace();
+	}
+	return null;
+    }
+
+    @Override
+    @Transactional
+    public Trade saveNewExcelTrade(Trade newTradeToSave) {
+	if (newTradeToSave != null) {
+	    newTradeToSave = tradeService.saveOrUpdate(newTradeToSave);
+	    System.out.println(MessageFormat.format("Saved a trade from Excel with the Symbol {0} and total amount {1}",
+		    newTradeToSave.getSymbol(), newTradeToSave.getTotal()));
+	} else {
+	    System.out.println("Could not save a new trade");
+	    return newTradeToSave;
 	}
 
-	private void sortExcelTradesBeforeSave(List<Trade> rawTrades) {
+	return newTradeToSave;
+    }
 
-		// sort list. TODO: lambda ala list.sort(Comparator.comparing(o ->
-		// o.getDateTime()));
-		Collections.sort(rawTrades, new Comparator<Trade>() {
-			@Override
-			public int compare(Trade o1, Trade o2) {
-				if (o1.getTradeTime() == null || o2.getTradeTime() == null) {
-					System.out.println("Trade times are not set.");
-					return 0;
-				} else if (o1.getTradeTime().compareTo(o2.getTradeTime()) == 0) {
-					System.out.println("Trade time is same the same. Saving buy first");
-					return -1;
-				}
-				return o1.getTradeTime().compareTo(o2.getTradeTime());
-			}
-		});
-		System.out.println("Starting task: Excel import");
-		rawTrades.forEach(t -> saveNewExcelTrade(t));
-		System.out.println("Completed task: Excel import");
-	}
+    private void sortExcelTradesBeforeSave(List<Trade> rawTrades) {
+
+	// sort list. TODO: lambda ala list.sort(Comparator.comparing(o ->
+	// o.getDateTime()));
+	Collections.sort(rawTrades, new Comparator<Trade>() {
+	    @Override
+	    public int compare(Trade o1, Trade o2) {
+		if (o1.getTradeTime() == null || o2.getTradeTime() == null) {
+		    System.out.println("Trade times are not set.");
+		    return 0;
+		} else if (o1.getTradeTime().compareTo(o2.getTradeTime()) == 0) {
+		    System.out.println("Trade time is same the same. Saving buy first");
+		    return -1;
+		}
+		return o1.getTradeTime().compareTo(o2.getTradeTime());
+	    }
+	});
+	System.out.println("Starting task: Excel import");
+	rawTrades.forEach(t -> saveNewExcelTrade(t));
+	System.out.println("Completed task: Excel import");
+    }
 
 }

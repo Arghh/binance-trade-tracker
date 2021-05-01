@@ -18,44 +18,44 @@ import arghh.tradetracker.model.Trade;
 @Service
 public class BinanceApiTradeServiceImpl implements BinanceApiTradeService {
 
-	private AggregatedTradeService aggTradeService;
-	private BinanceTradeToAggTrade aggTradeConverter;
+    private AggregatedTradeService aggTradeService;
+    private BinanceTradeToAggTrade aggTradeConverter;
 
-	@Autowired
-	public BinanceApiTradeServiceImpl(AggregatedTradeService aggTradeService, BinanceTradeToAggTrade tradeConverter) {
-		this.aggTradeService = aggTradeService;
-		this.aggTradeConverter = tradeConverter;
+    @Autowired
+    public BinanceApiTradeServiceImpl(AggregatedTradeService aggTradeService, BinanceTradeToAggTrade tradeConverter) {
+	this.aggTradeService = aggTradeService;
+	this.aggTradeConverter = tradeConverter;
+    }
+
+    @Override
+    public AggregatedTrade saveNewBinanceTrade(BinanceTrade newTrade) {
+
+	AggregatedTrade savedTrade = aggTradeConverter.convert(newTrade);
+	if (savedTrade != null) {
+	    aggTradeService.saveOrUpdate(savedTrade);
+	    System.out.println("Saved a trade with Binance Id: " + savedTrade.getBinanceId());
+	} else {
+	    System.out.println("Could not save a new trade");
 	}
 
-	@Override
-	public AggregatedTrade saveNewBinanceTrade(BinanceTrade newTrade) {
+	return savedTrade;
+    }
 
-		AggregatedTrade savedTrade = aggTradeConverter.convert(newTrade);
-		if (savedTrade != null) {
-			aggTradeService.saveOrUpdate(savedTrade);
-			System.out.println("Saved a trade with Binance Id: " + savedTrade.getBinanceId());
-		} else {
-			System.out.println("Could not save a new trade");
-		}
-
-		return savedTrade;
+    @Override
+    @Transactional
+    public List<Trade> saveAllBinanaceTrades(String symbol) {
+	try {
+	    BinanceSymbol sy = new BinanceSymbol(symbol);
+	    List<BinanceTrade> trades = new ArrayList<>();
+	    // List<BinanceTrade> trades = api.myTrades(sy);
+	    System.out.println(trades);
+	    for (BinanceTrade binanceTrade : trades) {
+		saveNewBinanceTrade(binanceTrade);
+	    }
+	} catch (BinanceApiException e) {
+	    System.out.println(e.getMessage());
 	}
-
-	@Override
-	@Transactional
-	public List<Trade> saveAllBinanaceTrades(String symbol) {
-		try {
-			BinanceSymbol sy = new BinanceSymbol(symbol);
-			List<BinanceTrade> trades = new ArrayList<>();
-			// List<BinanceTrade> trades = api.myTrades(sy);
-			System.out.println(trades);
-			for (BinanceTrade binanceTrade : trades) {
-				saveNewBinanceTrade(binanceTrade);
-			}
-		} catch (BinanceApiException e) {
-			System.out.println(e.getMessage());
-		}
-		return new ArrayList<Trade>();
-	}
+	return new ArrayList<Trade>();
+    }
 
 }
