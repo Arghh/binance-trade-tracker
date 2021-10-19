@@ -12,26 +12,26 @@ import arghh.tradetracker.model.AggregatedTrade;
 @Repository
 public interface AggregatedTradeRepository extends CrudRepository<AggregatedTrade, Long> {
 
-	List<AggregatedTrade> findBySymbol(String symbol);
+    List<AggregatedTrade> findBySymbol(String symbol);
 
-	List<AggregatedTrade> findBySymbolAndProfitIsNull(String symbol);
+    List<AggregatedTrade> findBySymbolAndProfitIsNull(String symbol);
 
-	@Query("select DISTINCT(at.symbol) from AggregatedTrade at")
-	List<String> findDistinctSymbols();
+    @Query("select DISTINCT(at.symbol) from AggregatedTrade at")
+    List<String> findDistinctSymbols();
 
-	@Query("select COUNT(at) from AggregatedTrade at")
-	Long countAll();
+    @Query("select COUNT(at) from AggregatedTrade at")
+    Long countAll();
 
-	List<AggregatedTrade> findByTradeTime(Date time);
+    List<AggregatedTrade> findByTradeTime(Date time);
 
-	AggregatedTrade findByBinanceId(Long Id);
+    AggregatedTrade findByBinanceId(Long Id);
 
-	@Query("select DISTINCT(at.feeCoin) from AggregatedTrade at")
-	List<String> findDistinctFeeCoin();
+    @Query("select DISTINCT(at.feeCoin) from AggregatedTrade at")
+    List<String> findDistinctFeeCoin();
 
-	List<AggregatedTrade> findByFeeCoin(String coin);
+    List<AggregatedTrade> findByFeeCoin(String coin);
 
-	@Query("select at from AggregatedTrade at where profit_fk is null")
-	List<AggregatedTrade> findAllWhereProfitIsNull();
+    @Query("select at from AggregatedTrade at where profit_fk is null")
+    List<AggregatedTrade> findAllWhereProfitIsNull();
 
 }

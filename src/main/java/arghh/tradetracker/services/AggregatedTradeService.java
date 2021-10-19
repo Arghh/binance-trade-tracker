@@ -6,20 +6,20 @@ import arghh.tradetracker.model.AggregatedTrade;
 
 public interface AggregatedTradeService {
 
-	List<AggregatedTrade> listAllAggregated();
+    List<AggregatedTrade> listAllAggregated();
 
-	AggregatedTrade getById(Long id);
+    AggregatedTrade getById(Long id);
 
-	AggregatedTrade saveOrUpdate(AggregatedTrade trade);
+    AggregatedTrade saveOrUpdate(AggregatedTrade trade);
 
-	void delete(Long id);
+    void delete(Long id);
 
-	void saveAllAggTrades(List<AggregatedTrade> trades);
+    void saveAllAggTrades(List<AggregatedTrade> trades);
 
-	void deleteAll();
+    void deleteAll();
 
-	List<AggregatedTrade> listAllUnmatchedTrades();
+    List<AggregatedTrade> listAllUnmatchedTrades();
 
-	List<AggregatedTrade> matchTrades(List<Integer> ids);
+    List<AggregatedTrade> matchTrades(List<Integer> ids);
 
 }

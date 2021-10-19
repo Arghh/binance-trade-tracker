@@ -6,7 +6,7 @@ import arghh.tradetracker.model.Trade;
 
 public interface ExcelTradeService {
 
-	List<Trade> saveAllTradesFromFile();
+    List<Trade> saveAllTradesFromFile();
 
-	public Trade saveNewExcelTrade(Trade trade);
+    Trade saveNewExcelTrade(Trade trade);
 }

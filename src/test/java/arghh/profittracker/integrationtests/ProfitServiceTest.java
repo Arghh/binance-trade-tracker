@@ -42,6 +42,7 @@ public class ProfitServiceTest {
     private AggregatedTradeRepository aggTradeRepository;
 
     // @PersistenceContext
+
     // private EntityManager entityManager;
 
     @Test

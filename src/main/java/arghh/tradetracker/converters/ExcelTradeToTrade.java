@@ -18,92 +18,89 @@ import arghh.tradetracker.repositories.TradeRepository;
 @Component
 public class ExcelTradeToTrade implements Converter<List<String>, Trade> {
 
-	private TradeRepository tradeRepository;
+    private TradeRepository tradeRepository;
 
-	@Autowired
-	public ExcelTradeToTrade(TradeRepository tradeRepository) {
-		this.tradeRepository = tradeRepository;
-	}
+    @Autowired
+    public ExcelTradeToTrade(TradeRepository tradeRepository) {
+	this.tradeRepository = tradeRepository;
+    }
 
-	@Override
-	public Trade convert(List<String> source) {
-		try {
-			if (source.size() != 8) {
-				System.out.println("To many cells in " + source + " this row.");
-				return null;
-			}
-
-			Trade trade = new Trade();
-			trade.setTradeTime(convertDate(source.get(0)));
-			trade.setSymbol(source.get(1));
-			trade.setBuy(convertBuy(source.get(2)));
-			trade.setPrice(convertDecimal(source.get(3)));
-			trade.setQuantity(convertDecimal(source.get(4)));
-			trade.setTotal(convertDecimal(source.get(5)));
-			trade.setFee(convertDecimal(source.get(6)));
-			trade.setFeeCoin(source.get(7));
-
-			if (checkForDuplicateEntries(trade)) {
-				return trade;
-			} else {
-				StringBuilder sb = new StringBuilder();
-				sb.append("The Excel import with the time: ");
-				sb.append(trade.getTradeTime());
-				sb.append(" Symbol: ");
-				sb.append(trade.getSymbol());
-				sb.append(" Price: ");
-				sb.append(trade.getPrice());
-				sb.append(" and Quantity: ");
-				sb.append(trade.getQuantity());
-				sb.append(" exists already.");
-				System.out.println(sb.toString());
-				return null;
-			}
-
-		} catch (TradeException e) {
-			System.out.println(e.getMessage());
-
-		}
-
+    @Override
+    public Trade convert(List<String> source) {
+	try {
+	    if (source.size() != 8) {
+		System.out.println("To many cells in " + source + " this row.");
 		return null;
+	    }
+
+	    var trade = new Trade();
+	    trade.setTradeTime(convertDate(source.get(0)));
+	    trade.setSymbol(source.get(1));
+	    trade.setBuy(convertBuy(source.get(2)));
+	    trade.setPrice(convertDecimal(source.get(3)));
+	    trade.setQuantity(convertDecimal(source.get(4)));
+	    trade.setTotal(convertDecimal(source.get(5)));
+	    trade.setFee(convertDecimal(source.get(6)));
+	    trade.setFeeCoin(source.get(7));
+
+	    if (checkForDuplicateEntries(trade)) {
+		return trade;
+	    }
+	    var sb = new StringBuilder();
+	    sb.append("The Excel import with the time: ");
+	    sb.append(trade.getTradeTime());
+	    sb.append(" Symbol: ");
+	    sb.append(trade.getSymbol());
+	    sb.append(" Price: ");
+	    sb.append(trade.getPrice());
+	    sb.append(" and Quantity: ");
+	    sb.append(trade.getQuantity());
+	    sb.append(" exists already.");
+	    System.out.println(sb.toString());
+	    return null;
+
+	} catch (TradeException e) {
+	    System.out.println(e.getMessage());
 
 	}
 
-	private boolean checkForDuplicateEntries(Trade trade) {
+	return null;
 
-		List<Trade> tradeExist = tradeRepository.findDuplicates(trade.getTradeTime(), trade.getSymbol(), trade.isBuy(),
-				trade.getPrice());
-		if (tradeExist.isEmpty()) {
-			return true;
-		}
-		return false;
-	}
+    }
 
-	private Date convertDate(String cell) throws TradeException {
-		TimeZone tz = TimeZone.getTimeZone(("UTC"));
-		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		formatter.setTimeZone(tz);
-		if (cell != null && cell.startsWith("2")) {
-			try {
-				return formatter.parse(cell);
-			} catch (ParseException e) {
-				System.out.println(e.getMessage());
-			}
-		} else {
-			throw new TradeException(
-					"The Excel sheet you have entered is not correct. Can't convert " + cell + " to any value.");
-		}
-		return null;
-	}
+    private boolean checkForDuplicateEntries(Trade trade) {
 
-	private boolean convertBuy(String cell) {
-		return cell.toUpperCase().equals("BUY");
+	var tradeExist = tradeRepository.findDuplicates(trade.getTradeTime(), trade.getSymbol(), trade.isBuy(),
+		trade.getPrice());
+	if (tradeExist.isEmpty()) {
+	    return true;
 	}
+	return false;
+    }
 
-	private BigDecimal convertDecimal(String cell) {
-		String filteredString = cell.replaceAll(",", ".");
-		BigDecimal amount = new BigDecimal(filteredString).stripTrailingZeros();
-		return amount;
+    private Date convertDate(String cell) throws TradeException {
+	var tz = TimeZone.getTimeZone("UTC");
+	var formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	formatter.setTimeZone(tz);
+	if ((cell == null) || !cell.startsWith("2")) {
+	    throw new TradeException(
+		    "The Excel sheet you have entered is not correct. Can't convert " + cell + " to any value.");
 	}
+	try {
+	    return formatter.parse(cell);
+	} catch (ParseException e) {
+	    System.out.println(e.getMessage());
+	}
+	return null;
+    }
+
+    private boolean convertBuy(String cell) {
+	return "BUY".equals(cell.toUpperCase());
+    }
+
+    private BigDecimal convertDecimal(String cell) {
+	var filteredString = cell.replace(',', '.');
+	return new BigDecimal(filteredString).stripTrailingZeros();
+    }
 
 }

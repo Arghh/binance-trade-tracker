@@ -4,5 +4,5 @@ import arghh.tradetracker.commands.StatsList;
 
 public interface StatsService {
 
-	public StatsList showAllStats();
+    StatsList showAllStats();
 }

@@ -13,14 +13,14 @@ import arghh.tradetracker.services.BaseCurrency;
 @Repository
 public interface ProfitRepository extends CrudRepository<Profit, Long> {
 
-	List<Profit> findByBaseCurrency(BaseCurrency currency);
+    List<Profit> findByBaseCurrency(BaseCurrency currency);
 
-	List<Profit> findBySellTimeBetween(Date start, Date end);
+    List<Profit> findBySellTimeBetween(Date start, Date end);
 
-	@Query("select count(p) from Profit p where profit_value > 0")
-	Integer findByPositiveProfitValue();
+    @Query("select count(p) from Profit p where profit_value > 0")
+    Integer findByPositiveProfitValue();
 
-	@Query("select count(p) from Profit p where profit_value < 0")
-	Integer findByNegativeProfitValue();
+    @Query("select count(p) from Profit p where profit_value < 0")
+    Integer findByNegativeProfitValue();
 
 }

@@ -24,7 +24,7 @@ public class BinanceApiTradeServiceImpl implements BinanceApiTradeService {
     @Autowired
     public BinanceApiTradeServiceImpl(AggregatedTradeService aggTradeService, BinanceTradeToAggTrade tradeConverter) {
 	this.aggTradeService = aggTradeService;
-	this.aggTradeConverter = tradeConverter;
+	aggTradeConverter = tradeConverter;
     }
 
     @Override
@@ -55,7 +55,7 @@ public class BinanceApiTradeServiceImpl implements BinanceApiTradeService {
 	} catch (BinanceApiException e) {
 	    System.out.println(e.getMessage());
 	}
-	return new ArrayList<Trade>();
+	return new ArrayList<>();
     }
 
 }

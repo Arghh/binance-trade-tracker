@@ -6,16 +6,16 @@ import arghh.tradetracker.model.Trade;
 
 public interface TradeService {
 
-	List<Trade> listAllRaw();
+    List<Trade> listAllRaw();
 
-	void saveAllAggregatedTrades();
+    void saveAllAggregatedTrades();
 
-	Trade getById(Long id);
+    Trade getById(Long id);
 
-	Trade saveOrUpdate(Trade trade);
+    Trade saveOrUpdate(Trade trade);
 
-	void delete(Long id);
+    void delete(Long id);
 
-	void deleteAll();
+    void deleteAll();
 
 }

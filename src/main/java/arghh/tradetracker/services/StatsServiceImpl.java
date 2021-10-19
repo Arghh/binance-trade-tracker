@@ -20,93 +20,87 @@ import arghh.tradetracker.util.TradeHelper;
 @Service
 public class StatsServiceImpl implements StatsService {
 
-	private AggregatedTradeRepository aggTradeRepository;
-	private ProfitRepository profitRepository;
+    private AggregatedTradeRepository aggTradeRepository;
+    private ProfitRepository profitRepository;
 
-	@Autowired
-	public StatsServiceImpl(AggregatedTradeRepository aggTradeRepository, ProfitRepository profitRepository) {
-		this.aggTradeRepository = aggTradeRepository;
-		this.profitRepository = profitRepository;
+    @Autowired
+    public StatsServiceImpl(AggregatedTradeRepository aggTradeRepository, ProfitRepository profitRepository) {
+	this.aggTradeRepository = aggTradeRepository;
+	this.profitRepository = profitRepository;
+    }
+
+    @Override
+    public StatsList showAllStats() {
+	StatsList statsForWeb = new StatsList();
+
+	// front end needs a string
+	statsForWeb.setTradesCount(aggTradeRepository.countAll().toString());
+	statsForWeb.setProfitsGained(profitRepository.findByPositiveProfitValue().toString());
+	statsForWeb.setProfitsLost(profitRepository.findByNegativeProfitValue().toString());
+	List<String> allSymbols = aggTradeRepository.findDistinctSymbols();
+	List<String> allFeeCoins = aggTradeRepository.findDistinctFeeCoin();
+
+	statsForWeb.setMarketTrades(findTradeCountProMarket(allSymbols));
+	statsForWeb.setMarketProfits(findProfitsProMarket(allSymbols));
+	statsForWeb.setCoinFees(findTotalFees(allFeeCoins));
+
+	return statsForWeb;
+    }
+
+    private Map<String, Long> findTradeCountProMarket(List<String> allTrades) {
+	Map<String, Long> tradesProMarket = new HashMap<>();
+	for (String s : allTrades) {
+	    Long tradeCount = aggTradeRepository.findBySymbol(s).stream().count();
+	    tradesProMarket.put(s, tradeCount);
 	}
 
-	@Override
-	public StatsList showAllStats() {
-		StatsList statsForWeb = new StatsList();
+	return sortMapBiggestValueFirstLong(tradesProMarket);
 
-		// front end needs a string
-		statsForWeb.setTradesCount(aggTradeRepository.countAll().toString());
-		statsForWeb.setProfitsGained(profitRepository.findByPositiveProfitValue().toString());
-		statsForWeb.setProfitsLost(profitRepository.findByNegativeProfitValue().toString());
-		List<String> allSymbols = aggTradeRepository.findDistinctSymbols();
-		List<String> allFeeCoins = aggTradeRepository.findDistinctFeeCoin();
+    }
 
-		statsForWeb.setMarketTrades(findTradeCountProMarket(allSymbols));
-		statsForWeb.setMarketProfits(findProfitsProMarket(allSymbols));
-		statsForWeb.setCoinFees(findTotalFees(allFeeCoins));
+    private Map<String, BigDecimal> findProfitsProMarket(List<String> allTrades) {
 
-		return statsForWeb;
+	Map<String, BigDecimal> profitsProMarket = new HashMap<>();
+
+	for (String s : allTrades) {
+	    List<AggregatedTrade> trades = aggTradeRepository.findBySymbol(s);
+
+	    if (trades.size() > 1) {
+		List<AggregatedTrade> filteredTrades = trades.stream().filter(x -> x.getProfit() != null)
+			.collect(Collectors.toList());
+
+		BigDecimal totalProfitProCurrency = TradeHelper.addBigDecimals(filteredTrades.stream()
+			.filter(x -> !x.isBuy()).map(x -> x.getProfit().getProfitValue()).collect(Collectors.toList()));
+		profitsProMarket.put(s, totalProfitProCurrency);
+	    }
 	}
 
-	private Map<String, Long> findTradeCountProMarket(List<String> allTrades) {
-		Map<String, Long> tradesProMarket = new HashMap<>();
-		for (String s : allTrades) {
-			Long tradeCount = aggTradeRepository.findBySymbol(s).stream().count();
-			tradesProMarket.put(s, tradeCount);
-		}
+	return sortMapBiggestValueFirstDecimal(profitsProMarket);
+    }
 
-		Map<String, Long> sortedTradesProMarket = sortMapBiggestValueFirstLong(tradesProMarket);
+    private Map<String, BigDecimal> findTotalFees(List<String> allFeeCoins) {
+	Map<String, BigDecimal> fees = new HashMap<>();
 
-		return sortedTradesProMarket;
+	for (String s : allFeeCoins) {
+	    List<AggregatedTrade> trades = aggTradeRepository.findByFeeCoin(s);
 
+	    BigDecimal totalFeesProCoin = TradeHelper
+		    .addBigDecimals(trades.stream().map(AggregatedTrade::getFee).collect(Collectors.toList()));
+
+	    fees.put(s, totalFeesProCoin);
 	}
 
-	private Map<String, BigDecimal> findProfitsProMarket(List<String> allTrades) {
+	return sortMapBiggestValueFirstDecimal(fees);
+    }
 
-		Map<String, BigDecimal> profitsProMarket = new HashMap<>();
+    private Map<String, Long> sortMapBiggestValueFirstLong(Map<String, Long> unsorted) {
+	return unsorted.entrySet().stream().sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
+		.collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
+    }
 
-		for (String s : allTrades) {
-			List<AggregatedTrade> trades = aggTradeRepository.findBySymbol(s);
-
-			if (trades.size() > 1) {
-				List<AggregatedTrade> filteredTrades = trades.stream().filter(x -> x.getProfit() != null)
-						.collect(Collectors.toList());
-
-				BigDecimal totalProfitProCurrency = TradeHelper.addBigDecimals(filteredTrades.stream()
-						.filter(x -> !x.isBuy()).map(x -> x.getProfit().getProfitValue()).collect(Collectors.toList()));
-				profitsProMarket.put(s, totalProfitProCurrency);
-			}
-		}
-
-		Map<String, BigDecimal> sortedProfits = sortMapBiggestValueFirstDecimal(profitsProMarket);
-
-		return sortedProfits;
-	}
-
-	private Map<String, BigDecimal> findTotalFees(List<String> allFeeCoins) {
-		Map<String, BigDecimal> fees = new HashMap<>();
-
-		for (String s : allFeeCoins) {
-			List<AggregatedTrade> trades = aggTradeRepository.findByFeeCoin(s);
-
-			BigDecimal totalFeesProCoin = TradeHelper
-					.addBigDecimals(trades.stream().map(x -> x.getFee()).collect(Collectors.toList()));
-
-			fees.put(s, totalFeesProCoin);
-		}
-
-		Map<String, BigDecimal> sortedFees = sortMapBiggestValueFirstDecimal(fees);
-
-		return sortedFees;
-	}
-
-	private Map<String, Long> sortMapBiggestValueFirstLong(Map<String, Long> unsorted) {
-		return unsorted.entrySet().stream().sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
-				.collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
-	}
-
-	private LinkedHashMap<String, BigDecimal> sortMapBiggestValueFirstDecimal(Map<String, BigDecimal> unsorted) {
-		return unsorted.entrySet().stream().sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
-				.collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (oldValue, newValue) -> oldValue,
-						LinkedHashMap::new));
-	}
+    private LinkedHashMap<String, BigDecimal> sortMapBiggestValueFirstDecimal(Map<String, BigDecimal> unsorted) {
+	return unsorted.entrySet().stream().sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
+		.collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (oldValue, newValue) -> oldValue,
+			LinkedHashMap::new));
+    }
 }

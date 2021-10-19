@@ -13,11 +13,11 @@ import arghh.tradetracker.model.Trade;
 @Repository
 public interface TradeRepository extends CrudRepository<Trade, Long> {
 
-	List<Trade> findBySymbol(String symbol);
+    List<Trade> findBySymbol(String symbol);
 
-	@Query("select DISTINCT(t.symbol) from Trade t")
-	List<String> findDistinctSymbols();
+    @Query("select DISTINCT(t.symbol) from Trade t")
+    List<String> findDistinctSymbols();
 
-	List<Trade> findDuplicates(Date tradeTime, String symbol, boolean buy, BigDecimal quantity);
+    List<Trade> findDuplicates(Date tradeTime, String symbol, boolean buy, BigDecimal quantity);
 
 }

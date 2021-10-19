@@ -2,12 +2,10 @@ package arghh.tradetracker.services;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import org.apache.poi.ss.usermodel.Cell;
@@ -34,7 +32,7 @@ public class ExcelTradeServiceImpl implements ExcelTradeService {
 
     @Autowired
     public ExcelTradeServiceImpl(ExcelTradeToTrade productFormToProduct, TradeService tradeService) {
-	this.excelTradeToTrade = productFormToProduct;
+	excelTradeToTrade = productFormToProduct;
 	this.tradeService = tradeService;
     }
 
@@ -66,11 +64,9 @@ public class ExcelTradeServiceImpl implements ExcelTradeService {
 
 		excelData.clear();
 	    }
-	    workbook.close();
 	    // sort all imported trades so we get the oldest first
 	    sortExcelTradesBeforeSave(rawTrades);
-	} catch (FileNotFoundException e) {
-	    e.printStackTrace();
+	    workbook.close();
 	} catch (IOException e) {
 	    e.printStackTrace();
 	}
@@ -80,14 +76,13 @@ public class ExcelTradeServiceImpl implements ExcelTradeService {
     @Override
     @Transactional
     public Trade saveNewExcelTrade(Trade newTradeToSave) {
-	if (newTradeToSave != null) {
-	    newTradeToSave = tradeService.saveOrUpdate(newTradeToSave);
-	    System.out.println(MessageFormat.format("Saved a trade from Excel with the Symbol {0} and total amount {1}",
-		    newTradeToSave.getSymbol(), newTradeToSave.getTotal()));
-	} else {
+	if (newTradeToSave == null) {
 	    System.out.println("Could not save a new trade");
 	    return newTradeToSave;
 	}
+	newTradeToSave = tradeService.saveOrUpdate(newTradeToSave);
+	System.out.println(MessageFormat.format("Saved a trade from Excel with the Symbol {0} and total amount {1}",
+		newTradeToSave.getSymbol(), newTradeToSave.getTotal()));
 
 	return newTradeToSave;
     }
@@ -96,21 +91,19 @@ public class ExcelTradeServiceImpl implements ExcelTradeService {
 
 	// sort list. TODO: lambda ala list.sort(Comparator.comparing(o ->
 	// o.getDateTime()));
-	Collections.sort(rawTrades, new Comparator<Trade>() {
-	    @Override
-	    public int compare(Trade o1, Trade o2) {
-		if (o1.getTradeTime() == null || o2.getTradeTime() == null) {
-		    System.out.println("Trade times are not set.");
-		    return 0;
-		} else if (o1.getTradeTime().compareTo(o2.getTradeTime()) == 0) {
-		    System.out.println("Trade time is same the same. Saving buy first");
-		    return -1;
-		}
-		return o1.getTradeTime().compareTo(o2.getTradeTime());
+	Collections.sort(rawTrades, (o1, o2) -> {
+	    if (o1.getTradeTime() == null || o2.getTradeTime() == null) {
+		System.out.println("Trade times are not set.");
+		return 0;
 	    }
+	    if (o1.getTradeTime().compareTo(o2.getTradeTime()) == 0) {
+		System.out.println("Trade time is same the same. Saving buy first");
+		return -1;
+	    }
+	    return o1.getTradeTime().compareTo(o2.getTradeTime());
 	});
 	System.out.println("Starting task: Excel import");
-	rawTrades.forEach(t -> saveNewExcelTrade(t));
+	rawTrades.forEach(this::saveNewExcelTrade);
 	System.out.println("Completed task: Excel import");
     }
 

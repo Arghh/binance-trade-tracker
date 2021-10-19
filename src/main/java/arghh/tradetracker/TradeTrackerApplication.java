@@ -10,4 +10,5 @@ public class TradeTrackerApplication {
 	SpringApplication.run(TradeTrackerApplication.class, args);
 
     }
+
 }

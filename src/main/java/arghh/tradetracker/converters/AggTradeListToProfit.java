@@ -16,84 +16,84 @@ import arghh.tradetracker.util.TradeHelper;
 @Component
 public class AggTradeListToProfit implements Converter<List<AggregatedTrade>, Profit> {
 
-	@Override
-	public Profit convert(List<AggregatedTrade> trades) {
+    @Override
+    public Profit convert(List<AggregatedTrade> trades) {
 
-		try {
-			// double check
-			List<AggregatedTrade> buys = trades.stream().filter(x -> x.isBuy()).collect(Collectors.toList());
-			List<AggregatedTrade> sells = trades.stream().filter(x -> !x.isBuy()).collect(Collectors.toList());
+	try {
+	    // double check
+	    List<AggregatedTrade> buys = trades.stream().filter(AggregatedTrade::isBuy).collect(Collectors.toList());
+	    List<AggregatedTrade> sells = trades.stream().filter(x -> !x.isBuy()).collect(Collectors.toList());
 
-			if (buys.isEmpty() || sells.isEmpty()) {
-				return null;
-			}
-
-			Profit profit = new Profit();
-			AggregatedTrade firstBuy = buys.get(0);
-			AggregatedTrade lastSell = sells.get(sells.size() - 1);
-			List<BigDecimal> allCosts = new ArrayList<>();
-
-			profit.setBaseCurrency(TradeHelper.getBaseCurrency(firstBuy.getSymbol()));
-			profit.setSellTime(lastSell.getTradeTime());
-			profit.setTimeDifference(TradeHelper.getMsBetweenTrades(firstBuy.getTradeTime(), lastSell.getTradeTime()));
-
-			// depending on if there is 1 buy or 1 sell order we will the rest to convert to
-			// profit TODO: refactor
-			if (buys.size() == 1) {
-				profit.setQuantity(firstBuy.getQuantity());
-
-				sells.forEach(s -> {
-					allCosts.add(s.getTotal());
-					s.setProfit(profit);
-				});
-				buys.get(0).setProfit(profit);
-				profit.setbuySellPair(trades);
-				BigDecimal totalCost = TradeHelper.addBigDecimals(allCosts);
-				profit.setProfitValue(TradeHelper.substractBigDecimals(firstBuy.getTotal(), totalCost));
-				BigDecimal priceDifference = calculatePriceBasedOnListValues(firstBuy, sells);
-				// TODO: price difference need to be avg of all sells or buys?
-				profit.setPriceDifference(priceDifference);
-
-			} else {
-				profit.setQuantity(lastSell.getQuantity());
-
-				buys.forEach(b -> {
-					allCosts.add(b.getTotal());
-					b.setProfit(profit);
-				});
-				sells.get(0).setProfit(profit);
-				profit.setbuySellPair(trades);
-				BigDecimal totalCost = TradeHelper.addBigDecimals(allCosts);
-				profit.setProfitValue(TradeHelper.substractBigDecimals(totalCost, lastSell.getTotal()));
-				BigDecimal priceDifference = calculatePriceBasedOnListValues(lastSell, buys);
-				profit.setPriceDifference(priceDifference);
-
-				// TODO: price difference need to be avg of all sells or buys?
-				// profit.setPriceDifference(TradeHelper.substractBigDecimals(firstBuy.getPrice(),
-				// lastSell.getPrice()));
-			}
-
-			return profit;
-		} catch (ProfitException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
+	    if (buys.isEmpty() || sells.isEmpty()) {
 		return null;
+	    }
+
+	    var profit = new Profit();
+	    var firstBuy = buys.get(0);
+	    var lastSell = sells.get(sells.size() - 1);
+	    List<BigDecimal> allCosts = new ArrayList<>();
+
+	    profit.setBaseCurrency(TradeHelper.getBaseCurrency(firstBuy.getSymbol()));
+	    profit.setSellTime(lastSell.getTradeTime());
+	    profit.setTimeDifference(TradeHelper.getMsBetweenTrades(firstBuy.getTradeTime(), lastSell.getTradeTime()));
+
+	    // depending on if there is 1 buy or 1 sell order we will the rest to convert to
+	    // profit TODO: refactor
+	    if (buys.size() == 1) {
+		profit.setQuantity(firstBuy.getQuantity());
+
+		sells.forEach(s -> {
+		    allCosts.add(s.getTotal());
+		    s.setProfit(profit);
+		});
+		buys.get(0).setProfit(profit);
+		profit.setbuySellPair(trades);
+		var totalCost = TradeHelper.addBigDecimals(allCosts);
+		profit.setProfitValue(TradeHelper.substractBigDecimals(firstBuy.getTotal(), totalCost));
+		var priceDifference = calculatePriceBasedOnListValues(firstBuy, sells);
+		// TODO: price difference need to be avg of all sells or buys?
+		profit.setPriceDifference(priceDifference);
+
+	    } else {
+		profit.setQuantity(lastSell.getQuantity());
+
+		buys.forEach(b -> {
+		    allCosts.add(b.getTotal());
+		    b.setProfit(profit);
+		});
+		sells.get(0).setProfit(profit);
+		profit.setbuySellPair(trades);
+		var totalCost = TradeHelper.addBigDecimals(allCosts);
+		profit.setProfitValue(TradeHelper.substractBigDecimals(totalCost, lastSell.getTotal()));
+		var priceDifference = calculatePriceBasedOnListValues(lastSell, buys);
+		profit.setPriceDifference(priceDifference);
+
+		// TODO: price difference need to be avg of all sells or buys?
+		// profit.setPriceDifference(TradeHelper.substractBigDecimals(firstBuy.getPrice(),
+		// lastSell.getPrice()));
+	    }
+
+	    return profit;
+	} catch (ProfitException e) {
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
 	}
 
-	private BigDecimal calculatePriceBasedOnListValues(AggregatedTrade one, List<AggregatedTrade> many) {
+	return null;
+    }
 
-		// total price * quantity
-		BigDecimal x = one.getQuantity().multiply(one.getPrice());
+    private BigDecimal calculatePriceBasedOnListValues(AggregatedTrade one, List<AggregatedTrade> many) {
 
-		// part prices with there quantities as weight
-		BigDecimal y = new BigDecimal("0");
-		for (AggregatedTrade aggregatedTrade : many) {
-			y = y.add(aggregatedTrade.getQuantity().multiply(aggregatedTrade.getPrice()));
-		}
+	// total price * quantity
+	var x = one.getQuantity().multiply(one.getPrice());
 
-		return x.subtract(y);
+	// part prices with there quantities as weight
+	var y = new BigDecimal("0");
+	for (AggregatedTrade aggregatedTrade : many) {
+	    y = y.add(aggregatedTrade.getQuantity().multiply(aggregatedTrade.getPrice()));
 	}
+
+	return x.subtract(y);
+    }
 
 }

@@ -13,8 +13,8 @@ import arghh.tradetracker.TradeTrackerApplication;
 @ActiveProfiles("test")
 public class TradeTrackerApplicationTest {
 
-	@Test
-	public void contextLoads() {
-	}
+    @Test
+    public void contextLoads() {
+    }
 
 }

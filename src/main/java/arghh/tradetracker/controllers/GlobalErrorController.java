@@ -15,12 +15,12 @@ import arghh.tradetracker.exception.ErrorDetails;
 @RestController
 public class GlobalErrorController extends ResponseEntityExceptionHandler {
 
-	@ExceptionHandler(Exception.class)
-	public ModelAndView exception(Exception exception, WebRequest request) {
-		ModelAndView modelAndView = new ModelAndView("errorpage");
-		ErrorDetails errorDetails = new ErrorDetails(new Date(), exception.getMessage(), request.getDescription(false));
-		modelAndView.addObject("errorMessage", errorDetails);
-		return modelAndView;
-	}
+    @ExceptionHandler(Exception.class)
+    public ModelAndView exception(Exception exception, WebRequest request) {
+	var modelAndView = new ModelAndView("errorpage");
+	var errorDetails = new ErrorDetails(new Date(), exception.getMessage(), request.getDescription(false));
+	modelAndView.addObject("errorMessage", errorDetails);
+	return modelAndView;
+    }
 
 }

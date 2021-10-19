@@ -39,7 +39,7 @@ public class AggTradeToProfitTest {
 	Date sellDate = formatter.parse(dateSellString);
 
 	AggregatedTrade firstBuy = new AggregatedTrade();
-	firstBuy.setId(1l);
+	firstBuy.setId(1L);
 	firstBuy.setBuy(true);
 	firstBuy.setQuantity(new BigDecimal("10"));
 	firstBuy.setSymbol("VENETH");
@@ -49,7 +49,7 @@ public class AggTradeToProfitTest {
 	trades.add(firstBuy);
 
 	AggregatedTrade firstSell = new AggregatedTrade();
-	firstSell.setId(2l);
+	firstSell.setId(2L);
 	firstSell.setBuy(false);
 	firstSell.setQuantity(new BigDecimal("10"));
 	firstSell.setSymbol("VENETH");

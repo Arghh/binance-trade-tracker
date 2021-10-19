@@ -8,26 +8,26 @@ import arghh.tradetracker.model.Profit;
 
 public interface ProfitService {
 
-	void saveAllTradeProfits();
+    void saveAllTradeProfits();
 
-	List<ProfitList> listDailyTradeProfits(String date);
+    List<ProfitList> listDailyTradeProfits(String date);
 
-	List<String> calculatedTotalDailyProfits(String date);
+    List<String> calculatedTotalDailyProfits(String date);
 
-	List<Profit> listAllProfits();
+    List<Profit> listAllProfits();
 
-	List<ProfitList> showAllProfits();
+    List<ProfitList> showAllProfits();
 
-	List<String> allTimeProfitsSumInCurrencies();
+    List<String> allTimeProfitsSumInCurrencies();
 
-	Profit saveOrUpdate(Profit profit);
+    Profit saveOrUpdate(Profit profit);
 
-	void deleteAll();
+    void deleteAll();
 
-	void delete(Long id);
+    void delete(Long id);
 
-	void convertAndSaveProfitLists(List<AggregatedTrade> trades);
+    void convertAndSaveProfitLists(List<AggregatedTrade> trades);
 
-	Profit saveNewProfit(List<AggregatedTrade> trades);
+    Profit saveNewProfit(List<AggregatedTrade> trades);
 
 }

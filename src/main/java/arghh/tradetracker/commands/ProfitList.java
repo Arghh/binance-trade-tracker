@@ -3,96 +3,95 @@ package arghh.tradetracker.commands;
 import java.util.Date;
 
 public class ProfitList {
+    private String buyPrice;
+    private Date buyTime;
+    private long id;
+    private String profit;
+    private String quantity;
+    private String sellPrice;
+    private Date sellTime;
+    private String symbol;
+    private String timeDifference;
+    private String totalProfit;
 
-	private long id;
-	private String symbol;
-	private Date buyTime;
-	private Date sellTime;
-	private String timeDifference;
-	private String buyPrice;
-	private String sellPrice;
-	private String profit;
-	private String quantity;
-	private String totalProfit;
+    public String getBuyPrice() {
+	return buyPrice;
+    }
 
-	public long getId() {
-		return id;
-	}
+    public Date getBuyTime() {
+	return buyTime;
+    }
 
-	public void setId(long id) {
-		this.id = id;
-	}
+    public long getId() {
+	return id;
+    }
 
-	public String getSymbol() {
-		return symbol;
-	}
+    public String getProfit() {
+	return profit;
+    }
 
-	public void setSymbol(String symbol) {
-		this.symbol = symbol;
-	}
+    public String getQuantity() {
+	return quantity;
+    }
 
-	public Date getBuyTime() {
-		return buyTime;
-	}
+    public String getSellPrice() {
+	return sellPrice;
+    }
 
-	public void setBuyTime(Date buyTime) {
-		this.buyTime = buyTime;
-	}
+    public Date getSellTime() {
+	return sellTime;
+    }
 
-	public Date getSellTime() {
-		return sellTime;
-	}
+    public String getSymbol() {
+	return symbol;
+    }
 
-	public void setSellTime(Date sellTime) {
-		this.sellTime = sellTime;
-	}
+    public String getTimeDifference() {
+	return timeDifference;
+    }
 
-	public String getTimeDifference() {
-		return timeDifference;
-	}
+    public String getTotalProfit() {
+	return totalProfit;
+    }
 
-	public void setTimeDifference(String timeDifference) {
-		this.timeDifference = timeDifference;
-	}
+    public void setBuyPrice(String buyPrice) {
+	this.buyPrice = buyPrice;
+    }
 
-	public String getBuyPrice() {
-		return buyPrice;
-	}
+    public void setBuyTime(Date buyTime) {
+	this.buyTime = buyTime;
+    }
 
-	public void setBuyPrice(String buyPrice) {
-		this.buyPrice = buyPrice;
-	}
+    public void setId(long id) {
+	this.id = id;
+    }
 
-	public String getSellPrice() {
-		return sellPrice;
-	}
+    public void setProfit(String profit) {
+	this.profit = profit;
+    }
 
-	public void setSellPrice(String sellPrice) {
-		this.sellPrice = sellPrice;
-	}
+    public void setQuantity(String quantity) {
+	this.quantity = quantity;
+    }
 
-	public String getProfit() {
-		return profit;
-	}
+    public void setSellPrice(String sellPrice) {
+	this.sellPrice = sellPrice;
+    }
 
-	public void setProfit(String profit) {
-		this.profit = profit;
-	}
+    public void setSellTime(Date sellTime) {
+	this.sellTime = sellTime;
+    }
 
-	public String getQuantity() {
-		return quantity;
-	}
+    public void setSymbol(String symbol) {
+	this.symbol = symbol;
+    }
 
-	public void setQuantity(String quantity) {
-		this.quantity = quantity;
-	}
+    public void setTimeDifference(String timeDifference) {
+	this.timeDifference = timeDifference;
+    }
 
-	public String getTotalProfit() {
-		return totalProfit;
-	}
-
-	public void setTotalProfit(String totalProfit) {
-		this.totalProfit = totalProfit;
-	}
+    public void setTotalProfit(String totalProfit) {
+	this.totalProfit = totalProfit;
+    }
 
 }

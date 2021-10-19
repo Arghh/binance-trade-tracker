@@ -10,7 +10,7 @@ import arghh.tradetracker.model.Trade;
 
 public interface BinanceApiTradeService {
 
-	AggregatedTrade saveNewBinanceTrade(BinanceTrade productForm) throws TradeException;
+    AggregatedTrade saveNewBinanceTrade(BinanceTrade productForm) throws TradeException;
 
-	public List<Trade> saveAllBinanaceTrades(String symbol);
+    public List<Trade> saveAllBinanaceTrades(String symbol);
 }

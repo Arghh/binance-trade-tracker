@@ -43,7 +43,7 @@ public class AggTradeListToProfitTest {
 	Date sellDate3 = formatter.parse(dateSellString3);
 
 	AggregatedTrade buy = new AggregatedTrade();
-	buy.setId(5l);
+	buy.setId(5L);
 	buy.setBuy(true);
 	buy.setQuantity(new BigDecimal("9.3"));
 	buy.setSymbol("LTCBTC");
@@ -53,7 +53,7 @@ public class AggTradeListToProfitTest {
 	trades.add(buy);
 
 	AggregatedTrade sell1 = new AggregatedTrade();
-	sell1.setId(1l);
+	sell1.setId(1L);
 	sell1.setBuy(false);
 	sell1.setQuantity(new BigDecimal("5"));
 	sell1.setSymbol("LTCBTC");
@@ -63,7 +63,7 @@ public class AggTradeListToProfitTest {
 	trades.add(sell1);
 
 	AggregatedTrade sell2 = new AggregatedTrade();
-	sell2.setId(2l);
+	sell2.setId(2L);
 	sell2.setBuy(false);
 	sell2.setQuantity(new BigDecimal("2"));
 	sell2.setSymbol("LTCBTC");
@@ -73,7 +73,7 @@ public class AggTradeListToProfitTest {
 	trades.add(sell2);
 
 	AggregatedTrade sell3 = new AggregatedTrade();
-	sell3.setId(3l);
+	sell3.setId(3L);
 	sell3.setBuy(false);
 	sell3.setQuantity(new BigDecimal("2.3"));
 	sell3.setSymbol("LTCBTC");
@@ -109,7 +109,7 @@ public class AggTradeListToProfitTest {
 	Date buyDate3 = formatter.parse(dateBuy3String);
 
 	AggregatedTrade sell = new AggregatedTrade();
-	sell.setId(5l);
+	sell.setId(5L);
 	sell.setBuy(false);
 	sell.setQuantity(new BigDecimal("5"));
 	sell.setSymbol("LTCBTC");
@@ -119,7 +119,7 @@ public class AggTradeListToProfitTest {
 	trades.add(sell);
 
 	AggregatedTrade buy1 = new AggregatedTrade();
-	buy1.setId(1l);
+	buy1.setId(1L);
 	buy1.setBuy(true);
 	buy1.setQuantity(new BigDecimal("1"));
 	buy1.setSymbol("LTCBTC");
@@ -129,7 +129,7 @@ public class AggTradeListToProfitTest {
 	trades.add(buy1);
 
 	AggregatedTrade buy2 = new AggregatedTrade();
-	buy2.setId(2l);
+	buy2.setId(2L);
 	buy2.setBuy(true);
 	buy2.setQuantity(new BigDecimal("1"));
 	buy2.setSymbol("LTCBTC");
@@ -139,7 +139,7 @@ public class AggTradeListToProfitTest {
 	trades.add(buy2);
 
 	AggregatedTrade buy3 = new AggregatedTrade();
-	buy3.setId(3l);
+	buy3.setId(3L);
 	buy3.setBuy(true);
 	buy3.setQuantity(new BigDecimal("3"));
 	buy3.setSymbol("LTCBTC");
