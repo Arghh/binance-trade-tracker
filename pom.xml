@@ -46,7 +46,7 @@
 		<dependency>
 			<groupId>org.liquibase</groupId>
 			<artifactId>liquibase-maven-plugin</artifactId>
-			<version>4.5.0</version>
+			<version>4.8.0</version>
 		</dependency>
 		<dependency>
 			<groupId>com.webcerebrium</groupId>
@@ -56,7 +56,7 @@
 		<dependency>
 			<groupId>org.apache.poi</groupId>
 			<artifactId>poi-ooxml</artifactId>
-			<version>5.0.0</version>
+			<version>5.4.0</version>
 		</dependency>
 		<dependency>
 			<groupId>com.github.jeffreytai</groupId>
